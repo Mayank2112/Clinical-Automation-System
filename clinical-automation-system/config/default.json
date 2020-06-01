@@ -1,0 +1,13 @@
+{
+  "filename": {
+    "homepage": "homepage.ejs",
+    "dashboard": "dashboard.ejs",
+    "login": "login.ejs",
+    "register": "register.ejs"
+  },
+  "serverConfig": {
+    "port": 3000,
+    "cookieTime": 300000,
+    "cookieSecret": "this-is-a-secret-key"
+  }
+}
