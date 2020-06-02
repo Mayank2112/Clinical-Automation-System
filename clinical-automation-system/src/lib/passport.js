@@ -1,9 +1,9 @@
 import passport from 'passport';
-import { Strategy as localStrategy } from 'passport-local';
+import { Strategy as LocalStrategy } from 'passport-local';
 import { isValidPatient } from '../services/patient';
 import { isValidDoctor } from '../services/doctor';
 import { isValidSupplier } from '../services/supplier';
-import { isValidAdmin } from '../services/admin'
+import { isValidAdmin } from '../services/admin';
 
 export const passportSetup = app => {
   // passport middleware setup
@@ -21,7 +21,7 @@ export const passportSetup = app => {
   });
 
   // Middleware for local strategy Authentication for Patient
-  passport.use('patient-authentication', new localStrategy(
+  passport.use('patient-authentication', new LocalStrategy(
     (username, password, done) => {
       isValidPatient(username, password)
         .then(result => {
@@ -34,7 +34,7 @@ export const passportSetup = app => {
   ));
 
   // Middleware for local strategy Authentication for Doctor
-  passport.use('doctor-authentication', new localStrategy(
+  passport.use('doctor-authentication', new LocalStrategy(
     (username, password, done) => {
       isValidDoctor(username, password)
         .then(result => {
@@ -47,7 +47,7 @@ export const passportSetup = app => {
   ));
 
   // Middleware for local strategy Authentication for Supplier
-  passport.use('supplier-authentication', new localStrategy(
+  passport.use('supplier-authentication', new LocalStrategy(
     (username, password, done) => {
       isValidSupplier(username, password)
         .then(result => {
@@ -60,7 +60,7 @@ export const passportSetup = app => {
   ));
 
   // Middleware for local strategy Authentication for Admin
-  passport.use('admin-authentication', new localStrategy(
+  passport.use('admin-authentication', new LocalStrategy(
     (username, password, done) => {
       isValidAdmin(username, password)
         .then(result => {
