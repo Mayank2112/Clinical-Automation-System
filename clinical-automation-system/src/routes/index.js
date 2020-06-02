@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import register from './register';
-import login from './login'
+import login from './login';
 import homepage from './home';
 import invalidRoutes from './invalidRoutes';
 import dashboard from './dashboard';

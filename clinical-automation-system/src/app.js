@@ -3,6 +3,7 @@ import session from 'express-session';
 import { join } from 'path';
 import { serverConfig } from 'config';
 import router from './routes';
+import { passportSetup } from './lib/passport';
 
 const app = express();
 const port = serverConfig.port;
@@ -27,7 +28,7 @@ app.use(session({
 }));
 
 // setup for passport module
-// passportSetup(app);
+passportSetup(app);
 
 // view engine setup
 app.set('view engine', 'ejs');

@@ -18,7 +18,32 @@ export const createPatient = patient => sequelize.authenticate()
       emailId: patient.email,
       password: patient.password
     })))
-  .catch(err => {
-    console.error(err);
+  .catch(() => false);
+
+/**
+ * Find patient with given emailId in database
+ * @param {String} emailId
+ */
+export const findPatient = emailId => sequelize.authenticate()
+  .then(() => Patient.sync({ force: false })
+    .then(() => Patient.findAll({
+      where: {
+        emailId: emailId
+      }
+    })
+      .then(patient => patient[0].dataValues)
+      .catch(() => undefined)))
+  .catch(console.error);
+
+/**
+ * Checks patient with given emailId and password is valid or not
+ * @param {String} emailId
+ * @param {String} password
+ */
+export const isValidPatient = (emailId, password) => findPatient(emailId)
+  .then(patient => {
+    if (patient) {
+      return password === patient.password;
+    }
     return false;
   });

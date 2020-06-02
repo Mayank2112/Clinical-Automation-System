@@ -5,6 +5,12 @@ import { registerPatient } from '../controllers/patient';
 import { registerDoctor } from '../controllers/doctor';
 import { registerSupplier } from '../controllers/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
+import {
+  adminLocalAuthentication,
+  doctorLocalAuthentication,
+  patientLocalAuthentication,
+  supplierLocalAuthentication
+} from './authentication';
 
 /**
  * Register new user to database
@@ -79,4 +85,23 @@ export const checkUserCredentials = (req, res, next) => {
     return next();
   }
   return registerFailure(req, res);
+};
+
+export const redirectUserToProfessionLogin = (req, res) => {
+  if (req.body.profession === 'admin') {
+    return adminLocalAuthentication(req, res);
+  }
+
+  if (req.body.profession === 'doctor') {
+    return doctorLocalAuthentication(req, res);
+  }
+
+  if (req.body.profession === 'patient') {
+    return patientLocalAuthentication(req, res);
+  }
+
+  if (req.body.profession === 'supplier') {
+    return supplierLocalAuthentication(req, res);
+  }
+  return setLoginFailure(req, res);
 };
