@@ -12,6 +12,11 @@
 
 <body>
   <h1>Clinical Automation System</h1>
+  <div style='color: red;'>
+    <% if (messageHolder) { %>
+    <%= messageHolder.message %>
+    <% } %>
+  </div>
 </body>
 
 </html>

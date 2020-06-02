@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { registerUser, methodNotAllowedError, redirectRegister } from '../controllers/user';
-import { checkUserCredentials } from '../middlewares/user';
+import { methodNotAllowedError, redirectRegister } from '../controllers/user';
+import { checkUserCredentials, registerUser } from '../middlewares/user';
 
 const router = Router();
 
