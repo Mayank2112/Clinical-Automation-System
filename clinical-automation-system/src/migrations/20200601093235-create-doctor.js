@@ -2,22 +2,18 @@
 
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('Doctors', {
-    id: {
+    doctorId: {
+      type: DataTypes.INTEGER,
+      unique: true,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
-    },
-    doctorId: {
-      type: Sequelize.STRING,
-      unique: true,
-      allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     doctorName: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       unique: true,
       allowNull: false,
       validate: {
@@ -25,70 +21,71 @@ export function up(queryInterface, Sequelize) {
       }
     },
     dateOfBirth: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     gender: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     degree: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     specialized: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     experience: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     appointmentFee: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     status: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     mobileNumber: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     emailId: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
     password: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true

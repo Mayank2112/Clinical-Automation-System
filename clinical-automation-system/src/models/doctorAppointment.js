@@ -1,16 +1,17 @@
 export default (sequelize, DataTypes) => {
   const doctorAppointment = sequelize.define('DoctorAppointment', {
     appointmentId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
     patientId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
       validate: {
@@ -18,7 +19,7 @@ export default (sequelize, DataTypes) => {
       }
     },
     doctorId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true

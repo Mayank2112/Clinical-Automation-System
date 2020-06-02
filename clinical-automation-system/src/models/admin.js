@@ -1,9 +1,10 @@
 export default (sequelize, DataTypes) => {
   const admin = sequelize.define('Admin', {
     adminId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true

@@ -2,22 +2,18 @@
 
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('Patients', {
-    id: {
+    patientId: {
+      type: DataTypes.INTEGER,
+      unique: true,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
-    },
-    patientId: {
-      type: Sequelize.STRING,
-      unique: true,
-      allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     patientName: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       unique: true,
       allowNull: false,
       validate: {
@@ -25,42 +21,43 @@ export function up(queryInterface, Sequelize) {
       }
     },
     dateOfBirth: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     gender: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     address: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     mobileNumber: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     emailId: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
     password: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true

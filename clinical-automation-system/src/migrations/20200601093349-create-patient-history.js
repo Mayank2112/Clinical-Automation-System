@@ -2,51 +2,48 @@
 
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('PatientHistories', {
-    id: {
+    historyId: {
+      type: DataTypes.INTEGER,
+      unique: true,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
-    },
-    historyId: {
-      type: Sequelize.STRING,
-      unique: true,
-      allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     appotmentId: {
-      type: Sequelize.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
     disease: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     tablets: {
-      type: Sequelize.ARRAY(Sequelize.STRING),
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     remark: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     patientReport: {
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     createdAt: {
       allowNull: false,

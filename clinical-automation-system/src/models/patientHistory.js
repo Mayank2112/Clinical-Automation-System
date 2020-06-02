@@ -1,16 +1,17 @@
 export default (sequelize, DataTypes) => {
   const patientHistory = sequelize.define('PatientHistory', {
     historyId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
     appotmentId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
       primaryKey: true,

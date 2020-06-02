@@ -1,16 +1,17 @@
 export default (sequelize, DataTypes) => {
   const patientOrder = sequelize.define('PatientOrder', {
     orderId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
     patientId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
       validate: {
@@ -18,7 +19,7 @@ export default (sequelize, DataTypes) => {
       }
     },
     medicineId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
       validate: {

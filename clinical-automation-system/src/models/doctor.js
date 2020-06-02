@@ -1,9 +1,10 @@
 export default (sequelize, DataTypes) => {
   const Doctor = sequelize.define('Doctor', {
     doctorId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true

@@ -1,9 +1,11 @@
 export default (sequelize, DataTypes) => {
   const supplier = sequelize.define('Supplier', {
     supplierId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }

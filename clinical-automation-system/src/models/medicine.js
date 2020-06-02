@@ -1,9 +1,10 @@
 export default (sequelize, DataTypes) => {
   return sequelize.define('Medicine', {
     medicineId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
