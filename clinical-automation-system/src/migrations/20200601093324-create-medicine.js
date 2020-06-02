@@ -3,7 +3,7 @@
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('Medicines', {
     medicineId: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       unique: true,
       allowNull: false,
       autoIncrement: true,
@@ -13,7 +13,7 @@ export function up(queryInterface, Sequelize) {
       }
     },
     medicineName: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       unique: true,
       allowNull: false,
       validate: {
@@ -21,28 +21,28 @@ export function up(queryInterface, Sequelize) {
       }
     },
     manufacturingDate: {
-      type: DataTypes.DATE,
+      type: Sequelize.DATE,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     expiryDate: {
-      type: DataTypes.DATE,
+      type: Sequelize.DATE,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     pricePerTablet: {
-      type: DataTypes.FLOAT,
+      type: Sequelize.FLOAT,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     quantity: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true

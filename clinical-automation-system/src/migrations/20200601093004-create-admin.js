@@ -3,7 +3,7 @@
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('Admins', {
     adminId: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       unique: true,
       allowNull: false,
       autoIncrement: true,
@@ -13,7 +13,7 @@ export function up(queryInterface, Sequelize) {
       }
     },
     adminName: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       unique: true,
       allowNull: false,
       validate: {
@@ -21,28 +21,28 @@ export function up(queryInterface, Sequelize) {
       }
     },
     gender: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     address: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     mobileNumber: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     emailId: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       primaryKey: true,
       validate: {
@@ -50,7 +50,7 @@ export function up(queryInterface, Sequelize) {
       }
     },
     password: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: true

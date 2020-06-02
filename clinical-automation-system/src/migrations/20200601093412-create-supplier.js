@@ -3,7 +3,7 @@
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('Suppliers', {
     supplierId: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       unique: true,
       allowNull: false,
       autoIncrement: true,
@@ -13,7 +13,7 @@ export function up(queryInterface, Sequelize) {
       }
     },
     supplierName: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       unique: true,
       allowNull: false,
       validate: {
@@ -21,35 +21,42 @@ export function up(queryInterface, Sequelize) {
       }
     },
     companyName: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     companyAddress: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     mobileNumber: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     emailId: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     password: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    status: {
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
