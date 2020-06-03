@@ -11,7 +11,6 @@ export default (sequelize, DataTypes) => {
     },
     patientId: {
       type: DataTypes.UUID,
-      unique: true,
       allowNull: false,
       validate: {
         notEmpty: true

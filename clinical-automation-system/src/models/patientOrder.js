@@ -11,7 +11,6 @@ export default (sequelize, DataTypes) => {
     },
     patientId: {
       type: DataTypes.UUID,
-      unique: true,
       allowNull: false,
       validate: {
         notEmpty: true
@@ -19,7 +18,6 @@ export default (sequelize, DataTypes) => {
     },
     medicineId: {
       type: DataTypes.UUID,
-      unique: true,
       allowNull: false,
       validate: {
         notEmpty: true
@@ -27,7 +25,6 @@ export default (sequelize, DataTypes) => {
     },
     supplierId: {
       type: DataTypes.UUID,
-      unique: true,
       allowNull: false,
       validate: {
         notEmpty: true

@@ -68,6 +68,7 @@ export default (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
       primaryKey: true,
       validate: {
@@ -84,9 +85,14 @@ export default (sequelize, DataTypes) => {
   });
 
   doctor.associate = models => {
-    const { DoctorAppointment } = models;
+    const { DoctorAppointment, Specialization } = models;
 
     doctor.hasMany(DoctorAppointment, {
+      foreignKey: 'doctorId',
+      sourceKey: 'id'
+    });
+
+    doctor.hasMany(Specialization, {
       foreignKey: 'doctorId',
       sourceKey: 'id'
     });

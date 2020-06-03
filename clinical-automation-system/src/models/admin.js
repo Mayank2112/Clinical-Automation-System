@@ -11,7 +11,6 @@ export default (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
       validate: {
         notEmpty: true
@@ -42,6 +41,7 @@ export default (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
       primaryKey: true,
       validate: {
