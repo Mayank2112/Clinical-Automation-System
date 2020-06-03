@@ -16,3 +16,12 @@ export const registerSupplier = async (req, res) => {
   }
   return renderPageWithMessage(res, 400, filename.register, 'Username or email is already in use');
 };
+
+/**
+ * Redirect to dashboard page
+ * @param {httpRequest} req
+ * @param {httResponse} res
+ */
+export const redirectDashboard = (req, res) => {
+  res.render(filename.supplier.dashboard, { username: req.user.username });
+};
