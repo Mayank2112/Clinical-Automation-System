@@ -8,7 +8,7 @@ import renderPageWithMessage from '../helpers/responseRenderer';
  */
 export const logoutUser = (req, res) => {
   req.logout();
-  return renderPageWithMessage(res, 204, filename.homepage, 'Successfully Logout');
+  return renderPageWithMessage(res, 204, filename.user.homepage, 'Successfully Logout');
 };
 
 /**
@@ -17,7 +17,7 @@ export const logoutUser = (req, res) => {
  * @param {httResponse} res
  */
 export const redirectHome = (req, res) => {
-  renderPageWithMessage(res, 200, filename.homepage, null);
+  renderPageWithMessage(res, 200, filename.user.homepage, null);
 };
 
 /**
@@ -27,9 +27,9 @@ export const redirectHome = (req, res) => {
  */
 export const redirectLogin = (req, res) => {
   if (req.app.locals.loginFailure) {
-    return renderPageWithMessage(res, 403, filename.login, 'Invalid Login credentials');
+    return renderPageWithMessage(res, 403, filename.user.login, 'Invalid Login credentials');
   }
-  return renderPageWithMessage(res, 200, filename.login, null);
+  return renderPageWithMessage(res, 200, filename.user.login, null);
 };
 
 /**
@@ -38,7 +38,7 @@ export const redirectLogin = (req, res) => {
  * @param {httResponse} res
  */
 export const redirectRegister = (req, res) => {
-  renderPageWithMessage(res, 200, filename.register, null);
+  renderPageWithMessage(res, 200, filename.user.register, null);
 };
 
 /**
@@ -47,7 +47,7 @@ export const redirectRegister = (req, res) => {
  * @param {httResponse} res
  */
 export const registerFailure = (req, res) => {
-  renderPageWithMessage(res, 400, filename.register, 'Invalid Credentials');
+  renderPageWithMessage(res, 400, filename.user.register, 'Invalid Credentials');
 };
 
 /**

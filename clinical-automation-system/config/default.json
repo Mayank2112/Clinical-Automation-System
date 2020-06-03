@@ -1,9 +1,22 @@
 {
   "filename": {
-    "homepage": "homepage.ejs",
-    "dashboard": "dashboard.ejs",
-    "login": "login.ejs",
-    "register": "register.ejs"
+    "user": {
+      "homepage": "pages/user/home.ejs",
+      "login": "pages/user/login.ejs",
+      "register": "pages/user/register.ejs"
+    },
+    "patient": {
+      "dashboard": "pages/patient/dashboard.ejs"
+    },
+    "doctor": {
+      "dashboard": "pages/doctor/dashboard.ejs"
+    },
+    "admin": {
+      "dashboard": "pages/admin/dashboard.ejs"
+    },
+    "supplier": {
+      "dashboard": "pages/supplier/dashboard.ejs"
+    }
   },
   "serverConfig": {
     "port": 3000,

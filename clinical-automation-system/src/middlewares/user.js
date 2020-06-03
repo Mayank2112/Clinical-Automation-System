@@ -30,7 +30,7 @@ export const registerUser = (req, res) => {
     return registerSupplier(req, res);
   }
 
-  return renderPageWithMessage(res, 403, filename.register, 'Please select profession');
+  return renderPageWithMessage(res, 403, filename.user.register, 'Please select profession');
 };
 
 /**

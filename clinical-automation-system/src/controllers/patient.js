@@ -13,9 +13,9 @@ export const registerPatient = async (req, res) => {
 
   const result = await createPatient(patient);
   if (result) {
-    return renderPageWithMessage(res, 201, filename.homepage, `${patient.username} registered successfully. Login to continue`);
+    return renderPageWithMessage(res, 201, filename.user.homepage, `${patient.username} registered successfully. Login to continue`);
   }
-  return renderPageWithMessage(res, 400, filename.register, 'Username or email is already in use');
+  return renderPageWithMessage(res, 400, filename.user.register, 'Username or email is already in use');
 };
 
 /**
