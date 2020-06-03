@@ -8,15 +8,15 @@ const sequelize = db.sequelize;
  * @param {String} emailId
  */
 export const findAdmin = emailId => sequelize.authenticate()
-.then(() => Admin.sync({ force: false })
-  .then(() => Admin.findAll({
-    where: {
-      emailId: emailId
-    }
-  })
-    .then(admin => admin[0].dataValues)
-    .catch(() => undefined)))
-.catch(console.error);
+  .then(() => Admin.sync({ force: false })
+    .then(() => Admin.findAll({
+      where: {
+        emailId: emailId
+      }
+    })
+      .then(admin => admin[0].dataValues)
+      .catch(() => undefined)))
+  .catch(console.error);
 
 /**
  * Checks admin with given emailId and password is valid or not

@@ -1,20 +1,24 @@
 import { Router } from 'express';
-import register from './register';
-import login from './login';
-import homepage from './home';
-import invalidRoutes from './invalidRoutes';
-import dashboard from './dashboard';
+import { isAdminLoggedIn } from '../middlewares/admin';
+import { isDoctorLoggedIn } from '../middlewares/doctor';
+import { isPatientLoggedIn } from '../middlewares/patient';
+import { isSupplierLoggedIn } from '../middlewares/supplier';
+import user from './user';
+import admin from './admin';
+import doctor from './doctor';
+import patient from './patient';
+import supplier from './supplier';
 
 const router = Router();
 
-router.use('/register', register);
+router.use('/admin', isAdminLoggedIn, admin);
 
-router.use('/login', login);
+router.use('/doctor', isDoctorLoggedIn, doctor);
 
-router.use('/dashboard', dashboard);
+router.use('/patient', isPatientLoggedIn, patient);
 
-router.use('/', homepage);
+router.use('/supplier', isSupplierLoggedIn, supplier);
 
-router.all(/ */, invalidRoutes);
+router.use('/', user);
 
 export default router;
