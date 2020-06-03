@@ -1,4 +1,5 @@
 import db from '../models';
+import { v4 } from 'uuid';
 
 const Supplier = db.Supplier;
 const sequelize = db.sequelize;
@@ -8,27 +9,26 @@ const sequelize = db.sequelize;
  * @param {Object} supplier - containing username, email and password
  */
 export const createSupplier = supplier => sequelize.authenticate()
-  .then(() => Supplier.sync({ force: true })
+  .then(() => Supplier.sync({ force: false })
     .then(() => Supplier.create({
-      supplierName: supplier.username,
-      companyName: 'pending',
-      companyAddress: 'pending',
+      id: v4(),
+      name: supplier.username,
       mobileNumber: supplier.mobileNumber,
-      emailId: supplier.email,
+      email: supplier.email,
       password: supplier.password,
-      status: 'pending'
+      status: 'registered'
     })))
   .catch(err => false);
 
 /**
  * Find supplier with given emailId in database
- * @param {String} emailId
+ * @param {String} email
  */
-export const findSupplier = emailId => sequelize.authenticate()
+export const findSupplier = email => sequelize.authenticate()
   .then(() => Supplier.sync({ force: false })
     .then(() => Supplier.findAll({
       where: {
-        emailId: emailId
+        email: email
       }
     })
       .then(supplier => supplier[0].dataValues)
@@ -37,10 +37,10 @@ export const findSupplier = emailId => sequelize.authenticate()
 
 /**
  * Checks supplier with given emailId and password is valid or not
- * @param {String} emailId
+ * @param {String} email
  * @param {String} password
  */
-export const isValidSupplier = (emailId, password) => findSupplier(emailId)
+export const isValidSupplier = (email, password) => findSupplier(email)
   .then(supplier => {
     if (supplier) {
       return password === supplier.password;

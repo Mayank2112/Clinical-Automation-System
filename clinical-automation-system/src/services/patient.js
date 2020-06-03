@@ -1,4 +1,5 @@
 import db from '../models';
+import { v4 } from 'uuid';
 
 const Patient = db.Patient;
 const sequelize = db.sequelize;
@@ -10,25 +11,26 @@ const sequelize = db.sequelize;
 export const createPatient = patient => sequelize.authenticate()
   .then(() => Patient.sync({ force: false })
     .then(() => Patient.create({
-      patientName: patient.username,
+      id: v4(),
+      name: patient.username,
       dateOfBirth: patient.dateOfBirth,
       gender: patient.gender,
       address: patient.address,
       mobileNumber: patient.mobileNumber,
-      emailId: patient.email,
+      email: patient.email,
       password: patient.password
     })))
   .catch(() => false);
 
 /**
  * Find patient with given emailId in database
- * @param {String} emailId
+ * @param {String} email
  */
-export const findPatient = emailId => sequelize.authenticate()
+export const findPatient = email => sequelize.authenticate()
   .then(() => Patient.sync({ force: false })
     .then(() => Patient.findAll({
       where: {
-        emailId: emailId
+        email: email
       }
     })
       .then(patient => patient[0].dataValues)
@@ -37,10 +39,10 @@ export const findPatient = emailId => sequelize.authenticate()
 
 /**
  * Checks patient with given emailId and password is valid or not
- * @param {String} emailId
+ * @param {String} email
  * @param {String} password
  */
-export const isValidPatient = (emailId, password) => findPatient(emailId)
+export const isValidPatient = (email, password) => findPatient(email)
   .then(patient => {
     if (patient) {
       return password === patient.password;

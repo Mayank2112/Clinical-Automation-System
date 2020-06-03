@@ -1,17 +1,16 @@
 export default (sequelize, DataTypes) => {
   const patientOrder = sequelize.define('PatientOrder', {
-    orderId: {
-      type: DataTypes.INTEGER,
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
     patientId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
       validate: {
@@ -19,7 +18,15 @@ export default (sequelize, DataTypes) => {
       }
     },
     medicineId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      unique: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    supplierId: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
       validate: {
@@ -27,20 +34,20 @@ export default (sequelize, DataTypes) => {
       }
     },
     quantity: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
-    amount: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
-    orderDate: {
+    amount: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    date: {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
@@ -48,7 +55,9 @@ export default (sequelize, DataTypes) => {
       }
     },
     status: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.ENUM({
+        values: ['pending', 'confirmed', 'delivered']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -57,16 +66,21 @@ export default (sequelize, DataTypes) => {
   });
 
   patientOrder.associate = models => {
-    const { Patient, Medicine } = models;
+    const { Patient, Medicine, Supplier } = models;
 
     patientOrder.belongsTo(Patient, {
-      foreignKey: 'patientId',
-      targetKey: 'patientId'
+      foreignKey: 'patientid',
+      targetKey: 'id'
     });
 
     patientOrder.hasMany(Medicine, {
       foreignKey: 'medicineId',
-      sourceKey: 'medicineId'
+      sourceKey: 'id'
+    });
+
+    patientOrder.hasOne(Supplier, {
+      foreignKey: 'supplierId',
+      sourceKey: 'id'
     });
   };
   return patientOrder;

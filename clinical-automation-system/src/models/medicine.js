@@ -1,16 +1,15 @@
 export default (sequelize, DataTypes) => {
   return sequelize.define('Medicine', {
-    medicineId: {
-      type: DataTypes.INTEGER,
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
-    medicineName: {
+    name: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,

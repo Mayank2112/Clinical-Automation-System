@@ -5,13 +5,13 @@ const sequelize = db.sequelize;
 
 /**
  * Find admin with given emailId in database
- * @param {String} emailId
+ * @param {String} email
  */
-export const findAdmin = emailId => sequelize.authenticate()
+export const findAdmin = email => sequelize.authenticate()
   .then(() => Admin.sync({ force: false })
     .then(() => Admin.findAll({
       where: {
-        emailId: emailId
+        email: email
       }
     })
       .then(admin => admin[0].dataValues)
@@ -20,10 +20,10 @@ export const findAdmin = emailId => sequelize.authenticate()
 
 /**
  * Checks admin with given emailId and password is valid or not
- * @param {String} emailId
+ * @param {String} email
  * @param {String} password
  */
-export const isValidAdmin = (emailId, password) => findAdmin(emailId)
+export const isValidAdmin = (email, password) => findAdmin(email)
   .then(admin => {
     if (admin) {
       return password === admin.password;

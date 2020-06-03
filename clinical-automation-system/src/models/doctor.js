@@ -1,16 +1,15 @@
 export default (sequelize, DataTypes) => {
-  const Doctor = sequelize.define('Doctor', {
-    doctorId: {
-      type: DataTypes.INTEGER,
+  const doctor = sequelize.define('Doctor', {
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
-    doctorName: {
+    name: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
@@ -26,42 +25,35 @@ export default (sequelize, DataTypes) => {
       }
     },
     gender: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM({
+        values: ['male', 'female', 'other']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     degree: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.ENUM({
+        values: ['MBBS', 'MD']
+      })
     },
-    specialized: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+    startTime: {
+      type: DataTypes.DATE
     },
-    experience: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+    endTime: {
+      type: DataTypes.DATE
+    },
+    experienceFrom: {
+      type: DataTypes.DATE
     },
     appointmentFee: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.INTEGER
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM({
+        values: ['registered', 'pending', 'approved']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -74,7 +66,7 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    emailId: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       primaryKey: true,
@@ -91,13 +83,13 @@ export default (sequelize, DataTypes) => {
     }
   });
 
-  Doctor.associate = models => {
+  doctor.associate = models => {
     const { DoctorAppointment } = models;
 
-    Doctor.hasMany(DoctorAppointment, {
+    doctor.hasMany(DoctorAppointment, {
       foreignKey: 'doctorId',
-      sourceKey: 'doctorId'
+      sourceKey: 'id'
     });
   };
-  return Doctor;
+  return doctor;
 };
