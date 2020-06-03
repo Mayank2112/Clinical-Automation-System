@@ -34,20 +34,6 @@ export const registerUser = (req, res) => {
 };
 
 /**
- * Checks user is logged in or not
- * @param {httpRequest} req
- * @param {httpResponse} res
- * @param {callback function} next
- */
-export const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(401);
-  return res.redirect('/login');
-};
-
-/**
  * Destroy the session of user
  * @param {httpRequest} req
  * @param {httpResponse} res
