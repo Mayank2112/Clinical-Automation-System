@@ -1,9 +1,9 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { isValidPatient } from '../services/patient';
-import { isValidDoctor } from '../services/doctor';
-import { isValidSupplier } from '../services/supplier';
-import { isValidAdmin } from '../services/admin';
+import { isValidPatient, findPatient } from '../services/patient';
+import { isValidDoctor, findDoctor } from '../services/doctor';
+import { isValidSupplier, findSupplier } from '../services/supplier';
+import { isValidAdmin, findAdmin } from '../services/admin';
 
 export const passportSetup = app => {
   // passport middleware setup
@@ -11,13 +11,32 @@ export const passportSetup = app => {
   app.use(passport.session());
 
   // Used to serialalize the user for session
-  passport.serializeUser((user, done) => {
-    done(null, user);
+  passport.serializeUser(async (user, done) => {
+    if (await findAdmin(user.username)) {
+      user.type = 'admin';
+      return done(null, user);
+    }
+
+    if (await findDoctor(user.username)) {
+      user.type = 'doctor';
+      return done(null, user);
+    }
+
+    if (await findSupplier(user.username)) {
+      user.type = 'supplier';
+      return done(null, user);
+    }
+
+    if (await findPatient(user.username)) {
+      user.type = 'patient';
+      return done(null, user);
+    }
+    return done(null, user);
   });
 
   // Used to deserialize the user
-  passport.deserializeUser((username, done) => {
-    done(null, username);
+  passport.deserializeUser((user, done) => {
+    done(null, user);
   });
 
   // Middleware for local strategy Authentication for Patient
