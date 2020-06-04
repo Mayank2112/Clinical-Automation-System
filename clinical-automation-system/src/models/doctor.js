@@ -39,10 +39,10 @@ export default (sequelize, DataTypes) => {
       })
     },
     startTime: {
-      type: DataTypes.DATE
+      type: DataTypes.INTEGER
     },
     endTime: {
-      type: DataTypes.DATE
+      type: DataTypes.INTEGER
     },
     experienceFrom: {
       type: DataTypes.DATE
