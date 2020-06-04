@@ -18,16 +18,14 @@ import {
  * @param {httResponse} res
  */
 export const registerUser = (req, res) => {
-  if (req.body.profession === 'patient') {
-    return registerPatient(req, res);
-  }
+  const registration = {
+    doctor: registerDoctor,
+    patient: registerPatient,
+    supplier: registerSupplier
+  };
 
-  if (req.body.profession === 'doctor') {
-    return registerDoctor(req, res);
-  }
-
-  if (req.body.profession === 'supplier') {
-    return registerSupplier(req, res);
+  if (registration[req.body.profession]) {
+    return registration[req.body.profession](req, res);
   }
 
   return renderPageWithMessage(res, 403, filename.user.register, 'Please select profession');
@@ -74,20 +72,16 @@ export const checkUserCredentials = (req, res, next) => {
 };
 
 export const redirectUserToProfessionLogin = (req, res) => {
-  if (req.body.profession === 'admin') {
-    return adminLocalAuthentication(req, res);
-  }
+  const authentication = {
+    admin: adminLocalAuthentication,
+    doctor: doctorLocalAuthentication,
+    patient: patientLocalAuthentication,
+    supplier: supplierLocalAuthentication
+  };
+  req.app.locals.userType = req.body.profession;
 
-  if (req.body.profession === 'doctor') {
-    return doctorLocalAuthentication(req, res);
-  }
-
-  if (req.body.profession === 'patient') {
-    return patientLocalAuthentication(req, res);
-  }
-
-  if (req.body.profession === 'supplier') {
-    return supplierLocalAuthentication(req, res);
+  if (authentication[req.body.profession]) {
+    return authentication[req.body.profession](req, res);
   }
   return setLoginFailure(req, res);
 };

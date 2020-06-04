@@ -1,4 +1,3 @@
-
 /**
  * Checks admin is logged in or not
  * @param {httpRequest} req
