@@ -1,3 +1,5 @@
+import { isValidTypes } from '../helpers/doctor/validator';
+import { redirectDashboard } from '../controllers/doctor';
 
 /**
  * Checks doctor is logged in or not
@@ -11,4 +13,11 @@ export const isDoctorLoggedIn = (req, res, next) => {
   }
   res.status(401);
   return res.redirect('/login');
+};
+
+export const checkCredentials = (req, res, next) => {
+  if (isValidTypes(req.body) && Number(req.body.startTime) < Number(req.body.endTime)) {
+    return next();
+  }
+  return redirectDashboard(req, res);
 };
