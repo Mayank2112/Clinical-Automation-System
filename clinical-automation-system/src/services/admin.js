@@ -1,3 +1,4 @@
+import { compareSync } from 'bcryptjs';
 import db from '../models';
 
 const Admin = db.Admin;
@@ -26,7 +27,7 @@ export const findAdmin = email => sequelize.authenticate()
 export const isValidAdmin = (email, password) => findAdmin(email)
   .then(admin => {
     if (admin) {
-      return password === admin.password;
+      return compareSync(password, admin.password);
     }
     return false;
   });

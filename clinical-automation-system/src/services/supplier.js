@@ -1,5 +1,6 @@
-import db from '../models';
+import { hashSync, compareSync } from 'bcryptjs';
 import { v4 } from 'uuid';
+import db from '../models';
 
 const Supplier = db.Supplier;
 const sequelize = db.sequelize;
@@ -15,7 +16,7 @@ export const createSupplier = supplier => sequelize.authenticate()
       name: supplier.username,
       mobileNumber: supplier.mobileNumber,
       email: supplier.email,
-      password: supplier.password,
+      password: hashSync(supplier.password, 10),
       status: 'registered'
     })))
   .catch(err => false);
@@ -43,7 +44,7 @@ export const findSupplier = email => sequelize.authenticate()
 export const isValidSupplier = (email, password) => findSupplier(email)
   .then(supplier => {
     if (supplier) {
-      return password === supplier.password;
+      return compareSync(password, supplier.password);
     }
     return false;
   });

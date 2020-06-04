@@ -1,5 +1,6 @@
-import db from '../models';
+import { hashSync, compareSync } from 'bcryptjs';
 import { v4 } from 'uuid';
+import db from '../models';
 
 const Doctor = db.Doctor;
 const sequelize = db.sequelize;
@@ -19,7 +20,7 @@ export const createDoctor = doctor => sequelize.authenticate()
       address: doctor.address,
       mobileNumber: doctor.mobileNumber,
       email: doctor.email,
-      password: doctor.password
+      password: hashSync(doctor.password, 10)
     })))
   .catch(() => false);
 
@@ -46,7 +47,7 @@ export const findDoctor = email => sequelize.authenticate()
 export const isValidDoctor = (email, password) => findDoctor(email)
   .then(doctor => {
     if (doctor) {
-      return password === doctor.password;
+      return compareSync(password, doctor.password);
     }
     return false;
   });
