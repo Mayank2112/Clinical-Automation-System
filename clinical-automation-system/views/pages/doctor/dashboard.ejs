@@ -4,19 +4,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>Dashboard | CAS</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
+  <link href="../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
-  <%- include('../../partials/afterLoginHeader') %>
+  <div class='main'>
+    <%- include('../../partials/afterLoginHeader') %>
+  </div>
 </header>
 
 <body>
-  <h1>Clinical Automation System</h1>
-  <br>
-  <h2>Dashboard</h2>
-  Welcome <%= username%>
+  <% if(details.status) {
+    if(details.status === 'registered' || details.status === 'pending') { %>
+  <%- include('../../partials/doctor/pendingSidenav') -%>
+  <% } else if(details.status === 'approved') { %>
+  <%- include('../../partials/doctor/sidenav') -%>
+  <% }
+  } %>
+  <div class='main'>
+
+    <h1>Clinical Automation System</h1>
+    <br>
+    <h2>Dashboard</h2>
+    Add details from left bar and then wait for Admin approval
+
+  </div>
 </body>
 
 </html>

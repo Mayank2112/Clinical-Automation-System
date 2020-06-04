@@ -9,10 +9,12 @@
       "dashboard": "pages/patient/dashboard.ejs"
     },
     "doctor": {
-      "dashboard": "pages/doctor/dashboard.ejs"
+      "dashboard": "pages/doctor/dashboard.ejs",
+      "details": "pages/doctor/details.ejs"
     },
     "admin": {
-      "dashboard": "pages/admin/dashboard.ejs"
+      "dashboard": "pages/admin/dashboard.ejs",
+      "doctorRequest": "pages/admin/doctorRequest"
     },
     "supplier": {
       "dashboard": "pages/supplier/dashboard.ejs"

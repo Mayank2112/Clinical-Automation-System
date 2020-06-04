@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | CAS</title>
+  <link href="../header.css" rel="stylesheet" type="text/css" />
+  <link href="../sidenav.css" rel="stylesheet" type="text/css" />
+</head>
+
+<header>
+  <div class='main'>
+    <%- include('../../partials/doctor/header') %>
+  </div>
+</header>
+
+<body>
+  <% if(details.status) {
+    if(details.status === 'registered' || details.status === 'pending') { %>
+  <%- include('../../partials/doctor/pendingSidenav') -%>
+  <% } else if(details.status === 'approved') { %>
+  <%- include('../../partials/doctor/sidenav') -%>
+  <% }
+  } %>
+
+  <div class='main'>
+    <h1>Clinical Automation System</h1>
+    <br>
+    <h2>My Personal Details</h2>
+    <br>
+
+    Name : <%= details.name %> <br>
+    Email : <%= details.email %> <br>
+    <% if (details.degree && details.startTime && details.endTime && details.experienceFrom && details.appointmentFee) { %>
+    Degree: <%= details.degree %> <br>
+    Start Time: <%= details.startTime %> <br>
+    End Time: <%= details.endTime %> <br>
+    Experienced From: <%= details.experienceFrom %> <br>
+    appointmentFee: <%= details.appointmentFee %>
+    <% } else { %>
+    <form action="/doctor/details" method="POST">
+      Start Time : <input type="number" name="startTime" required="required" placeholder="24 hour format"><br>
+      End Time : <input type="number" name="endTime" required="required" placeholder="24 hour format"><br>
+      Experienced From : <input type="datetime" name="experienceFrom" required="required" placeholder="mm/dd/yyyy"><br>
+      Degree : <input type="text" name="degree" required="required" , placeholder="Higher degree"><br>
+      Appointment Fee : <input type="number" name="appointmentFee" required="required"><br>
+      <br>
+      <button type="submit">Submit</button>
+    </form>
+    <% } %>
+  </div>
+</body>
+
+</html>
