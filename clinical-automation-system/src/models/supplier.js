@@ -18,18 +18,10 @@ export default (sequelize, DataTypes) => {
       }
     },
     companyName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.STRING
     },
     companyAddress: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.STRING
     },
     mobileNumber: {
       type: DataTypes.STRING,
