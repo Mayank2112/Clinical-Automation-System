@@ -48,3 +48,65 @@ export const isValidSupplier = (email, password) => findSupplier(email)
     }
     return false;
   });
+
+export const addDetails = supplier => sequelize.authenticate()
+  .then(() => Supplier.sync({ force: false })
+    .then(() => Supplier.update({
+      companyName: supplier.companyName,
+      companyAddress: supplier.companyAddress,
+      status: 'pending'
+    },
+      {
+        where: {
+          email: supplier.email
+        }
+      })
+      .catch(() => undefined)))
+  .catch(console.error);
+
+/**
+ * Find doctor with given status
+ * @param {String} email
+ */
+export const findSupplierByStatus = status => sequelize.authenticate()
+  .then(() => Supplier.sync({ force: false })
+    .then(() => Supplier.findAll({
+      where: {
+        status: status
+      }
+    })
+      .then(supplier => {
+        const result = [];
+        supplier.forEach(supplier => {
+          supplier.dataValues.id = 'Hidden';
+          supplier.dataValues.password = 'Hidden';
+          result.push(supplier.dataValues);
+        });
+        return result;
+      })
+      .catch(() => undefined)))
+  .catch(console.error);
+
+export const approveSupplier = email => sequelize.authenticate()
+  .then(() => Supplier.sync({ force: false })
+    .then(() => Supplier.update({
+      status: 'approved'
+    },
+      {
+        where: {
+          email: email
+        }
+      })
+      .catch(() => undefined)))
+  .catch(console.error);
+
+export const deleteSupplier = email => sequelize.authenticate()
+  .then(() => Supplier.sync({ force: false })
+    .then(() => Supplier.destroy(
+      {
+        where: {
+          email: email
+        }
+      })
+      .catch(() => undefined)))
+  .catch(console.error);
