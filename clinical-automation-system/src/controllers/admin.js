@@ -1,5 +1,7 @@
 import { filename } from 'config';
 import { findDoctorByStatus, approveDoctor, deleteDoctor } from '../services/doctor';
+import { findSupplierByStatus, approveSupplier, deleteSupplier } from '../services/supplier';
+import renderPageWithMessage from '../helpers/responseRenderer';
 
 /**
  * Redirect to dashboard page
@@ -17,8 +19,7 @@ export const redirectDashboard = (req, res) => {
  */
 export const redirectDoctorRequest = async (req, res) => {
   const doctors = await findDoctorByStatus('pending');
-  const details = { doctors };
-  return res.render(filename.admin.doctorRequest, { details });
+  return renderPageWithMessage(res, 200, filename.admin.doctorRequest, null, doctors);
 };
 
 export const configureDoctor = async (req, res) => {
@@ -26,8 +27,31 @@ export const configureDoctor = async (req, res) => {
     approved: approveDoctor,
     rejected: deleteDoctor
   };
+
   if (doctorOperation[req.body.status]) {
     await doctorOperation[req.body.status](req.body.doctorEmail);
   }
   res.redirect('/admin/doctorRequest');
+};
+
+/**
+ * Redirect to supplier details page
+ * @param {httpRequest} req
+ * @param {httResponse} res
+ */
+export const redirectSupplierRequest = async (req, res) => {
+  const suppliers = await findSupplierByStatus('pending');
+  return renderPageWithMessage(res, 200, filename.admin.supplierRequest, null, suppliers);
+};
+
+export const configureSupplier = async (req, res) => {
+  const supplierOperation = {
+    approved: approveSupplier,
+    rejected: deleteSupplier
+  };
+
+  if (supplierOperation[req.body.status]) {
+    await supplierOperation[req.body.status](req.body.supplierEmail);
+  }
+  res.redirect('/admin/supplierRequest');
 };

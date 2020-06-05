@@ -28,7 +28,7 @@ export const redirectDashboard = (req, res) => {
     name: req.user.username,
     status: req.session.passport.user.status
   };
-  res.render(filename.doctor.dashboard, { details });
+  renderPageWithMessage(res, 200, filename.doctor.dashboard, null, details);
 };
 
 /**
@@ -50,7 +50,7 @@ export const redirectDetails = async (req, res) => {
     experienceFrom: doctor.experienceFrom,
     appointmentFee: doctor.appointmentFee
   };
-  return res.render(filename.doctor.details, { details });
+  return renderPageWithMessage(res, 200, filename.doctor.details, null, details);
 };
 
 export const addCredentials = async (req, res) => {

@@ -62,12 +62,12 @@ export const addDetails = doctor => sequelize.authenticate()
       appointmentFee: doctor.appointmentFee,
       status: 'pending'
     },
-      {
-        where: {
-          email: doctor.email
-        }
-      })
-      .catch(() => undefined)))
+    {
+      where: {
+        email: doctor.email
+      }
+    })
+    .catch(() => undefined)))
   .catch(console.error);
 
 /**
@@ -98,12 +98,12 @@ export const approveDoctor = email => sequelize.authenticate()
     .then(() => Doctor.update({
       status: 'approved'
     },
-      {
-        where: {
-          email: email
-        }
-      })
-      .catch(() => undefined)))
+    {
+      where: {
+        email: email
+      }
+    })
+    .catch(() => undefined)))
   .catch(console.error);
 
 export const deleteDoctor = email => sequelize.authenticate()

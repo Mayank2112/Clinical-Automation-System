@@ -1,4 +1,3 @@
-
 /**
  * Checks patient is logged in or not
  * @param {httpRequest} req
