@@ -34,14 +34,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     time: {
-      type: DataTypes.DATE,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true

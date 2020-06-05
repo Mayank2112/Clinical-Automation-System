@@ -116,3 +116,18 @@ export const deleteDoctor = email => sequelize.authenticate()
       })
       .catch(() => undefined)))
   .catch(console.error);
+
+/**
+ * Find doctor with given emailId in database
+ * @param {String} email
+ */
+export const findDoctorById = id => sequelize.authenticate()
+  .then(() => Doctor.sync({ force: false })
+    .then(() => Doctor.findAll({
+      where: {
+        id: id
+      }
+    })
+      .then(doctor => doctor[0].dataValues)
+      .catch(() => undefined)))
+  .catch(console.error);

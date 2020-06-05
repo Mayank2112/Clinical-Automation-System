@@ -1,7 +1,8 @@
+import moment from 'moment';
 import { filename } from 'config';
 import { createDoctor, findDoctor, addDetails } from '../services/doctor';
 import renderPageWithMessage from '../helpers/responseRenderer';
-
+import { findAppointmentByDoctor, approveAppointment, deleteAppointment } from '../services/appointment';
 /**
  * Register new doctor to database
  * @param {httpRequest} req
@@ -64,4 +65,37 @@ export const addCredentials = async (req, res) => {
     res.redirect('/doctor/details');
   }
   return renderPageWithMessage(res, 400, filename.doctor.details, 'Data submitted is not correct');
+};
+
+export const sendAppointmentRequestList = async (req, res) => {
+  const doctor = await findDoctor(req.user.username);
+  const appointments = await findAppointmentByDoctor(doctor.id, 'pending');
+
+  if (appointments.length) {
+    return renderPageWithMessage(res, 200, filename.doctor.appointmentRequest, null, appointments);
+  }
+  return renderPageWithMessage(res, 200, filename.doctor.appointmentRequest, 'No Appointments yet');
+};
+
+export const configureAppointmentRequest = async (req, res) => {
+  const doctor = await findDoctor(req.user.username);
+  const appointmentOperation = {
+    approved: approveAppointment,
+    rejected: deleteAppointment
+  };
+
+  if (appointmentOperation[req.body.status]) {
+    await appointmentOperation[req.body.status](req.body.patientId, doctor.id, moment().format('l'));
+  }
+  res.redirect('/doctor/appointmentRequest');
+};
+
+export const sendAppointmentList = async (req, res) => {
+  const doctor = await findDoctor(req.user.username);
+  const appointments = await findAppointmentByDoctor(doctor.id, 'confirmed');
+
+  if (appointments.length) {
+    return renderPageWithMessage(res, 200, filename.doctor.appointment, null, appointments);
+  }
+  return renderPageWithMessage(res, 200, filename.doctor.appointment, 'No Appointments yet');
 };
