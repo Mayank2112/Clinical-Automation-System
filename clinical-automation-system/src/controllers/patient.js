@@ -1,6 +1,9 @@
+import moment from 'moment';
 import { filename } from 'config';
-import { createPatient } from '../services/patient';
+import { createPatient, findPatient } from '../services/patient';
 import renderPageWithMessage from '../helpers/responseRenderer';
+import { findDoctorByStatus, findDoctor } from '../services/doctor';
+import { createAppointment, findAppointmentByPatient } from '../services/appointment';
 
 /**
  * Register new user to database
@@ -25,4 +28,44 @@ export const registerPatient = async (req, res) => {
  */
 export const redirectDashboard = (req, res) => {
   res.render(filename.patient.dashboard, { username: req.user.username });
+};
+
+export const sendDoctorList = async (req, res) => {
+  const doctors = await findDoctorByStatus('approved');
+  if (doctors.length > 0) {
+    return renderPageWithMessage(res, 200, filename.patient.appointmentRequest, null, doctors);
+  }
+  return renderPageWithMessage(res, 200, filename.patient.appointmentRequest, 'No doctor registered successfully yet');
+};
+
+export const makeAppointmentRequest = async (req, res) => {
+  const time = Number(req.body.time) % 100;
+  const doctor = await findDoctor(req.body.doctorEmail);
+  const patient = await findPatient(req.user.username);
+
+  const appointment = {
+    patientId: patient.id,
+    doctorId: doctor.id,
+    subject: req.body.subject,
+    description: req.body.description || null,
+    date: moment().format('l'),
+    time: time,
+    status: 'pending'
+  };
+
+  const result = await createAppointment(appointment);
+  if (result) {
+    res.redirect('/patient/appointment');
+  }
+  return renderPageWithMessage(res, 500, filename.patient.appointmentRequest, 'Some error occurs please try again');
+};
+
+export const sendAppointmentList = async (req, res) => {
+  const patient = await findPatient(req.user.username);
+  const appointments = await findAppointmentByPatient(patient.id);
+
+  if (appointments.length) {
+    return renderPageWithMessage(res, 200, filename.patient.appointment, null, appointments);
+  }
+  return renderPageWithMessage(res, 200, filename.patient.appointment, 'No Appointments yet');
 };
