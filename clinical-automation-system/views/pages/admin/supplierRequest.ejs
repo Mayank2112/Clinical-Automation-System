@@ -22,34 +22,24 @@
     <h1>Clinical Automation System</h1>
     <br>
     <% if(details) { %>
-    <h2>Doctors List</h2>
+    <h2>Suppliers List</h2>
     <table border="1px">
       <th>Name</th>
-      <th>Date of Birth</th>
-      <th>Gender</th>
-      <th>Degree</th>
-      <th>Start Time</th>
-      <th>End Time</th>
-      <th>Experience from</th>
-      <th>Appointment Fee</th>
+      <th>Company Name</th>
+      <th>Company Address</th>
       <th>Mobile Number</th>
       <th>Email</th>
       <th>Approve</th>
       <th>Reject</th>
       <th>Submit</th>
-      <% details.forEach(doctor => { %>
-      <form action="/admin/doctorRequest" method="post">
+      <% details.forEach(supplier => { %>
+      <form action="/admin/supplierRequest" method="post">
         <tr>
-          <td><%= doctor.name %></td>
-          <td><%= doctor.dateOfBirth %></td>
-          <td><%= doctor.gender %></td>
-          <td><%= doctor.degree %></td>
-          <td><%= doctor.startTime %></td>
-          <td><%= doctor.endTime %></td>
-          <td><%= doctor.experienceFrom %></td>
-          <td><%= doctor.appointmentFee %></td>
-          <td><%= doctor.mobileNumber %></td>
-          <td><input type="text" name="doctorEmail" readonly="readonly" value= <%= doctor.email %> ></td>
+          <td><%= supplier.name %></td>
+          <td><%= supplier.companyName %></td>
+          <td><%= supplier.companyAddress %></td>
+          <td><%= supplier.mobileNumber %></td>
+          <td><input type="text" name="supplierEmail" readonly="readonly" value= <%= supplier.email %> ></td>
           <td><input type="radio" name="status" value="approved"></td>
           <td><input type="radio" name="status" value="rejected"></td>
           <td><button type="submit">Send Response</button></td>

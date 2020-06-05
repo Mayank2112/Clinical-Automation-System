@@ -14,15 +14,17 @@
     },
     "admin": {
       "dashboard": "pages/admin/dashboard.ejs",
-      "doctorRequest": "pages/admin/doctorRequest"
+      "doctorRequest": "pages/admin/doctorRequest",
+      "supplierRequest": "pages/admin/supplierRequest"
     },
     "supplier": {
-      "dashboard": "pages/supplier/dashboard.ejs"
+      "dashboard": "pages/supplier/dashboard.ejs",
+      "details": "pages/supplier/details"
     }
   },
   "serverConfig": {
     "port": 3000,
-    "cookieTime": 300000,
+    "cookieTime": 600000,
     "cookieSecret": "this-is-a-secret-key"
   }
 }
