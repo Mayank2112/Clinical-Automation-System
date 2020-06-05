@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "mocha": "^7.1.2",
+    "moment": "^2.26.0",
     "nodemon": "^2.0.3",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
