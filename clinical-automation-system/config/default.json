@@ -6,11 +6,15 @@
       "register": "pages/user/register.ejs"
     },
     "patient": {
-      "dashboard": "pages/patient/dashboard.ejs"
+      "dashboard": "pages/patient/dashboard.ejs",
+      "appointmentRequest": "pages/patient/appointmentRequest.ejs",
+      "appointment": "pages/patient/appointment"
     },
     "doctor": {
       "dashboard": "pages/doctor/dashboard.ejs",
-      "details": "pages/doctor/details.ejs"
+      "details": "pages/doctor/details.ejs",
+      "appointmentRequest": "pages/doctor/appointmentRequest.ejs",
+      "appointment": "pages/doctor/appointment"
     },
     "admin": {
       "dashboard": "pages/admin/dashboard.ejs",
