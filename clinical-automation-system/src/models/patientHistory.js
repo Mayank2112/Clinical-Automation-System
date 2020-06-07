@@ -9,7 +9,7 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    appotmentId: {
+    appointmentId: {
       type: DataTypes.UUID,
       unique: true,
       allowNull: false,

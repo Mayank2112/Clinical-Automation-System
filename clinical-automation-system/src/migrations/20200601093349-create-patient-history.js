@@ -12,7 +12,7 @@ export function up(queryInterface, Sequelize) {
         notEmpty: true
       }
     },
-    appotmentId: {
+    appointmentId: {
       type: Sequelize.INTEGER,
       unique: true,
       allowNull: false,
@@ -28,13 +28,6 @@ export function up(queryInterface, Sequelize) {
         notEmpty: true
       }
     },
-    tablets: {
-      type: Sequelize.ARRAY(Sequelize.STRING),
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
     remark: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -42,7 +35,7 @@ export function up(queryInterface, Sequelize) {
         notEmpty: true
       }
     },
-    patientReport: {
+    report: {
       type: Sequelize.STRING
     },
     createdAt: {
