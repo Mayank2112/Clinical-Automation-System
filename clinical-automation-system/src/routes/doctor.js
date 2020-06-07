@@ -8,8 +8,12 @@ import {
   addCredentials,
   sendAppointmentRequestList,
   configureAppointmentRequest,
-  sendAppointmentList
+  sendAppointmentList,
+  sendPatientInformation,
+  saveReport,
+  sendDoctorInformation
 } from '../controllers/doctor';
+import { appointmentCompleted } from '../middlewares/appointment';
 
 const router = Router();
 
@@ -25,6 +29,12 @@ router.get('/appointmentRequest', sendAppointmentRequestList);
 router.post('/appointmentRequest', configureAppointmentRequest);
 
 router.get('/appointment', sendAppointmentList);
+
+router.post('/appointment/patient-report', appointmentCompleted, saveReport);
+
+router.get('/appointment/patient-information/:patientId', sendPatientInformation);
+
+router.get('/information/:doctorId', sendDoctorInformation);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);

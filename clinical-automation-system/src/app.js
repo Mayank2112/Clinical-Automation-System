@@ -9,7 +9,7 @@ const app = express();
 const port = serverConfig.port;
 
 // setup for parsing data
-app.use(urlencoded({ extended: false }));
+app.use(urlencoded({ extended: true }));
 app.use(json());
 
 // Set options for cookie
