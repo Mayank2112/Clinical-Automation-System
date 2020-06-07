@@ -75,9 +75,9 @@ export const findSupplierByStatus = status => sequelize.authenticate()
         status: status
       }
     })
-      .then(supplier => {
+      .then(suppliers => {
         const result = [];
-        supplier.forEach(supplier => {
+        suppliers.forEach(supplier => {
           supplier.dataValues.id = 'Hidden';
           supplier.dataValues.password = 'Hidden';
           result.push(supplier.dataValues);

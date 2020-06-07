@@ -3,7 +3,7 @@ import { filename } from 'config';
 import { isValidEmail } from '../helpers/validator';
 import renderPageWithMessage from '../helpers/responseRenderer';
 import { findDoctor } from '../services/doctor';
-import { findAppointmentByTime } from '../services/appointment';
+import { findAppointmentByTime, changeAppointmentStatus } from '../services/appointment';
 
 export const checkAppointmentData = (req, res, next) => {
   if (isValidEmail(req.body.doctorEmail) && req.body.subject && !isNaN(req.body.time)) {
@@ -15,9 +15,8 @@ export const checkAppointmentData = (req, res, next) => {
 export const checkDoctorAvailability = async (req, res, next) => {
   const time = Number(req.body.time) % 100;
   const doctor = await findDoctor(req.body.doctorEmail);
-  console.log(time);
-  
-  if(doctor) {
+
+  if (doctor) {
     const appointment = await findAppointmentByTime(doctor.id, moment().format('l'), time);
 
     if (appointment) {
@@ -26,4 +25,13 @@ export const checkDoctorAvailability = async (req, res, next) => {
     return next();
   }
   return renderPageWithMessage(res, 400, filename.patient.appointmentRequest, 'Please select valid doctor');
+};
+
+export const appointmentCompleted = async (req, res, next) => {
+  const result = await changeAppointmentStatus(req.body.appointmentId, 'confirmed', 'completed');
+
+  if (result) {
+    return next();
+  }
+  return renderPageWithMessage(res, 403, filename.doctor.appointment, 'Request is not processed. Please enter correct credentials and try again');
 };

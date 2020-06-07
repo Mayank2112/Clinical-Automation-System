@@ -6,7 +6,7 @@
  * @param {String} message
  * @param {Object} details
  */
-const renderPageWithMessage = (res, statusCode, page, message=null, details = null) => {
+const renderPageWithMessage = (res, statusCode, page, message = null, details = null) => {
   res.status(statusCode);
   return res.render(page, { message, details });
 };

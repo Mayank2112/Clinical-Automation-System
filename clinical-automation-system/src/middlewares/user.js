@@ -39,7 +39,7 @@ export const registerUser = (req, res) => {
  */
 export const destroySession = (req, res, next) => {
   req.session.destroy();
-  next();
+  return next();
 };
 
 /**
@@ -59,7 +59,7 @@ export const setLoginFailure = (req, res) => {
  */
 export const resetLoginFailure = (req, res, next) => {
   req.app.locals.loginFailure = false;
-  next();
+  return next();
 };
 
 export const checkUserCredentials = (req, res, next) => {

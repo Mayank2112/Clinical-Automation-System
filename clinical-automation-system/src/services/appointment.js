@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 import db from '../models';
 
 const DoctorAppointment = db.DoctorAppointment;
+const PatientHistory = db.PatientHistory;
 const sequelize = db.sequelize;
 
 /**
@@ -54,7 +55,6 @@ export const findAppointmentByPatient = id => sequelize.authenticate()
       .then(appointments => {
         const result = [];
         appointments.forEach(appointment => {
-          appointment.dataValues.id = 'Hidden';
           result.push(appointment.dataValues);
         });
         return result;
@@ -77,7 +77,6 @@ export const findAppointmentByDoctor = (id, status) => sequelize.authenticate()
       .then(appointments => {
         const result = [];
         appointments.forEach(appointment => {
-          appointment.dataValues.id = 'Hidden';
           result.push(appointment.dataValues);
         });
         return result;
@@ -85,30 +84,51 @@ export const findAppointmentByDoctor = (id, status) => sequelize.authenticate()
       .catch(err => undefined)))
   .catch(console.error);
 
-export const approveAppointment = (patientId, doctorId, date) => sequelize.authenticate()
+export const changeAppointmentStatus = (id, statusFrom, statusTo) => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })
     .then(() => DoctorAppointment.update({
-      status: 'confirmed'
+      status: statusTo
     },
       {
         where: {
-          patientId: patientId,
-          doctorId: doctorId,
-          date: date,
-          status: 'pending'
+          id: id,
+          status: statusFrom
         }
       })
-      .catch(err => undefined)))
+      .catch(console.error)))
   .catch(console.error);
 
-export const deleteAppointment = (patientId, doctorId, date) => sequelize.authenticate()
+export const deleteAppointment = id => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })
     .then(() => DoctorAppointment.destroy({
       where: {
-        patientId: patientId,
-        doctorId: doctorId,
-        date: date
+        id: id
       }
     })
+      .catch(() => undefined)))
+  .catch(console.error);
+
+/**
+ * Find patient with given emailId in database
+ * @param {String} id
+ */
+export const findAppointmentWithHistory = id => sequelize.authenticate()
+  .then(() => DoctorAppointment.sync({ force: false })
+    .then(() => DoctorAppointment.findAll({
+      where: {
+        patientId: id,
+        status: 'completed'
+      },
+      include: [{
+        model: PatientHistory
+      }]
+    })
+      .then(appointments => {
+        const result = [];
+        appointments.forEach(appointment => {
+          result.push(appointment.dataValues);
+        });
+        return result;
+      })
       .catch(() => undefined)))
   .catch(console.error);

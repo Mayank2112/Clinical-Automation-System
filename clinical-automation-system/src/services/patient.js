@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import db from '../models';
 
 const Patient = db.Patient;
+const PatientHistory = db.PatientHistory;
 const sequelize = db.sequelize;
 
 /**
@@ -50,3 +51,29 @@ export const isValidPatient = (email, password) => findPatient(email)
     }
     return false;
   });
+
+/**
+ * Find patient with given emailId in database
+ * @param {String} id
+ */
+export const findPatientById = id => sequelize.authenticate()
+  .then(() => Patient.sync({ force: false })
+    .then(() => Patient.findAll({
+      where: {
+        id: id
+      }
+    })
+      .then(patient => patient[0].dataValues)
+      .catch(() => undefined)))
+  .catch(console.error);
+
+export const savePatientReport = report => sequelize.authenticate()
+  .then(() => PatientHistory.sync({ force: false })
+    .then(() => PatientHistory.create({
+      id: v4(),
+      appointmentId: report.appointmentId,
+      disease: report.disease,
+      remark: report.remark,
+      patientReport: report.patientReport
+    })))
+  .catch(() => false);

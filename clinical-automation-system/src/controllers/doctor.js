@@ -1,8 +1,14 @@
-import moment from 'moment';
 import { filename } from 'config';
-import { createDoctor, findDoctor, addDetails } from '../services/doctor';
+import { createDoctor, findDoctor, addDetails, findDoctorById } from '../services/doctor';
 import renderPageWithMessage from '../helpers/responseRenderer';
-import { findAppointmentByDoctor, approveAppointment, deleteAppointment } from '../services/appointment';
+import { findPatientById, savePatientReport } from '../services/patient';
+import {
+  findAppointmentByDoctor,
+  deleteAppointment,
+  findAppointmentWithHistory,
+  changeAppointmentStatus
+} from '../services/appointment';
+
 /**
  * Register new doctor to database
  * @param {httpRequest} req
@@ -29,7 +35,7 @@ export const redirectDashboard = (req, res) => {
     name: req.user.username,
     status: req.session.passport.user.status
   };
-  renderPageWithMessage(res, 200, filename.doctor.dashboard, null, details);
+  return renderPageWithMessage(res, 200, filename.doctor.dashboard, null, details);
 };
 
 /**
@@ -78,16 +84,15 @@ export const sendAppointmentRequestList = async (req, res) => {
 };
 
 export const configureAppointmentRequest = async (req, res) => {
-  const doctor = await findDoctor(req.user.username);
   const appointmentOperation = {
-    approved: approveAppointment,
+    approved: changeAppointmentStatus,
     rejected: deleteAppointment
   };
 
   if (appointmentOperation[req.body.status]) {
-    await appointmentOperation[req.body.status](req.body.patientId, doctor.id, moment().format('l'));
+    await appointmentOperation[req.body.status](req.body.appointmentId, 'pending', 'confirmed');
   }
-  res.redirect('/doctor/appointmentRequest');
+  return res.redirect('/doctor/appointmentRequest');
 };
 
 export const sendAppointmentList = async (req, res) => {
@@ -98,4 +103,32 @@ export const sendAppointmentList = async (req, res) => {
     return renderPageWithMessage(res, 200, filename.doctor.appointment, null, appointments);
   }
   return renderPageWithMessage(res, 200, filename.doctor.appointment, 'No Appointments yet');
+};
+
+export const sendPatientInformation = async (req, res) => {
+  const patient = await findPatientById(req.params.patientId);
+  const patientInformation = await findAppointmentWithHistory(req.params.patientId);
+
+  return renderPageWithMessage(res,
+    200,
+    filename.doctor.patientInformation,
+    null,
+    {
+      patient,
+      patientInformation
+    }
+  );
+};
+
+export const sendDoctorInformation = async (req, res) => {
+  const doctor = await findDoctorById(req.params.doctorId);
+  return renderPageWithMessage(res, 200, filename.doctor.doctorInformation, null, doctor);
+};
+
+export const saveReport = async (req, res) => {
+  const result = await savePatientReport(req.body);
+  if (result) {
+    return res.redirect('/doctor/appointment');
+  }
+  return renderPageWithMessage(res, 500, filename.doctor.appointment, 'Some error occurs please try again');
 };

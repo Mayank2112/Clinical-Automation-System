@@ -1,4 +1,4 @@
-import { redirectDashboard } from "../controllers/supplier";
+import { redirectDashboard } from '../controllers/supplier';
 
 /**
  * Checks user is logged in or not
