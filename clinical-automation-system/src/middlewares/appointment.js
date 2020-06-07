@@ -13,7 +13,12 @@ import { findAppointmentByTime, changeAppointmentStatus } from '../services/appo
  */
 export const checkAppointmentData = (req, res, next) => {
   if (isValidEmail(req.body.doctorEmail) && req.body.subject && !isNaN(req.body.time)) {
-    return next();
+    const doctor = await findDoctor(req.body.doctorEmail);
+    if (time >= doctor.startTime && time <= doctor.endTime) {
+      return next();
+    }
+    return renderPageWithMessage(res, 403, filename.patient.appointmentRequest, 'Select appropriate time');
+
   }
   return renderPageWithMessage(res, 403, filename.patient.appointmentRequest, 'Request credentials are not correct');
 };
