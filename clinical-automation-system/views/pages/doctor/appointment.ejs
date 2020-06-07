@@ -14,40 +14,63 @@
     <%- include('../../partials/doctor/header') %>
   </div>
 </header>
+<script>
+  const setAppointmentId = id => {
+    document.getElementById('appointmentId').value = id;
+  };
+</script>
+
 <body>
   <%- include('../../partials/doctor/approvedSidenav') -%>
 
   <div class='main'>
     <h1>Clinical Automation System</h1>
+    <%= message %>
+    <% if(!message && details.length) { %>
+    <br>
+    <h2>Upload Patient Report</h2>
+    <form action="/doctor/appointment/patient-report" method="post">
+      <table>
+        <tr>
+          <td>Appointment Number</td>
+          <td><input type="text" name="appointmentId" id="appointmentId" readonly="readonly" required
+              placeholder="Select patient"></td>
+        </tr>
+        <tr>
+          <td>Disease</td>
+          <td><input type="text" name="disease" required></td>
+        </tr>
+        <tr>
+          <td>Remark</td>
+          <td><input type="text" name="remark"></td>
+        </tr>
+      </table>
+      <td><button type="submit">Send</button></td>
+    </form>
     <br>
     <h2>Today's Appointments</h2>
     <br>
-    <%= message %>
-    <% if(!message && details.length) { %>
-      <table border="1px">
-        <th>Patient</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Subject</th>
-        <th>Description</th>
-        <th>Done</th>
-        <th>Cancel</th>
-        <th>Response</th>
-        <% details.forEach(appointment => { %>
-        <form action="/doctor/appointment" method="post">
-          <tr>
-            <td><input type="text" name="patientId" readonly="readonly" value= <%= appointment.patientId %> ></td>
-            <td><%= appointment.date %></td>
-            <td><%= appointment.time %></td>
-            <td><%= appointment.subject %></td>
-            <td><%= appointment.description %></td>
-            <td><input type="radio" name="status" value="done"></td>
-            <td><input type="radio" name="status" value="canceled"></td>
-            <td><button type="submit">Send</button></td>
-          </tr>
-        </form>
-        <% }) %>
-        <% } %>
+    <br>
+    <table border="1px">
+      <th>Patient Information</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Subject</th>
+      <th>Description</th>
+      <th>Select</th>
+      <% details.forEach(appointment => { %>
+      <tr>
+        <td><a href="/doctor/appointment/patient-information/<%= appointment.patientId%>"><%= appointment.patientId %></a></td>
+        <td><%= appointment.date %></td>
+        <td><%= appointment.time %></td>
+        <td><%= appointment.subject %></td>
+        <td><%= appointment.description %></td>
+        <td>
+          <input type="button" value="Select" onclick="setAppointmentId(`<%= appointment.id%>`)">
+        </td>
+      </tr>
+      <% }); %>
+      <% } %>
   </div>
 </body>
 

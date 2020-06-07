@@ -26,6 +26,7 @@
     <%= message %>
     <% if(!message && details.length) { %>
       <table border="1px">
+        <th>Appointment</th>
         <th>Patient</th>
         <th>Date</th>
         <th>Time</th>
@@ -37,7 +38,8 @@
         <% details.forEach(appointment => { %>
         <form action="/doctor/appointmentRequest" method="post">
           <tr>
-            <td><input type="text" name="patientId" readonly="readonly" value= <%= appointment.patientId %> ></td>
+            <td><input type="text" name="appointmentId" readonly="readonly" value= <%= appointment.id %> ></td>
+            <td><a href="/doctor/appointment/patient-information/<%= appointment.patientId%>">View</a></td>
             <td><%= appointment.date %></td>
             <td><%= appointment.time %></td>
             <td><%= appointment.subject %></td>
