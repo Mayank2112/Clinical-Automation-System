@@ -62,8 +62,8 @@ export const redirectDetails = async (req, res) => {
 
 /**
  * Add additional information of doctor to database
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const addCredentials = async (req, res) => {
   const doctor = req.body;
@@ -80,8 +80,8 @@ export const addCredentials = async (req, res) => {
 
 /**
  * Send list of pending appointment requests to doctor
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const sendAppointmentRequestList = async (req, res) => {
   const doctor = await findDoctor(req.user.username);
@@ -95,8 +95,8 @@ export const sendAppointmentRequestList = async (req, res) => {
 
 /**
  * Approve or reject appointment based on doctor decision
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const configureAppointmentRequest = async (req, res) => {
   const appointmentOperation = {
@@ -112,8 +112,8 @@ export const configureAppointmentRequest = async (req, res) => {
 
 /**
  * Send list of confirmed appointments to doctor
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const sendAppointmentList = async (req, res) => {
   const doctor = await findDoctor(req.user.username);
@@ -127,8 +127,8 @@ export const sendAppointmentList = async (req, res) => {
 
 /**
  * Send information of patient to doctor
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const sendPatientInformation = async (req, res) => {
   const patient = await findPatientById(req.params.patientId);
@@ -148,8 +148,8 @@ export const sendPatientInformation = async (req, res) => {
 
 /**
  * Send details of doctor
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const sendDoctorInformation = async (req, res) => {
   const doctor = await findDoctorById(req.params.doctorId);
@@ -158,8 +158,8 @@ export const sendDoctorInformation = async (req, res) => {
 
 /**
  * Save report of patient to database
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const saveReport = async (req, res) => {
   const result = await savePatientReport(req.body);

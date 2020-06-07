@@ -32,8 +32,8 @@ export const redirectDashboard = (req, res) => {
 
 /**
  * Send list of doctors approved by admin
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const sendDoctorList = async (req, res) => {
   const doctors = await findDoctorByStatus('approved');
@@ -45,8 +45,8 @@ export const sendDoctorList = async (req, res) => {
 
 /**
  * Create appointment and save to database
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const makeAppointmentRequest = async (req, res) => {
   const time = Number(req.body.time) % 100;
@@ -71,9 +71,25 @@ export const makeAppointmentRequest = async (req, res) => {
 };
 
 /**
+ * Redirect to patient details page
+ * @param {httpRequest} req
+ * @param {httResponse} res
+ */
+export const sendPersonalDetail = async (req, res) => {
+  const patient = await findPatient(req.user.username);
+  const details = {
+    name: patient.name,
+    email: patient.email,
+    dateOfBirth: patient.dateOfBirth,
+    gender: patient.gender,
+  };
+  return renderPageWithMessage(res, 200, filename.patient.details, null, details);
+};
+
+/**
  * Send list of appointment requests of patient
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const sendAppointmentList = async (req, res) => {
   const patient = await findPatient(req.user.username);

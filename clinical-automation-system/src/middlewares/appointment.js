@@ -11,14 +11,13 @@ import { findAppointmentByTime, changeAppointmentStatus } from '../services/appo
  * @param {httpResopnse} res
  * @param {Function} next
  */
-export const checkAppointmentData = (req, res, next) => {
+export const checkAppointmentData = async (req, res, next) => {
   if (isValidEmail(req.body.doctorEmail) && req.body.subject && !isNaN(req.body.time)) {
     const doctor = await findDoctor(req.body.doctorEmail);
-    if (time >= doctor.startTime && time <= doctor.endTime) {
+    if (req.body.time >= doctor.startTime && req.body.time <= doctor.endTime) {
       return next();
     }
     return renderPageWithMessage(res, 403, filename.patient.appointmentRequest, 'Select appropriate time');
-
   }
   return renderPageWithMessage(res, 403, filename.patient.appointmentRequest, 'Request credentials are not correct');
 };
@@ -45,7 +44,7 @@ export const checkDoctorAvailability = async (req, res, next) => {
 };
 
 /**
- * Change status of Appointment to completed 
+ * Change status of Appointment to completed
  * @param {httpRequest} req
  * @param {httpResopnse} res
  * @param {Function} next

@@ -1,6 +1,6 @@
 /**
  * Checks addtional informations of doctor
- * @param {Object} doctor 
+ * @param {Object} doctor
  */
 export const isValidTypes = doctor => !(isNaN(doctor.startTime)
   || isNaN(doctor.endTime)

@@ -3,5 +3,6 @@
     "password": "deq@123",
     "database": "clinical-automation-system",
     "host": "localhost",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
 }

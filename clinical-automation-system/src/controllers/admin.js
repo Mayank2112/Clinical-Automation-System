@@ -24,8 +24,8 @@ export const redirectDoctorRequest = async (req, res) => {
 
 /**
  * Approve or reject doctor based on admin decision
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const configureDoctor = async (req, res) => {
   const doctorOperation = {
@@ -51,8 +51,8 @@ export const redirectSupplierRequest = async (req, res) => {
 
 /**
  * Approve or reject supplier based on admin decision
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const configureSupplier = async (req, res) => {
   const supplierOperation = {

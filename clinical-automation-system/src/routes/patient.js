@@ -6,13 +6,17 @@ import {
   redirectDashboard,
   sendDoctorList,
   makeAppointmentRequest,
-  sendAppointmentList
+  sendAppointmentList,
+  sendPersonalDetail
 } from '../controllers/patient';
 
 const router = Router();
 
 // Dashborad route to access dashboard after login
 router.get('/dashboard', resetLoginFailure, redirectDashboard);
+
+// Route to get personal details
+router.get('/details', sendPersonalDetail);
 
 // Route for getting confirmed doctors list and make appointments
 router.get('/appointmentRequest', sendDoctorList);
