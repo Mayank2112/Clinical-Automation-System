@@ -26,7 +26,9 @@
   <div class='main'>
     <h1>Clinical Automation System</h1>
     <%= message %>
-    <% if(!message && details.length) { %>
+    <% if(details.length) { %>
+    <br>
+    <h2>My Appointments</h2>
     <br>
     <h2>Upload Patient Report</h2>
     <form action="/doctor/appointment/patient-report" method="post">
@@ -60,7 +62,9 @@
       <th>Select</th>
       <% details.forEach(appointment => { %>
       <tr>
-        <td><a href="/doctor/appointment/patient-information/<%= appointment.patientId%>"><%= appointment.patientId %></a></td>
+        <td><a
+            href="/doctor/appointment/patient-information/<%= appointment.patientId%>"><%= appointment.patientId %></a>
+        </td>
         <td><%= appointment.date %></td>
         <td><%= appointment.time %></td>
         <td><%= appointment.subject %></td>

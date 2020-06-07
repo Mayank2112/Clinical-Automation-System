@@ -11,8 +11,7 @@
 
 <header>
   <div class='main'>
-
-  <%- include('../../partials/patient/header') %>
+    <%- include('../../partials/patient/header') %>
   </div>
 </header>
 
@@ -20,9 +19,15 @@
   <%- include('../../partials/patient/sidenav') -%>
 
   <div class='main'>
-  <h1>Clinical Automation System</h1>
-  <br>
-  <h2>Dashboard</h2>
+    <h1>Clinical Automation System</h1>
+    <br>
+    <h2>My Personal Details</h2>
+    <br>
+
+    Name : <%= details.name %> <br>
+    Email : <%= details.email %> <br>
+    Date of Birth: <%= details.dateOfBirth %> <br>
+    Gender: <%= details.gender %> <br>
   </div>
 </body>
 

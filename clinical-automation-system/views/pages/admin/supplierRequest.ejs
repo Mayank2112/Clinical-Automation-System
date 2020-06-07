@@ -21,7 +21,7 @@
   <div class="main">
     <h1>Clinical Automation System</h1>
     <br>
-    <% if(details) { %>
+    <% if(details.length) { %>
     <h2>Suppliers List</h2>
     <table border="1px">
       <th>Name</th>
@@ -39,13 +39,15 @@
           <td><%= supplier.companyName %></td>
           <td><%= supplier.companyAddress %></td>
           <td><%= supplier.mobileNumber %></td>
-          <td><input type="text" name="supplierEmail" readonly="readonly" value= <%= supplier.email %> ></td>
+          <td><input type="text" name="supplierEmail" readonly="readonly" value=<%= supplier.email %>></td>
           <td><input type="radio" name="status" value="approved"></td>
           <td><input type="radio" name="status" value="rejected"></td>
           <td><button type="submit">Send Response</button></td>
         </tr>
       </form>
       <% }) %>
+      <% } else { %>
+      No pending requests
       <% } %>
     </table>
   </div>
