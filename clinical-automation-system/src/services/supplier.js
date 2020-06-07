@@ -48,7 +48,10 @@ export const isValidSupplier = (email, password) => findSupplier(email)
     }
     return false;
   });
-
+/**
+ * Add additional details of supplier to database
+ * @param {Object} supplier
+ */
 export const addDetails = supplier => sequelize.authenticate()
   .then(() => Supplier.sync({ force: false })
     .then(() => Supplier.update({
@@ -65,7 +68,7 @@ export const addDetails = supplier => sequelize.authenticate()
   .catch(console.error);
 
 /**
- * Find doctor with given status
+ * Find supplier with given status
  * @param {String} email
  */
 export const findSupplierByStatus = status => sequelize.authenticate()
@@ -87,6 +90,10 @@ export const findSupplierByStatus = status => sequelize.authenticate()
       .catch(() => undefined)))
   .catch(console.error);
 
+/**
+ * Change status from pending to approved for doctor
+ * @param {String} email
+ */
 export const approveSupplier = email => sequelize.authenticate()
   .then(() => Supplier.sync({ force: false })
     .then(() => Supplier.update({
@@ -100,6 +107,10 @@ export const approveSupplier = email => sequelize.authenticate()
       .catch(() => undefined)))
   .catch(console.error);
 
+/**
+ * Delete supplier from database
+ * @param {String} email
+ */
 export const deleteSupplier = email => sequelize.authenticate()
   .then(() => Supplier.sync({ force: false })
     .then(() => Supplier.destroy(

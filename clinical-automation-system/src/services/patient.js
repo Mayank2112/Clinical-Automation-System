@@ -53,8 +53,8 @@ export const isValidPatient = (email, password) => findPatient(email)
   });
 
 /**
- * Find patient with given emailId in database
- * @param {String} id
+ * Find patient with given id in database
+ * @param {UUID} id
  */
 export const findPatientById = id => sequelize.authenticate()
   .then(() => Patient.sync({ force: false })
@@ -67,6 +67,10 @@ export const findPatientById = id => sequelize.authenticate()
       .catch(() => undefined)))
   .catch(console.error);
 
+/**
+ * Save patient report to patientHistory table
+ * @param {Object} report
+ */
 export const savePatientReport = report => sequelize.authenticate()
   .then(() => PatientHistory.sync({ force: false })
     .then(() => PatientHistory.create({

@@ -62,6 +62,12 @@ export const resetLoginFailure = (req, res, next) => {
   return next();
 };
 
+/**
+ * Check user credentials on registration
+ * @param {httpRequest} req
+ * @param {httpResopnse} res
+ * @param {Function} next
+ */
 export const checkUserCredentials = (req, res, next) => {
   if (isValidEmail(req.body.email)
     && isValidPassword(req.body.password)
@@ -71,6 +77,12 @@ export const checkUserCredentials = (req, res, next) => {
   return registerFailure(req, res);
 };
 
+/**
+ * Set appropriate authentication strategy based on user profile
+ * @param {httpRequest} req
+ * @param {httpResopnse} res
+ * @param {Function} next
+ */
 export const redirectUserToProfessionLogin = (req, res) => {
   const authentication = {
     admin: adminLocalAuthentication,

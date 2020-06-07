@@ -22,6 +22,11 @@ export const redirectDoctorRequest = async (req, res) => {
   return renderPageWithMessage(res, 200, filename.admin.doctorRequest, null, doctors);
 };
 
+/**
+ * Approve or reject doctor based on admin decision
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const configureDoctor = async (req, res) => {
   const doctorOperation = {
     approved: approveDoctor,
@@ -44,6 +49,11 @@ export const redirectSupplierRequest = async (req, res) => {
   return renderPageWithMessage(res, 200, filename.admin.supplierRequest, null, suppliers);
 };
 
+/**
+ * Approve or reject supplier based on admin decision
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const configureSupplier = async (req, res) => {
   const supplierOperation = {
     approved: approveSupplier,

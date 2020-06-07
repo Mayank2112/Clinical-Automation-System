@@ -30,6 +30,11 @@ export const redirectDashboard = (req, res) => {
   res.render(filename.patient.dashboard, { username: req.user.username });
 };
 
+/**
+ * Send list of doctors approved by admin
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const sendDoctorList = async (req, res) => {
   const doctors = await findDoctorByStatus('approved');
   if (doctors.length > 0) {
@@ -38,6 +43,11 @@ export const sendDoctorList = async (req, res) => {
   return renderPageWithMessage(res, 200, filename.patient.appointmentRequest, 'No doctor registered successfully yet');
 };
 
+/**
+ * Create appointment and save to database
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const makeAppointmentRequest = async (req, res) => {
   const time = Number(req.body.time) % 100;
   const doctor = await findDoctor(req.body.doctorEmail);
@@ -60,6 +70,11 @@ export const makeAppointmentRequest = async (req, res) => {
   return renderPageWithMessage(res, 500, filename.patient.appointmentRequest, 'Some error occurs please try again');
 };
 
+/**
+ * Send list of appointment requests of patient
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const sendAppointmentList = async (req, res) => {
   const patient = await findPatient(req.user.username);
   const appointments = await findAppointmentByPatient(patient.id);

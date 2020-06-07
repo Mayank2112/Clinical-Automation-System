@@ -51,7 +51,10 @@ export const isValidDoctor = (email, password) => findDoctor(email)
     }
     return false;
   });
-
+/**
+ * Add additional information of doctor to database
+ * @param {Object} doctor
+ */
 export const addDetails = doctor => sequelize.authenticate()
   .then(() => Doctor.sync({ force: false })
     .then(() => Doctor.update({
@@ -62,12 +65,12 @@ export const addDetails = doctor => sequelize.authenticate()
       appointmentFee: doctor.appointmentFee,
       status: 'pending'
     },
-    {
-      where: {
-        email: doctor.email
-      }
-    })
-    .catch(() => undefined)))
+      {
+        where: {
+          email: doctor.email
+        }
+      })
+      .catch(() => undefined)))
   .catch(console.error);
 
 /**
@@ -93,19 +96,27 @@ export const findDoctorByStatus = status => sequelize.authenticate()
       .catch(() => undefined)))
   .catch(console.error);
 
+/**
+ * Change status from pending to approved for doctor
+ * @param {String} email
+ */
 export const approveDoctor = email => sequelize.authenticate()
   .then(() => Doctor.sync({ force: false })
     .then(() => Doctor.update({
       status: 'approved'
     },
-    {
-      where: {
-        email: email
-      }
-    })
-    .catch(() => undefined)))
+      {
+        where: {
+          email: email
+        }
+      })
+      .catch(() => undefined)))
   .catch(console.error);
 
+/**
+ * Delete doctor from database
+ * @param {String} email
+ */
 export const deleteDoctor = email => sequelize.authenticate()
   .then(() => Doctor.sync({ force: false })
     .then(() => Doctor.destroy(
@@ -118,8 +129,8 @@ export const deleteDoctor = email => sequelize.authenticate()
   .catch(console.error);
 
 /**
- * Find doctor with given emailId in database
- * @param {String} email
+ * Find doctor with given id in database
+ * @param {UUID} email
  */
 export const findDoctorById = id => sequelize.authenticate()
   .then(() => Doctor.sync({ force: false })

@@ -15,6 +15,12 @@ export const isDoctorLoggedIn = (req, res, next) => {
   return res.redirect('/login');
 };
 
+/**
+ * Check credentials of doctor
+ * @param {httpRequest} req
+ * @param {httpResopnse} res
+ * @param {Function} next
+ */
 export const checkCredentials = (req, res, next) => {
   if (isValidTypes(req.body) && Number(req.body.startTime) < Number(req.body.endTime)) {
     return next();

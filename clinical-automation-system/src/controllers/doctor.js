@@ -60,6 +60,11 @@ export const redirectDetails = async (req, res) => {
   return renderPageWithMessage(res, 200, filename.doctor.details, null, details);
 };
 
+/**
+ * Add additional information of doctor to database
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const addCredentials = async (req, res) => {
   const doctor = req.body;
   doctor.email = req.user.username;
@@ -73,6 +78,11 @@ export const addCredentials = async (req, res) => {
   return renderPageWithMessage(res, 400, filename.doctor.details, 'Data submitted is not correct');
 };
 
+/**
+ * Send list of pending appointment requests to doctor
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const sendAppointmentRequestList = async (req, res) => {
   const doctor = await findDoctor(req.user.username);
   const appointments = await findAppointmentByDoctor(doctor.id, 'pending');
@@ -83,6 +93,11 @@ export const sendAppointmentRequestList = async (req, res) => {
   return renderPageWithMessage(res, 200, filename.doctor.appointmentRequest, 'No Appointments yet');
 };
 
+/**
+ * Approve or reject appointment based on doctor decision
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const configureAppointmentRequest = async (req, res) => {
   const appointmentOperation = {
     approved: changeAppointmentStatus,
@@ -95,6 +110,11 @@ export const configureAppointmentRequest = async (req, res) => {
   return res.redirect('/doctor/appointmentRequest');
 };
 
+/**
+ * Send list of confirmed appointments to doctor
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const sendAppointmentList = async (req, res) => {
   const doctor = await findDoctor(req.user.username);
   const appointments = await findAppointmentByDoctor(doctor.id, 'confirmed');
@@ -105,11 +125,17 @@ export const sendAppointmentList = async (req, res) => {
   return renderPageWithMessage(res, 200, filename.doctor.appointment, 'No Appointments yet');
 };
 
+/**
+ * Send information of patient to doctor
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const sendPatientInformation = async (req, res) => {
   const patient = await findPatientById(req.params.patientId);
   const patientInformation = await findAppointmentWithHistory(req.params.patientId);
 
-  return renderPageWithMessage(res,
+  return renderPageWithMessage(
+    res,
     200,
     filename.doctor.patientInformation,
     null,
@@ -120,11 +146,21 @@ export const sendPatientInformation = async (req, res) => {
   );
 };
 
+/**
+ * Send details of doctor
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const sendDoctorInformation = async (req, res) => {
   const doctor = await findDoctorById(req.params.doctorId);
   return renderPageWithMessage(res, 200, filename.doctor.doctorInformation, null, doctor);
 };
 
+/**
+ * Save report of patient to database
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const saveReport = async (req, res) => {
   const result = await savePatientReport(req.body);
   if (result) {

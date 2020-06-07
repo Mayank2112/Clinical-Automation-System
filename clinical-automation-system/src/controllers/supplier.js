@@ -48,6 +48,11 @@ export const redirectDetails = async (req, res) => {
   return renderPageWithMessage(res, 200, filename.supplier.details, null, details);
 };
 
+/**
+ * Add additional information of supplier to database
+ * @param {httpRequest} req 
+ * @param {httpResponse} res 
+ */
 export const addCredentials = async (req, res) => {
   const supplier = req.body;
   supplier.email = req.user.username;

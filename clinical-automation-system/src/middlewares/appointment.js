@@ -5,6 +5,12 @@ import renderPageWithMessage from '../helpers/responseRenderer';
 import { findDoctor } from '../services/doctor';
 import { findAppointmentByTime, changeAppointmentStatus } from '../services/appointment';
 
+/**
+ * Check types of data
+ * @param {httpRequest} req
+ * @param {httpResopnse} res
+ * @param {Function} next
+ */
 export const checkAppointmentData = (req, res, next) => {
   if (isValidEmail(req.body.doctorEmail) && req.body.subject && !isNaN(req.body.time)) {
     return next();
@@ -12,6 +18,12 @@ export const checkAppointmentData = (req, res, next) => {
   return renderPageWithMessage(res, 403, filename.patient.appointmentRequest, 'Request credentials are not correct');
 };
 
+/**
+ * Check appointment of doctor for given time
+ * @param {httpRequest} req
+ * @param {httpResopnse} res
+ * @param {Function} next
+ */
 export const checkDoctorAvailability = async (req, res, next) => {
   const time = Number(req.body.time) % 100;
   const doctor = await findDoctor(req.body.doctorEmail);
@@ -27,6 +39,12 @@ export const checkDoctorAvailability = async (req, res, next) => {
   return renderPageWithMessage(res, 400, filename.patient.appointmentRequest, 'Please select valid doctor');
 };
 
+/**
+ * Change status of Appointment to completed 
+ * @param {httpRequest} req
+ * @param {httpResopnse} res
+ * @param {Function} next
+ */
 export const appointmentCompleted = async (req, res, next) => {
   const result = await changeAppointmentStatus(req.body.appointmentId, 'confirmed', 'completed');
 

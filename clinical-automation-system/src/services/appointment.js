@@ -6,8 +6,8 @@ const PatientHistory = db.PatientHistory;
 const sequelize = db.sequelize;
 
 /**
- * create new user in database
- * @param {Object} appointment - containing username, email and password
+ * create new appointment in database
+ * @param {Object} appointment
  */
 export const createAppointment = appointment => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })
@@ -24,8 +24,10 @@ export const createAppointment = appointment => sequelize.authenticate()
   .catch(() => false);
 
 /**
- * Find doctor with given emailId in database
- * @param {String} email
+ * Find appointment of doctor with time
+ * @param {UUID} doctorId
+ * @param {Date} date
+ * @param {Number} time
  */
 export const findAppointmentByTime = (doctorId, date, time) => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })
@@ -42,8 +44,8 @@ export const findAppointmentByTime = (doctorId, date, time) => sequelize.authent
   .catch(console.error);
 
 /**
- * Find doctor with given patientId in database
- * @param {String} id
+ * Find appointment with given patientId in database
+ * @param {UUID} id
  */
 export const findAppointmentByPatient = id => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })
@@ -63,8 +65,9 @@ export const findAppointmentByPatient = id => sequelize.authenticate()
   .catch(console.error);
 
 /**
- * Find doctor with given doctorId in database
- * @param {String} id
+ * Find appointment with given doctorId and status in database
+ * @param {UUID} id
+ * @param {String} status
  */
 export const findAppointmentByDoctor = (id, status) => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })
@@ -84,6 +87,12 @@ export const findAppointmentByDoctor = (id, status) => sequelize.authenticate()
       .catch(err => undefined)))
   .catch(console.error);
 
+/**
+ * Change appointment status in database
+ * @param {UUID} id
+ * @param {String} statusFrom
+ * @param {String} statusTo
+ */
 export const changeAppointmentStatus = (id, statusFrom, statusTo) => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })
     .then(() => DoctorAppointment.update({
@@ -98,6 +107,10 @@ export const changeAppointmentStatus = (id, statusFrom, statusTo) => sequelize.a
       .catch(console.error)))
   .catch(console.error);
 
+/**
+ * Delete appointment from database
+ * @param {UUID} id 
+ */
 export const deleteAppointment = id => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })
     .then(() => DoctorAppointment.destroy({
@@ -109,8 +122,8 @@ export const deleteAppointment = id => sequelize.authenticate()
   .catch(console.error);
 
 /**
- * Find patient with given emailId in database
- * @param {String} id
+ * Find appointment with patient history
+ * @param {UUID} id
  */
 export const findAppointmentWithHistory = id => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })
