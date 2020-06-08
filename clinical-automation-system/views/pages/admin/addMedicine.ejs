@@ -7,6 +7,7 @@
   <title>CAS | Add Medicine</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
+  <link href="../tables.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
@@ -23,12 +24,49 @@
     <br>
     <h2>Add Medicines to Store</h2>
     <form action="/admin/medicine" method="post">
-      Name : <input type="text" name="medicineName" required="required"><br>
-      Manufacturing Date: <input type="datetime" name="manufacturingDate" required="required"><br>
-      Expiry Date : <input type="datetime" name="expiryDate" required="required"><br>
-      Price per Tablet : <input type="datetime" name="pricePerTablet" required="required"><br>
-      Quantity : <input type="number" name="quantity" required="required"><br>
-      <br>
+      <table>
+        <tr>
+          <td>
+            Name
+          </td>
+          <td>
+            <input type="text" name="medicineName" required="required"><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Manufacturing Date
+          </td>
+          <td>
+            <input type="datetime" name="manufacturingDate" required="required"><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Expiry Date
+          </td>
+          <td>
+            <input type="datetime" name="expiryDate" required="required"><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Price per Tablet
+          </td>
+          <td>
+            <input type="datetime" name="pricePerTablet" required="required"><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Quantity
+          </td>
+          <td>
+            <input type="number" name="quantity" required="required"><br>
+          </td>
+        </tr>
+        <br>
+      </table>
       <button type="submit">Add</button>
     </form>
     <% if (message) { %>

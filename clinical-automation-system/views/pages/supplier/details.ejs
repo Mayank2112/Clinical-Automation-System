@@ -7,6 +7,7 @@
   <title>CAS | Personal Details</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
+  <link href="../tables.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
@@ -29,16 +30,57 @@
     <br>
     <h2>My Personal Details</h2>
     <br>
-
-    Name : <%= details.name %> <br>
-    Email : <%= details.email %> <br>
-    <% if (details.companyName && details.companyAddress) { %>
-    Company Name: <%= details.companyName %> <br>
-    Company Address: <%= details.companyAddress %> <br>
+    <tr>
+      <td>
+        Name
+      </td>
+      <td>
+        <%= details.name %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Email
+      </td>
+      <td>
+        <%= details.email %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <% if (details.companyName && details.companyAddress) { %>
+        Company Name
+      </td>
+      <td>
+        <%= details.companyName %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Company Address
+      </td>
+      <td>
+        <%= details.companyAddress %>
+      </td>
+    </tr>
     <% } else { %>
     <form action="/supplier/details" method="POST">
-      Company Name : <input type="text" name="companyName" required="required"><br>
-      Company Address : <input type="text" name="companyAddress" required="required"><br>
+      <tr>
+        <td>
+          Company Name
+        </td>
+        <td>
+          <input type="text" name="companyName" required="required">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Company Address
+        </td>
+        <td>
+          <input type="text" name="companyAddress" required="required">
+        </td>
+      </tr>
       <br>
       <button type="submit">Submit</button>
     </form>

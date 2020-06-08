@@ -7,6 +7,7 @@
   <title>CAS | Patient Details</title>
   <link href="../../../header.css" rel="stylesheet" type="text/css" />
   <link href="../../../sidenav.css" rel="stylesheet" type="text/css" />
+  <link href="../../../tables.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
@@ -28,20 +29,20 @@
     <table>
       <tr>
         <td> Name </td>
-        <td>: <%= details.patient.name %></td>
+        <td> <%= details.patient.name %></td>
       </tr>
       <tr>
         <td> Date of Birth </td>
-        <td>: <%= details.patient.dateOfBirth %> </td>
+        <td> <%= details.patient.dateOfBirth %> </td>
       </tr>
       <tr>
         <td> Gender </td>
-        <td>: <%= details.patient.gender %> </td>
+        <td> <%= details.patient.gender %> </td>
       </tr>
     </table>
     <br>
     <% if (details.patientInformation.length) { %>
-    <table border="1px">
+    <table >
       <th>Doctor</th>
       <th>Date</th>
       <th>Subject</th>

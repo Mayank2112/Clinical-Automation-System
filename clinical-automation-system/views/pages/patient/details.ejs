@@ -7,6 +7,7 @@
   <title>CAS | Personal Details</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
+  <link href="../tables.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
@@ -22,11 +23,40 @@
     <h1>Clinical Automation System</h1>
     <br>
     <h2>My Personal Details</h2>
-    <br>
-    Name : <%= details.name %> <br>
-    Email : <%= details.email %> <br>
-    Date of Birth: <%= details.dateOfBirth %> <br>
-    Gender: <%= details.gender %> <br>
+
+    <tr>
+      <td>
+        Name
+      </td>
+      <td>
+        <%= details.name %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Email
+      </td>
+      <td>
+        <%= details.email %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Date of Birth
+      </td>
+      <td>
+        <%= details.dateOfBirth %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Gender
+      </td>
+      <td>
+        <%= details.gender %>
+      </td>
+    </tr>
+
   </div>
 </body>
 

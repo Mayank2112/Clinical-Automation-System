@@ -7,6 +7,7 @@
   <title>CAS | Appointment Request</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
+  <link href="../tables.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
@@ -31,16 +32,50 @@
     <br>
     <%= message %>
     <% if(!message && details.length) { %>
-      <form action="/patient/appointmentRequest" method="post">
-        Enter Doctor Id : <input type="text" name="doctorId" required="required" id="doctorId"
-        placeholder="Select from below table" readonly><br>
-        Subject : <input type="text" name="subject" required="required"><br>
-        Description : <input type="text" name="description"><br>
-        Time : <input type="text" name="time"><br>
-        <button type="submit">Send Request</button><br>
-      </form>
+    <form action="/patient/appointmentRequest" method="post">
+      <tr>
+        <td>
+          Enter Doctor Id
+        </td>
+        <td>
+          <input type="text" name="doctorId" required="required" id="doctorId" placeholder="Select from below table"
+            readonly>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Subject
+        </td>
+        <td>
+          <input type="text" name="subject" required="required">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Description
+        </td>
+        <td>
+          <input type="text" name="description">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Time
+        </td>
+        <td>
+          <input type="text" name="time">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button type="submit">Send Request</button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+    </form>
     <h2>Doctors List</h2>
-    <table border="1px">
+    <table>
       <th>Name</th>
       <th>Gender</th>
       <th>Start Time</th>

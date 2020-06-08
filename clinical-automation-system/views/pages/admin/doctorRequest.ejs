@@ -7,6 +7,7 @@
   <title>CAS | Doctor Requests</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
+  <link href="../tables.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
@@ -23,7 +24,7 @@
     <br>
     <% if(details.length) { %>
     <h2>Doctors List</h2>
-    <table border="1px">
+    <table>
       <th>Name</th>
       <th>Date of Birth</th>
       <th>Gender</th>
@@ -51,7 +52,7 @@
           <td><%= doctor.experienceFrom %></td>
           <td><%= doctor.appointmentFee %></td>
           <td><%= doctor.mobileNumber %></td>
-          <td><input type="text" name="doctorEmail" readonly="readonly" value= <%= doctor.email %> ></td>
+          <td><input type="text" name="doctorEmail" readonly="readonly" value=<%= doctor.email %>></td>
           <td><input type="radio" name="status" value="approved"></td>
           <td><input type="radio" name="status" value="rejected"></td>
           <td><button type="submit">Send Response</button></td>

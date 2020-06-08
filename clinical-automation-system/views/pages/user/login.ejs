@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | CAS</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
+  <link href="../tables.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
@@ -17,8 +18,24 @@
   <br>
   <h2>Login</h2>
   <form action="/login" method="post">
-    Email : <input type="email" name="username" required="required" placeholder="Enter email Id"><br>
-    Password : <input type="password" name="password" required="required"><br>
+    <table border="10px">
+      <tr>
+        <td>
+          Email
+        </td>
+        <td>
+          <input type="email" name="username" required="required" placeholder="Enter email Id">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Password
+        </td>
+        <td>
+          <input type="password" name="password" required="required">
+        </td>
+      </tr>
+    </table>
     <div style='color: red;'>
       <% if (message) { %>
       <%= message %>
