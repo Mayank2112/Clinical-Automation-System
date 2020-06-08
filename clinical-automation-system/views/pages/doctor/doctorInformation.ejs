@@ -7,7 +7,7 @@
   <title>CAS | Doctor Details</title>
   <link href="../../header.css" rel="stylesheet" type="text/css" />
   <link href="../../sidenav.css" rel="stylesheet" type="text/css" />
-  <link href="../tables.css" rel="stylesheet" type="text/css" />
+  <link href="../../tables.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
@@ -23,71 +23,74 @@
     <h1>Clinical Automation System</h1>
     <br>
     <h2>Doctor Details</h2>
-
-    <tr>
-      <td>
-        Name
-      </TD>
-      <TD>
-        <%= details.name %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Email
-      </TD>
-      <TD>
-        <%= details.email %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <% if (details.degree && details.startTime && details.endTime && details.experienceFrom && details.appointmentFee) { %>
-        Degree
-      </TD>
-      <TD>
-        <%= details.degree %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Specialization
-      </TD>
-      <TD>
-        <%= details.specialization.name %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Start Time
-      </TD>
-      <TD>
-        <%= details.startTime %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        End Time
-      </TD>
-      <TD>
-        <%= details.endTime %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Experienced From
-      </TD>
-      <TD>
-        <%= details.experienceFrom %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        appointmentFee
-      </TD>
-      <TD>
-        <%= details.appointmentFee %>
-        <% } %>
+    <table>
+      <tr>
+        <td>
+          Name
+        </td>
+        <td>
+          <%= details.name %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Email
+        </td>
+        <td>
+          <%= details.email %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <% if (details.degree && details.startTime && details.endTime && details.experienceFrom && details.appointmentFee) { %>
+          Degree
+        </td>
+        <td>
+          <%= details.degree %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Specialization
+        </td>
+        <td>
+          <%= details.specialization.name %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Start Time
+        </td>
+        <td>
+          <%= details.startTime %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          End Time
+        </td>
+        <td>
+          <%= details.endTime %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Experienced From
+        </td>
+        <td>
+          <%= details.experienceFrom %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          appointmentFee
+        </td>
+        <td>
+          <%= details.appointmentFee %>
+          <% } %>
+        </td>
+      </tr>
+    </table>
   </div>
 </body>
 

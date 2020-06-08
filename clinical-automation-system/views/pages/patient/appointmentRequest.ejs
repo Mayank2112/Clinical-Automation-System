@@ -33,46 +33,46 @@
     <%= message %>
     <% if(!message && details.length) { %>
     <form action="/patient/appointmentRequest" method="post">
-      <tr>
-        <td>
-          Enter Doctor Id
-        </td>
-        <td>
-          <input type="text" name="doctorId" required="required" id="doctorId" placeholder="Select from below table"
-            readonly>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Subject
-        </td>
-        <td>
-          <input type="text" name="subject" required="required">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Description
-        </td>
-        <td>
-          <input type="text" name="description">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Time
-        </td>
-        <td>
-          <input type="text" name="time">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button type="submit">Send Request</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
+      <table>
+        <tr>
+          <td>
+            Enter Doctor Id
+          </td>
+          <td>
+            <input type="text" name="doctorId" required="required" id="doctorId" placeholder="Select from below table"
+              readonly>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Subject
+          </td>
+          <td>
+            <input type="text" name="subject" required="required">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Description
+          </td>
+          <td>
+            <input type="text" name="description">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Time
+          </td>
+          <td>
+            <input type="text" name="time">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button type="submit">Send Request</button>
+          </td>
+        </tr>
+      </table>
     </form>
     <h2>Doctors List</h2>
     <table>
