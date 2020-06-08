@@ -1,6 +1,13 @@
 import { filename } from 'config';
-import { createSupplier, findSupplier, addDetails, findOrdersBySupplier, changeOrderStatus } from '../services/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
+import { findPatientById } from '../services/patient';
+import {
+  createSupplier,
+  findSupplier,
+  addDetails,
+  findOrdersBySupplier,
+  changeOrderStatus
+} from '../services/supplier';
 
 /**
  * Register new user to database
@@ -12,9 +19,21 @@ export const registerSupplier = async (req, res) => {
 
   const result = await createSupplier(supplier);
   if (result) {
-    return renderPageWithMessage(res, 201, filename.user.homepage, `${supplier.username} registered successfully. Login to continue`);
+    return renderPageWithMessage(
+      req,
+      res,
+      201,
+      filename.user.homepage,
+      `${supplier.username} registered successfully. Login to continue`
+    );
   }
-  return renderPageWithMessage(res, 400, filename.user.register, 'Username or email is already in use');
+  return renderPageWithMessage(
+    req,
+    res,
+    400,
+    filename.user.register,
+    'Username or email is already in use'
+  );
 };
 
 /**
@@ -25,9 +44,9 @@ export const registerSupplier = async (req, res) => {
 export const redirectDashboard = (req, res) => {
   const details = {
     name: req.user.username,
-    status: req.session.passport.user.status
+    status: req.user.status
   };
-  renderPageWithMessage(res, 200, filename.supplier.dashboard, null, details);
+  return renderPageWithMessage(req, res, 200, filename.supplier.dashboard, null, details);
 };
 
 /**
@@ -45,7 +64,7 @@ export const redirectDetails = async (req, res) => {
     companyAddress: supplier.companyAddress,
     mobileNumber: supplier.mobileNumber
   };
-  return renderPageWithMessage(res, 200, filename.supplier.details, null, details);
+  return renderPageWithMessage(req, res, 200, filename.supplier.details, null, details);
 };
 
 /**
@@ -59,10 +78,16 @@ export const addCredentials = async (req, res) => {
 
   const result = await addDetails(supplier);
   if (result) {
-    req.session.passport.user.status = 'pending';
+    req.user.status = 'pending';
     res.redirect('/supplier/details');
   }
-  return renderPageWithMessage(res, 400, filename.supplier.details, 'Data submitted is not correct');
+  return renderPageWithMessage(
+    req,
+    res,
+    400,
+    filename.supplier.details,
+    'Data submitted is not correct'
+  );
 };
 
 /**
@@ -71,9 +96,9 @@ export const addCredentials = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendOrders = async (req, res) => {
-  const supplier = await findSupplier(req.user.username);
-  const orders = await findOrdersBySupplier(supplier.id);
-  return renderPageWithMessage(res, 200, filename.supplier.orders, null, orders);
+  console.log(req.user);
+  const orders = await findOrdersBySupplier(req.user.id);
+  return renderPageWithMessage(req, res, 200, filename.supplier.orders, null, orders);
 };
 
 /**
@@ -84,4 +109,21 @@ export const sendOrders = async (req, res) => {
 export const orderDelivered = async (req, res) => {
   await changeOrderStatus(req.params.orderId, 'delivered');
   return res.redirect('/supplier/orders');
+};
+
+/**
+ * Send information of patient to supplier
+ * @param {httpRequest} req
+ * @param {httpResponse} res
+ */
+export const sendPatientInformation = async (req, res) => {
+  const patient = await findPatientById(req.params.patientId);
+  return renderPageWithMessage(
+    req,
+    res,
+    200,
+    filename.supplier.patientInformation,
+    null,
+    patient
+  );
 };

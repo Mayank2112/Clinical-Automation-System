@@ -153,7 +153,7 @@ export const findOrdersBySupplier = supplierId => sequelize.authenticate()
     .then(() => PatientOrder.findAll({
       where: {
         supplierId: supplierId,
-        status: 'pending'
+        status: 'confirmed'
       }
     })
       .then(orders => {

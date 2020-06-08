@@ -7,7 +7,8 @@ import {
   addCredentials,
   redirectDetails,
   sendOrders,
-  orderDelivered
+  orderDelivered,
+  sendPatientInformation
 } from '../controllers/supplier';
 
 const router = Router();
@@ -23,6 +24,9 @@ router.post('/details', checkCredentials, addCredentials);
 
 // Route to get order details
 router.get('/orders', sendOrders);
+
+// Route to get information of patients
+router.get('/patient-information/:patientId', sendPatientInformation);
 
 // Route to set order status delivered
 router.get('/order-delivered/:orderId', orderDelivered);

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>CAS | Orders</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -36,7 +36,7 @@
         <% details.forEach(order => { %>
           <form action="/supplier/order-delivered/<%= order.id %>">
           <tr>
-            <td><%= order.patientId %></td>
+            <td><a href="/supplier/patient-information/<%= order.patientId%>">View</a></td>
             <td><%= order.medicineName %></td>
             <td><%= order.quantity %></td>
             <td><%= order.date %></td>
