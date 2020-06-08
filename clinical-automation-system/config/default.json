@@ -30,7 +30,8 @@
     "supplier": {
       "dashboard": "pages/supplier/dashboard.ejs",
       "details": "pages/supplier/details.ejs",
-      "orders": "pages/supplier/orders.ejs"
+      "orders": "pages/supplier/orders.ejs",
+      "patientInformation": "pages/supplier/patientInformation.ejs"
     }
   },
   "serverConfig": {
