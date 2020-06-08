@@ -114,7 +114,6 @@ export const addCredentials = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendAppointmentRequestList = async (req, res) => {
-  console.log(req.user);
   const appointments = await findAppointmentByDoctor(req.user.id, 'pending');
 
   if (appointments.length) {
@@ -159,7 +158,6 @@ export const configureAppointmentRequest = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendAppointmentList = async (req, res) => {
-  console.log(req.user);
   const appointments = await findAppointmentByDoctor(req.user.id, 'confirmed');
 
   if (appointments.length) {

@@ -96,7 +96,6 @@ export const addCredentials = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendOrders = async (req, res) => {
-  console.log(req.user);
   const orders = await findOrdersBySupplier(req.user.id);
   return renderPageWithMessage(req, res, 200, filename.supplier.orders, null, orders);
 };

@@ -84,10 +84,6 @@ export const sendDoctorList = async (req, res) => {
  */
 export const makeAppointmentRequest = async (req, res) => {
   const time = Number(req.body.time) % 100;
-  // const doctor = await findDoctor(req.body.doctorEmail);
-  // const patient = await findPatient(req.user.username);
-  console.log(req.user);
-
   const appointment = {
     patientId: req.user.id,
     doctorId: req.body.doctorId,
@@ -133,7 +129,6 @@ export const sendPersonalDetail = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendAppointmentList = async (req, res) => {
-  console.log(req.user);
   const appointments = await findAppointmentByPatient(req.user.id);
 
   if (appointments.length) {
@@ -177,7 +172,6 @@ export const sendMakeOrderPage = (req, res) => renderPageWithMessage(
  * @param {httpResponse} res
  */
 export const createOrder = async (req, res) => {
-  console.log(req.user);
   const order = {
     patientId: req.user.id,
     quantity: req.body.quantity,
@@ -214,7 +208,6 @@ export const createOrder = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendOrderDetails = async (req, res) => {
-  console.log(req.user);
   const orders = await findOrders(req.user.id);
   return renderPageWithMessage(req, res, 200, filename.patient.orders, null, orders);
 };
