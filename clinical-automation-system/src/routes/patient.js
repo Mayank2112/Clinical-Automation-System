@@ -7,8 +7,12 @@ import {
   sendDoctorList,
   makeAppointmentRequest,
   sendAppointmentList,
-  sendPersonalDetail
+  sendPersonalDetail,
+  sendMakeOrderPage,
+  sendOrderDetails,
+  createOrder
 } from '../controllers/patient';
+import { checkMedicineAvailabilty } from '../middlewares/patient';
 
 const router = Router();
 
@@ -26,6 +30,15 @@ router.post('/appointmentRequest', checkAppointmentData, checkDoctorAvailability
 
 // Route to get all appointments
 router.get('/appointment', sendAppointmentList);
+
+// Route for getting order information
+router.get('/order-medicine', sendMakeOrderPage);
+
+// Route for creating order
+router.post('/order-medicine', checkMedicineAvailabilty, createOrder);
+
+// Route to get order details
+router.get('/orders', sendOrderDetails);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);

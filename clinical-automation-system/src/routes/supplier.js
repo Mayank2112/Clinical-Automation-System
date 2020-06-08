@@ -1,8 +1,14 @@
 import { Router } from 'express';
 import { resetLoginFailure } from '../middlewares/user';
-import { redirectDashboard, addCredentials, redirectDetails } from '../controllers/supplier';
 import { checkCredentials } from '../middlewares/supplier';
 import invalidRoutes from './invalidRoutes';
+import {
+  redirectDashboard,
+  addCredentials,
+  redirectDetails,
+  sendOrders,
+  orderDelivered
+} from '../controllers/supplier';
 
 const router = Router();
 
@@ -14,6 +20,12 @@ router.get('/details', redirectDetails);
 
 // Route to add personal details
 router.post('/details', checkCredentials, addCredentials);
+
+// Route to get order details
+router.get('/orders', sendOrders);
+
+// Route to set order status delivered
+router.get('/order-delivered/:orderId', orderDelivered);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);

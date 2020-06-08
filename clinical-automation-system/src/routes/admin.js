@@ -6,7 +6,9 @@ import {
   redirectDoctorRequest,
   configureDoctor,
   redirectSupplierRequest,
-  configureSupplier
+  configureSupplier,
+  addMedicine,
+  sendAddMedicinesPage
 } from '../controllers/admin';
 
 const router = Router();
@@ -25,6 +27,12 @@ router.get('/supplierRequest', redirectSupplierRequest);
 
 // Route to handle admin decision on supplier requests
 router.post('/supplierRequest', configureSupplier);
+
+// Route for admin to give medicine information to store in database
+router.get('/medicine', sendAddMedicinesPage);
+
+// Rout for admin to add medicines
+router.post('/medicine', addMedicine);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);
