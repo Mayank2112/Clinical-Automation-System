@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>CAS | Personal Details</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -37,12 +37,14 @@
     Start Time: <%= details.startTime %> <br>
     End Time: <%= details.endTime %> <br>
     Experienced From: <%= details.experienceFrom %> <br>
+    Specialization : <%= details.specialization%> <br>
     appointmentFee: <%= details.appointmentFee %>
     <% } else { %>
     <form action="/doctor/details" method="POST">
       Start Time : <input type="number" name="startTime" required="required" placeholder="24 hour format"><br>
       End Time : <input type="number" name="endTime" required="required" placeholder="24 hour format"><br>
       Experienced From : <input type="datetime" name="experienceFrom" required="required" placeholder="mm/dd/yyyy"><br>
+      Specialization : <input type="text" name="specialization" required="requires"> <br>
       Degree : <input type="text" name="degree" required="required" , placeholder="Higher degree"><br>
       Appointment Fee : <input type="number" name="appointmentFee" required="required"><br>
       <br>

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>CAS | Doctor Requests</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -28,6 +28,7 @@
       <th>Date of Birth</th>
       <th>Gender</th>
       <th>Degree</th>
+      <th>Specialization</th>
       <th>Start Time</th>
       <th>End Time</th>
       <th>Experience from</th>
@@ -44,6 +45,7 @@
           <td><%= doctor.dateOfBirth %></td>
           <td><%= doctor.gender %></td>
           <td><%= doctor.degree %></td>
+          <td><%= doctor.specialization.name %></td>
           <td><%= doctor.startTime %></td>
           <td><%= doctor.endTime %></td>
           <td><%= doctor.experienceFrom %></td>

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CAS | Appointment Request</title>
+  <title>CAS | Order</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -32,8 +32,8 @@
     <%= message %>
     <% if (!details.suppliers) { %>
     <form action="/patient/order-medicine" method="post">
-      Medicine : <input type="text" name="medicineName" required="required" value="<%= details.medicineName %>"><br>
-      Quantity: <input type="number" name="quantity" required="required" value="<%= details.quantity %>"><br>
+      Medicine : <input type="text" name="medicineName" required="required"><br>
+      Quantity: <input type="number" name="quantity" required="required"><br>
       <button type="submit">Make order</button>
     </form>
       <% } else { %>

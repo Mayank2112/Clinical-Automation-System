@@ -16,8 +16,8 @@
 </header>
 
 <script>
-  const setMail = mail => {
-    document.getElementById('email').value = mail;
+  const setDoctorId = id => {
+    document.getElementById('doctorId').value = id;
   };
 </script>
 
@@ -32,7 +32,7 @@
     <%= message %>
     <% if(!message && details.length) { %>
       <form action="/patient/appointmentRequest" method="post">
-        Enter Doctor Email : <input type="email" name="doctorEmail" required="required" id="email"
+        Enter Doctor Id : <input type="text" name="doctorId" required="required" id="doctorId"
         placeholder="Select from below table" readonly><br>
         Subject : <input type="text" name="subject" required="required"><br>
         Description : <input type="text" name="description"><br>
@@ -45,6 +45,7 @@
       <th>Gender</th>
       <th>Start Time</th>
       <th>End Time</th>
+      <th>Specialization</th>
       <th>Experience from</th>
       <th>Appointment Fee</th>
       <th>Mobile Number</th>
@@ -55,10 +56,11 @@
         <td><%= doctor.gender %></td>
         <td><%= doctor.startTime %></td>
         <td><%= doctor.endTime %></td>
+        <td><%= doctor.specialization.name %></td>
         <td><%= doctor.experienceFrom %></td>
         <td><%= doctor.appointmentFee %></td>
         <td><%= doctor.mobileNumber %></td>
-        <td><button onclick="setMail(`<%= doctor.email %>`)">Click</button></td>
+        <td><button onclick="setDoctorId(`<%= doctor.id %>`)">Click</button></td>
       </tr>
       <% }) %>
       <% } %>

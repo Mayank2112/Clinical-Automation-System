@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CAS | Order List</title>
+  <title>CAS | Orders List</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -20,10 +20,10 @@
   <div class='main'>
     <h1>Clinical Automation System</h1>
     <br>
-    <h2>My Orders</h2>
-    <br>
     <%= message %>
     <% if(!message && details.length) { %>
+      <h2>My Orders</h2>
+      <br>
       <table border="1px">
         <th>Medicine</th>
         <th>Quantity</th>
@@ -40,7 +40,6 @@
             <td><%= order.supplierId %></td>
             <td><%= order.status %></td>
           </tr>
-        </form>
         <% }) %>
         <% } %>
   </div>

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>CAS | Doctor Details</title>
   <link href="../../header.css" rel="stylesheet" type="text/css" />
   <link href="../../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -21,12 +21,13 @@
   <div class='main'>
     <h1>Clinical Automation System</h1>
     <br>
-    <h2>My Personal Details</h2>
+    <h2>Doctor Details</h2>
     <br>
     Name : <%= details.name %> <br>
     Email : <%= details.email %> <br>
     <% if (details.degree && details.startTime && details.endTime && details.experienceFrom && details.appointmentFee) { %>
     Degree: <%= details.degree %> <br>
+    Specialization: <%= details.specialization.name %> <br>
     Start Time: <%= details.startTime %> <br>
     End Time: <%= details.endTime %> <br>
     Experienced From: <%= details.experienceFrom %> <br>

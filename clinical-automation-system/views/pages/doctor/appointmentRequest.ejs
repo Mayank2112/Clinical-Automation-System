@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>CAS | Appointment Requests</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -22,7 +22,8 @@
     <h1>Clinical Automation System</h1>
     <br>
     <%= message %>
-    <% if(details.length) { %>
+    <% if(details && details.length) { %>
+      <h2>Today's Appointment Requests</h2>
       <table border="1px">
         <th>Appointment</th>
         <th>Patient</th>

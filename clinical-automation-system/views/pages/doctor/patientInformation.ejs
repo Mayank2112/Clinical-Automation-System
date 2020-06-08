@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>CAS | Patient Details</title>
   <link href="../../../header.css" rel="stylesheet" type="text/css" />
   <link href="../../../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -40,7 +40,7 @@
       </tr>
     </table>
     <br>
-    <% if (details.patientInformation) { %>
+    <% if (details.patientInformation.length) { %>
     <table border="1px">
       <th>Doctor</th>
       <th>Date</th>
