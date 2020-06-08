@@ -17,18 +17,10 @@ export default (sequelize, DataTypes) => {
       }
     },
     medicineId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.UUID
     },
     supplierId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.UUID
     },
     quantity: {
       type: DataTypes.INTEGER,
@@ -38,11 +30,7 @@ export default (sequelize, DataTypes) => {
       }
     },
     amount: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.FLOAT
     },
     date: {
       type: DataTypes.DATE,
@@ -50,6 +38,9 @@ export default (sequelize, DataTypes) => {
       validate: {
         notEmpty: true
       }
+    },
+    medicineName: {
+      type: DataTypes.TEXT
     },
     status: {
       type: DataTypes.ENUM({
@@ -66,18 +57,18 @@ export default (sequelize, DataTypes) => {
     const { Patient, Medicine, Supplier } = models;
 
     patientOrder.belongsTo(Patient, {
-      foreignKey: 'patientid',
+      foreignKey: 'patientId',
       targetKey: 'id'
     });
 
-    patientOrder.hasMany(Medicine, {
+    patientOrder.belongsTo(Medicine, {
       foreignKey: 'medicineId',
-      sourceKey: 'id'
+      targetKey: 'id'
     });
 
-    patientOrder.hasOne(Supplier, {
+    patientOrder.belongsTo(Supplier, {
       foreignKey: 'supplierId',
-      sourceKey: 'id'
+      targetKey: 'id'
     });
   };
   return patientOrder;
