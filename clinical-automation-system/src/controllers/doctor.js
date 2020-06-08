@@ -1,7 +1,13 @@
 import { filename } from 'config';
-import { createDoctor, findDoctor, addDetails, findDoctorById } from '../services/doctor';
 import renderPageWithMessage from '../helpers/responseRenderer';
 import { findPatientById, savePatientReport } from '../services/patient';
+import {
+  createDoctor,
+  addDetails,
+  findDoctorById,
+  addDoctorSpecialization
+} from '../services/doctor';
+
 import {
   findAppointmentByDoctor,
   deleteAppointment,
@@ -20,9 +26,21 @@ export const registerDoctor = async (req, res) => {
 
   const result = await createDoctor(doctor);
   if (result) {
-    return renderPageWithMessage(res, 201, filename.user.homepage, `${doctor.username} registered successfully. Login to continue`);
+    return renderPageWithMessage(
+      req,
+      res,
+      201,
+      filename.user.homepage,
+      `${doctor.username} registered successfully. Login to continue`
+    );
   }
-  return renderPageWithMessage(res, 400, filename.user.register, 'Username or email is already in use');
+  return renderPageWithMessage(
+    req,
+    res,
+    400,
+    filename.user.register,
+    'Username or email is already in use'
+  );
 };
 
 /**
@@ -33,9 +51,9 @@ export const registerDoctor = async (req, res) => {
 export const redirectDashboard = (req, res) => {
   const details = {
     name: req.user.username,
-    status: req.session.passport.user.status
+    status: req.user.status
   };
-  return renderPageWithMessage(res, 200, filename.doctor.dashboard, null, details);
+  return renderPageWithMessage(req, res, 200, filename.doctor.dashboard, null, details);
 };
 
 /**
@@ -44,7 +62,8 @@ export const redirectDashboard = (req, res) => {
  * @param {httResponse} res
  */
 export const redirectDetails = async (req, res) => {
-  const doctor = await findDoctor(req.user.username);
+  const doctor = await findDoctorById(req.user.id);
+  const specialization = doctor.Specializations[0].dataValues;
   const details = {
     name: doctor.name,
     email: doctor.email,
@@ -54,10 +73,11 @@ export const redirectDetails = async (req, res) => {
     gender: doctor.gender,
     startTime: doctor.startTime,
     endTime: doctor.endTime,
+    specialization: specialization.name,
     experienceFrom: doctor.experienceFrom,
     appointmentFee: doctor.appointmentFee
   };
-  return renderPageWithMessage(res, 200, filename.doctor.details, null, details);
+  return renderPageWithMessage(req, res, 200, filename.doctor.details, null, details);
 };
 
 /**
@@ -70,12 +90,19 @@ export const addCredentials = async (req, res) => {
   doctor.email = req.user.username;
   doctor.experienceFrom = new Date(req.body.experienceFrom).getTime();
 
+  const specialization = await addDoctorSpecialization(req.user.id, req.body.specialization);
   const result = await addDetails(doctor);
-  if (result) {
-    req.session.passport.user.status = 'pending';
+  if (result && specialization) {
+    req.user.status = 'pending';
     res.redirect('/doctor/details');
   }
-  return renderPageWithMessage(res, 400, filename.doctor.details, 'Data submitted is not correct');
+  return renderPageWithMessage(
+    req,
+    res,
+    400,
+    filename.doctor.details,
+    'Data submitted is not correct'
+  );
 };
 
 /**
@@ -84,13 +111,26 @@ export const addCredentials = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendAppointmentRequestList = async (req, res) => {
-  const doctor = await findDoctor(req.user.username);
-  const appointments = await findAppointmentByDoctor(doctor.id, 'pending');
+  console.log(req.user);
+  const appointments = await findAppointmentByDoctor(req.user.id, 'pending');
 
   if (appointments.length) {
-    return renderPageWithMessage(res, 200, filename.doctor.appointmentRequest, null, appointments);
+    return renderPageWithMessage(
+      req,
+      res,
+      200,
+      filename.doctor.appointmentRequest,
+      null,
+      appointments
+    );
   }
-  return renderPageWithMessage(res, 200, filename.doctor.appointmentRequest, 'No Appointments yet');
+  return renderPageWithMessage(
+    req,
+    res,
+    200,
+    filename.doctor.appointmentRequest,
+    'No Appointments yet'
+  );
 };
 
 /**
@@ -116,13 +156,26 @@ export const configureAppointmentRequest = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendAppointmentList = async (req, res) => {
-  const doctor = await findDoctor(req.user.username);
-  const appointments = await findAppointmentByDoctor(doctor.id, 'confirmed');
+  console.log(req.user);
+  const appointments = await findAppointmentByDoctor(req.user.id, 'confirmed');
 
   if (appointments.length) {
-    return renderPageWithMessage(res, 200, filename.doctor.appointment, null, appointments);
+    return renderPageWithMessage(
+      req,
+      res,
+      200,
+      filename.doctor.appointment,
+      null,
+      appointments
+    );
   }
-  return renderPageWithMessage(res, 200, filename.doctor.appointment, 'No Appointments yet');
+  return renderPageWithMessage(
+    req,
+    res,
+    200,
+    filename.doctor.appointment,
+    'No Appointments yet'
+  );
 };
 
 /**
@@ -134,7 +187,7 @@ export const sendPatientInformation = async (req, res) => {
   const patient = await findPatientById(req.params.patientId);
   const patientInformation = await findAppointmentWithHistory(req.params.patientId);
 
-  return renderPageWithMessage(
+  return renderPageWithMessage(req,
     res,
     200,
     filename.doctor.patientInformation,
@@ -142,8 +195,7 @@ export const sendPatientInformation = async (req, res) => {
     {
       patient,
       patientInformation
-    }
-  );
+    });
 };
 
 /**
@@ -153,7 +205,14 @@ export const sendPatientInformation = async (req, res) => {
  */
 export const sendDoctorInformation = async (req, res) => {
   const doctor = await findDoctorById(req.params.doctorId);
-  return renderPageWithMessage(res, 200, filename.doctor.doctorInformation, null, doctor);
+  return renderPageWithMessage(
+    req,
+    res,
+    200,
+    filename.doctor.doctorInformation,
+    null,
+    doctor
+  );
 };
 
 /**
@@ -166,5 +225,11 @@ export const saveReport = async (req, res) => {
   if (result) {
     return res.redirect('/doctor/appointment');
   }
-  return renderPageWithMessage(res, 500, filename.doctor.appointment, 'Some error occurs please try again');
+  return renderPageWithMessage(
+    req,
+    res,
+    500,
+    filename.doctor.appointment,
+    'Some error occurs please try again'
+  );
 };

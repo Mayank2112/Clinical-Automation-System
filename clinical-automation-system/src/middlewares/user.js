@@ -27,8 +27,13 @@ export const registerUser = (req, res) => {
   if (registration[req.body.profession]) {
     return registration[req.body.profession](req, res);
   }
-
-  return renderPageWithMessage(res, 403, filename.user.register, 'Please select profession');
+  return renderPageWithMessage(
+    req,
+    res,
+    403,
+    filename.user.register,
+    'Please select profession'
+  );
 };
 
 /**

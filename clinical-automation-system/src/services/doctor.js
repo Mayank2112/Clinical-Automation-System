@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import db from '../models';
 
 const Doctor = db.Doctor;
+const Specialization = db.Specialization;
 const sequelize = db.sequelize;
 
 /**
@@ -33,7 +34,10 @@ export const findDoctor = email => sequelize.authenticate()
     .then(() => Doctor.findAll({
       where: {
         email: email
-      }
+      },
+      include: [{
+        model: Specialization
+      }]
     })
       .then(doctor => doctor[0].dataValues)
       .catch(() => undefined)))
@@ -82,13 +86,16 @@ export const findDoctorByStatus = status => sequelize.authenticate()
     .then(() => Doctor.findAll({
       where: {
         status: status
-      }
+      },
+      include: [{
+        model: Specialization
+      }]
     })
       .then(doctors => {
         const result = [];
         doctors.forEach(doctor => {
-          doctor.dataValues.id = 'Hidden';
           doctor.dataValues.password = 'Hidden';
+          doctor.dataValues.specialization = doctor.Specializations[0].dataValues;
           result.push(doctor.dataValues);
         });
         return result;
@@ -137,8 +144,28 @@ export const findDoctorById = id => sequelize.authenticate()
     .then(() => Doctor.findAll({
       where: {
         id: id
-      }
+      },
+      include: [{
+        model: Specialization
+      }]
     })
-      .then(doctor => doctor[0].dataValues)
-      .catch(() => undefined)))
-  .catch(console.error);
+      .then(doctor => {
+        doctor[0].dataValues.password = 'Hidden';
+        doctor[0].dataValues.specialization = doctor[0].Specializations[0].dataValues;
+        return doctor[0].dataValues;
+      })
+      .catch(console.error)));
+
+/**
+ * Add doctor's specialization
+ * @param {*} doctorId
+ * @param {*} specialization
+ */
+export const addDoctorSpecialization = (doctorId, specialization) => sequelize.authenticate()
+  .then(() => Specialization.sync({ force: false })
+    .then(() => Specialization.create({
+      id: v4(),
+      doctorId: doctorId,
+      name: specialization
+    })))
+  .catch(() => false);

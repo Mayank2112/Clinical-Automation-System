@@ -1,14 +1,14 @@
 import moment from 'moment';
 import { filename } from 'config';
 import renderPageWithMessage from '../helpers/responseRenderer';
-import { findDoctorByStatus, findDoctor } from '../services/doctor';
+import { findDoctorByStatus } from '../services/doctor';
 import { createAppointment, findAppointmentByPatient } from '../services/appointment';
 import {
   createPatient,
-  findPatient,
   findMedicine,
   addOrder,
-  findOrders
+  findOrders,
+  findPatientById
 } from '../services/patient';
 
 /**
@@ -22,9 +22,21 @@ export const registerPatient = async (req, res) => {
 
   const result = await createPatient(patient);
   if (result) {
-    return renderPageWithMessage(res, 201, filename.user.homepage, `${patient.username} registered successfully. Login to continue`);
+    return renderPageWithMessage(
+      req,
+      res,
+      201,
+      filename.user.homepage,
+      `${patient.username} registered successfully. Login to continue`
+    );
   }
-  return renderPageWithMessage(res, 400, filename.user.register, 'Username or email is already in use');
+  return renderPageWithMessage(
+    req,
+    res,
+    400,
+    filename.user.register,
+    'Username or email is already in use'
+  );
 };
 
 /**
@@ -32,9 +44,12 @@ export const registerPatient = async (req, res) => {
  * @param {httpRequest} req
  * @param {httResponse} res
  */
-export const redirectDashboard = (req, res) => {
-  res.render(filename.patient.dashboard, { username: req.user.username });
-};
+export const redirectDashboard = (req, res) => renderPageWithMessage(
+  req,
+  res,
+  200,
+  filename.patient.dashboard
+);
 
 /**
  * Send list of doctors approved by admin
@@ -44,9 +59,22 @@ export const redirectDashboard = (req, res) => {
 export const sendDoctorList = async (req, res) => {
   const doctors = await findDoctorByStatus('approved');
   if (doctors.length > 0) {
-    return renderPageWithMessage(res, 200, filename.patient.appointmentRequest, null, doctors);
+    return renderPageWithMessage(
+      req,
+      res,
+      200,
+      filename.patient.appointmentRequest,
+      null,
+      doctors
+    );
   }
-  return renderPageWithMessage(res, 200, filename.patient.appointmentRequest, 'No doctor registered successfully yet');
+  return renderPageWithMessage(
+    req,
+    res,
+    200,
+    filename.patient.appointmentRequest,
+    'No doctor registered successfully yet'
+  );
 };
 
 /**
@@ -56,12 +84,13 @@ export const sendDoctorList = async (req, res) => {
  */
 export const makeAppointmentRequest = async (req, res) => {
   const time = Number(req.body.time) % 100;
-  const doctor = await findDoctor(req.body.doctorEmail);
-  const patient = await findPatient(req.user.username);
+  // const doctor = await findDoctor(req.body.doctorEmail);
+  // const patient = await findPatient(req.user.username);
+  console.log(req.user);
 
   const appointment = {
-    patientId: patient.id,
-    doctorId: doctor.id,
+    patientId: req.user.id,
+    doctorId: req.body.doctorId,
     subject: req.body.subject,
     description: req.body.description || null,
     date: moment().format('l'),
@@ -73,7 +102,13 @@ export const makeAppointmentRequest = async (req, res) => {
   if (result) {
     res.redirect('/patient/appointment');
   }
-  return renderPageWithMessage(res, 500, filename.patient.appointmentRequest, 'Some error occurs please try again');
+  return renderPageWithMessage(
+    req,
+    res,
+    500,
+    filename.patient.appointmentRequest,
+    'Some error occurs please try again'
+  );
 };
 
 /**
@@ -82,14 +117,14 @@ export const makeAppointmentRequest = async (req, res) => {
  * @param {httResponse} res
  */
 export const sendPersonalDetail = async (req, res) => {
-  const patient = await findPatient(req.user.username);
+  const patient = await findPatientById(req.user.id);
   const details = {
     name: patient.name,
     email: patient.email,
     dateOfBirth: patient.dateOfBirth,
     gender: patient.gender
   };
-  return renderPageWithMessage(res, 200, filename.patient.details, null, details);
+  return renderPageWithMessage(req, res, 200, filename.patient.details, null, details);
 };
 
 /**
@@ -98,13 +133,26 @@ export const sendPersonalDetail = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendAppointmentList = async (req, res) => {
-  const patient = await findPatient(req.user.username);
-  const appointments = await findAppointmentByPatient(patient.id);
+  console.log(req.user);
+  const appointments = await findAppointmentByPatient(req.user.id);
 
   if (appointments.length) {
-    return renderPageWithMessage(res, 200, filename.patient.appointment, null, appointments);
+    return renderPageWithMessage(
+      req,
+      res,
+      200,
+      filename.patient.appointment,
+      null,
+      appointments
+    );
   }
-  return renderPageWithMessage(res, 200, filename.patient.appointment, 'No Appointments yet');
+  return renderPageWithMessage(
+    req,
+    res,
+    200,
+    filename.patient.appointment,
+    'No Appointments yet'
+  );
 };
 
 /**
@@ -112,9 +160,16 @@ export const sendAppointmentList = async (req, res) => {
  * @param {httpRequest} req
  * @param {httpResponse} res
  */
-export const sendMakeOrderPage = (req, res) => {
-  return renderPageWithMessage(res, 200, filename.patient.makeOrder, null, { message: null });
-};
+export const sendMakeOrderPage = (req, res) => renderPageWithMessage(
+  req,
+  res,
+  200,
+  filename.patient.makeOrder,
+  null,
+  {
+    message: null
+  }
+);
 
 /**
  * Add new order to database
@@ -122,9 +177,9 @@ export const sendMakeOrderPage = (req, res) => {
  * @param {httpResponse} res
  */
 export const createOrder = async (req, res) => {
-  const patient = await findPatient(req.user.username);
+  console.log(req.user);
   const order = {
-    patientId: patient.id,
+    patientId: req.user.id,
     quantity: req.body.quantity,
     medicineName: req.body.medicineName,
     supplierId: req.body.supplierId || null,
@@ -144,7 +199,13 @@ export const createOrder = async (req, res) => {
     res.status = 201;
     return res.redirect('/patient/orders');
   }
-  return renderPageWithMessage(res, 200, filename.patient.makeOrder, 'Some error occurs. Try Again');
+  return renderPageWithMessage(
+    req,
+    res,
+    200,
+    filename.patient.makeOrder,
+    'Some error occurs. Try Again'
+  );
 };
 
 /**
@@ -153,7 +214,7 @@ export const createOrder = async (req, res) => {
  * @param {httpResponse} res
  */
 export const sendOrderDetails = async (req, res) => {
-  const patient = await findPatient(req.user.username);
-  const orders = await findOrders(patient.id);
-  return renderPageWithMessage(res, 200, filename.patient.orders, null, orders);
+  console.log(req.user);
+  const orders = await findOrders(req.user.id);
+  return renderPageWithMessage(req, res, 200, filename.patient.orders, null, orders);
 };

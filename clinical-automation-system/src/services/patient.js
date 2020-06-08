@@ -88,7 +88,7 @@ export const savePatientReport = report => sequelize.authenticate()
  * Find medicine from database
  * @param {Object} medicine
  */
-export const findMedicine = (name, quantity) => sequelize.authenticate()
+export const findMedicine = name => sequelize.authenticate()
   .then(() => Medicine.sync({ force: false })
     .then(() => Medicine.findAll({
       where: {
@@ -97,7 +97,7 @@ export const findMedicine = (name, quantity) => sequelize.authenticate()
     })))
   .catch(err => {
     console.error(err);
-    return false
+    return false;
   });
 
 /**
@@ -105,7 +105,7 @@ export const findMedicine = (name, quantity) => sequelize.authenticate()
  * @param {Object} order
  */
 export const addOrder = order => sequelize.authenticate()
-  .then(() => PatientOrder.sync({ force: true })
+  .then(() => PatientOrder.sync({ force: false })
     .then(() => PatientOrder.create({
       id: v4(),
       medicineId: order.medicineId || null,

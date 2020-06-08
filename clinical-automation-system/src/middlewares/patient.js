@@ -10,7 +10,7 @@ import renderPageWithMessage from '../helpers/responseRenderer';
  * @param {callback function} next
  */
 export const isPatientLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated() && req.session.passport.user.type === 'patient') {
+  if (req.isAuthenticated() && req.user.type === 'patient') {
     return next();
   }
   res.status(401);
@@ -30,12 +30,15 @@ export const checkMedicineAvailabilty = async (req, res, next) => {
     return next();
   }
   const suppliers = await getSupplierList();
-  return renderPageWithMessage(res,
+  return renderPageWithMessage(
+    req,
+    res,
     200,
     filename.patient.makeOrder,
     'Not available at store',
     {
       medicine: req.body,
       suppliers
-    });
+    }
+  );
 };

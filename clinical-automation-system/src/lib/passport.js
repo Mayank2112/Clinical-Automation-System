@@ -11,16 +11,18 @@ export const passportSetup = app => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // Used to serialalize the user for session
-  passport.serializeUser(async (user, done) => {
-    const userInfo = await getUserDetails(user.username);
-    user.type = userInfo.type;
-    user.status = userInfo.status;
+  // Used to serialize the user for session
+  passport.serializeUser((user, done) => {
     done(null, user);
   });
 
   // Used to deserialize the user
-  passport.deserializeUser((user, done) => {
+  passport.deserializeUser(async (user, done) => {
+    const userInfo = await getUserDetails(user.username);
+    user.id = userInfo.id;
+    user.name = userInfo.name;
+    user.type = userInfo.type;
+    user.status = userInfo.status;
     done(null, user);
   });
 

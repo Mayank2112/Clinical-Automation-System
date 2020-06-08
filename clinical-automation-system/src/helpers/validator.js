@@ -24,3 +24,13 @@ export const isValidNumber = phoneNumber => {
   const phoneRegEx = /^[0-9]{10}$/;
   return phoneRegEx.test(phoneNumber);
 };
+
+/**
+ * Checks addtional informations of doctor
+ * @param {Object} doctor
+ */
+export const isValidTypes = doctor => !(isNaN(doctor.startTime)
+  || isNaN(doctor.endTime)
+  || isNaN(doctor.appointmentFee)
+  || !doctor.experienceFrom
+  || typeof doctor.degree !== 'string');

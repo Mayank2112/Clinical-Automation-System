@@ -9,9 +9,12 @@ import { addNewMedicine } from '../services/admin';
  * @param {httpRequest} req
  * @param {httResponse} res
  */
-export const redirectDashboard = (req, res) => {
-  res.render(filename.admin.dashboard, { username: req.user.username });
-};
+export const redirectDashboard = (req, res) => renderPageWithMessage(
+  req,
+  res,
+  200,
+  filename.admin.dashboard
+);
 
 /**
  * Redirect to doctors details page
@@ -20,7 +23,7 @@ export const redirectDashboard = (req, res) => {
  */
 export const redirectDoctorRequest = async (req, res) => {
   const doctors = await findDoctorByStatus('pending');
-  return renderPageWithMessage(res, 200, filename.admin.doctorRequest, null, doctors);
+  return renderPageWithMessage(req, res, 200, filename.admin.doctorRequest, null, doctors);
 };
 
 /**
@@ -47,7 +50,7 @@ export const configureDoctor = async (req, res) => {
  */
 export const redirectSupplierRequest = async (req, res) => {
   const suppliers = await findSupplierByStatus('pending');
-  return renderPageWithMessage(res, 200, filename.admin.supplierRequest, null, suppliers);
+  return renderPageWithMessage(req, res, 200, filename.admin.supplierRequest, null, suppliers);
 };
 
 /**
@@ -72,9 +75,12 @@ export const configureSupplier = async (req, res) => {
  * @param {httpRequest} req
  * @param {httpResponse} res
  */
-export const sendAddMedicinesPage = (req, res) => {
-  return renderPageWithMessage(res, 200, filename.admin.addMedicine);
-};
+export const sendAddMedicinesPage = (req, res) => renderPageWithMessage(
+  req,
+  res,
+  200,
+  filename.admin.addMedicine
+);
 
 /**
  * Add medicine to database
@@ -92,7 +98,19 @@ export const addMedicine = async (req, res) => {
 
   const result = await addNewMedicine(medicine);
   if (result) {
-    return renderPageWithMessage(res, 201, filename.admin.addMedicine, 'Added successfully');
+    return renderPageWithMessage(
+      req,
+      res,
+      201,
+      filename.admin.addMedicine,
+      'Added successfully'
+    );
   }
-  return renderPageWithMessage(res, 403, filename.admin.addMedicine, 'Medicine already available at store');
+  return renderPageWithMessage(
+    req,
+    res,
+    403,
+    filename.admin.addMedicine,
+    'Medicine already available at store'
+  );
 };
