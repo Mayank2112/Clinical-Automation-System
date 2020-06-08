@@ -2,6 +2,7 @@ import { filename } from 'config';
 import { findDoctorByStatus, approveDoctor, deleteDoctor } from '../services/doctor';
 import { findSupplierByStatus, approveSupplier, deleteSupplier } from '../services/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
+import { addNewMedicine } from '../services/admin';
 
 /**
  * Redirect to dashboard page
@@ -36,7 +37,7 @@ export const configureDoctor = async (req, res) => {
   if (doctorOperation[req.body.status]) {
     await doctorOperation[req.body.status](req.body.doctorEmail);
   }
-  res.redirect('/admin/doctorRequest');
+  return res.redirect('/admin/doctorRequest');
 };
 
 /**
@@ -63,5 +64,35 @@ export const configureSupplier = async (req, res) => {
   if (supplierOperation[req.body.status]) {
     await supplierOperation[req.body.status](req.body.supplierEmail);
   }
-  res.redirect('/admin/supplierRequest');
+  return res.redirect('/admin/supplierRequest');
+};
+
+/**
+ * Render add medicine page
+ * @param {httpRequest} req
+ * @param {httpResponse} res
+ */
+export const sendAddMedicinesPage = (req, res) => {
+  return renderPageWithMessage(res, 200, filename.admin.addMedicine);
+};
+
+/**
+ * Add medicine to database
+ * @param {httpRequest} req
+ * @param {httpResponse} res
+ */
+export const addMedicine = async (req, res) => {
+  const medicine = {
+    name: req.body.medicineName,
+    manufacturingDate: req.body.manufacturingDate,
+    expiryDate: req.body.expiryDate,
+    pricePerTablet: req.body.pricePerTablet,
+    quantity: req.body.quantity
+  };
+
+  const result = await addNewMedicine(medicine);
+  if (result) {
+    return renderPageWithMessage(res, 201, filename.admin.addMedicine, 'Added successfully');
+  }
+  return renderPageWithMessage(res, 403, filename.admin.addMedicine, 'Medicine already available at store');
 };

@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import db from '../models';
 
 const Supplier = db.Supplier;
+const PatientOrder = db.PatientOrder;
 const sequelize = db.sequelize;
 
 /**
@@ -117,6 +118,69 @@ export const deleteSupplier = email => sequelize.authenticate()
       {
         where: {
           email: email
+        }
+      })
+      .catch(() => undefined)))
+  .catch(console.error);
+
+/**
+ * Get list of suppliers
+ */
+export const getSupplierList = () => sequelize.authenticate()
+  .then(() => Supplier.sync({ force: false })
+    .then(() => Supplier.findAll({
+      where: {
+        status: 'approved'
+      }
+    })
+      .then(suppliers => {
+        const result = [];
+        suppliers.forEach(supplier => {
+          supplier.dataValues.password = 'Hidden';
+          result.push(supplier.dataValues);
+        });
+        return result;
+      })
+      .catch(() => undefined)))
+  .catch(console.error);
+
+/**
+ * Find orders from database of supplier
+ * @param {Object} medicine
+ */
+export const findOrdersBySupplier = supplierId => sequelize.authenticate()
+  .then(() => PatientOrder.sync({ force: false })
+    .then(() => PatientOrder.findAll({
+      where: {
+        supplierId: supplierId,
+        status: 'pending'
+      }
+    })
+      .then(orders => {
+        const result = [];
+        orders.forEach(order => {
+          result.push(order.dataValues);
+        });
+        return result;
+      })))
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
+
+/**
+ * Change order status to given status
+ * @param {Object} orderId
+ * @param {String} status
+ */
+export const changeOrderStatus = (orderId, status) => sequelize.authenticate()
+  .then(() => PatientOrder.sync({ force: false })
+    .then(() => PatientOrder.update({
+      status: status
+    },
+      {
+        where: {
+          id: orderId
         }
       })
       .catch(() => undefined)))

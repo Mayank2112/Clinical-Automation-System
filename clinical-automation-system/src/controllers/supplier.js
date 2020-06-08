@@ -1,5 +1,5 @@
 import { filename } from 'config';
-import { createSupplier, findSupplier, addDetails } from '../services/supplier';
+import { createSupplier, findSupplier, addDetails, findOrdersBySupplier, changeOrderStatus } from '../services/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
 
 /**
@@ -50,8 +50,8 @@ export const redirectDetails = async (req, res) => {
 
 /**
  * Add additional information of supplier to database
- * @param {httpRequest} req 
- * @param {httpResponse} res 
+ * @param {httpRequest} req
+ * @param {httpResponse} res
  */
 export const addCredentials = async (req, res) => {
   const supplier = req.body;
@@ -63,4 +63,25 @@ export const addCredentials = async (req, res) => {
     res.redirect('/supplier/details');
   }
   return renderPageWithMessage(res, 400, filename.supplier.details, 'Data submitted is not correct');
+};
+
+/**
+ * Render order details to supplier
+ * @param {httpRequest} req
+ * @param {httpResponse} res
+ */
+export const sendOrders = async (req, res) => {
+  const supplier = await findSupplier(req.user.username);
+  const orders = await findOrdersBySupplier(supplier.id);
+  return renderPageWithMessage(res, 200, filename.supplier.orders, null, orders);
+};
+
+/**
+ * Change order status to delivered
+ * @param {httpRequest} req
+ * @param {httpResponse} res
+ */
+export const orderDelivered = async (req, res) => {
+  await changeOrderStatus(req.params.orderId, 'delivered');
+  return res.redirect('/supplier/orders');
 };

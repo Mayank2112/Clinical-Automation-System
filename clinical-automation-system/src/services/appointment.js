@@ -109,7 +109,7 @@ export const changeAppointmentStatus = (id, statusFrom, statusTo) => sequelize.a
 
 /**
  * Delete appointment from database
- * @param {UUID} id 
+ * @param {UUID} id
  */
 export const deleteAppointment = id => sequelize.authenticate()
   .then(() => DoctorAppointment.sync({ force: false })

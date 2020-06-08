@@ -4,6 +4,8 @@ import db from '../models';
 
 const Patient = db.Patient;
 const PatientHistory = db.PatientHistory;
+const Medicine = db.Medicine;
+const PatientOrder = db.PatientOrder;
 const sequelize = db.sequelize;
 
 /**
@@ -81,3 +83,57 @@ export const savePatientReport = report => sequelize.authenticate()
       patientReport: report.patientReport
     })))
   .catch(() => false);
+
+/**
+ * Find medicine from database
+ * @param {Object} medicine
+ */
+export const findMedicine = (name, quantity) => sequelize.authenticate()
+  .then(() => Medicine.sync({ force: false })
+    .then(() => Medicine.findAll({
+      where: {
+        name: name
+      }
+    })))
+  .catch(err => {
+    console.error(err);
+    return false
+  });
+
+/**
+ * Add new order to database
+ * @param {Object} order
+ */
+export const addOrder = order => sequelize.authenticate()
+  .then(() => PatientOrder.sync({ force: true })
+    .then(() => PatientOrder.create({
+      id: v4(),
+      medicineId: order.medicineId || null,
+      supplierId: order.supplierId || null,
+      patientId: order.patientId,
+      quantity: order.quantity,
+      amount: order.amount || null,
+      date: order.date,
+      medicineName: order.medicineName,
+      status: order.status
+    })))
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
+
+/**
+ * Find orders from database of patient
+ * @param {Object} medicine
+ */
+export const findOrders = patientId => sequelize.authenticate()
+  .then(() => PatientOrder.sync({ force: false })
+    .then(() => PatientOrder.findAll({
+      where: {
+        patientId: patientId
+      }
+    })))
+  .catch(err => {
+    console.error(err);
+    return false;
+  });

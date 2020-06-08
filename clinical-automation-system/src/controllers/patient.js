@@ -1,9 +1,15 @@
 import moment from 'moment';
 import { filename } from 'config';
-import { createPatient, findPatient } from '../services/patient';
 import renderPageWithMessage from '../helpers/responseRenderer';
 import { findDoctorByStatus, findDoctor } from '../services/doctor';
 import { createAppointment, findAppointmentByPatient } from '../services/appointment';
+import {
+  createPatient,
+  findPatient,
+  findMedicine,
+  addOrder,
+  findOrders
+} from '../services/patient';
 
 /**
  * Register new user to database
@@ -81,7 +87,7 @@ export const sendPersonalDetail = async (req, res) => {
     name: patient.name,
     email: patient.email,
     dateOfBirth: patient.dateOfBirth,
-    gender: patient.gender,
+    gender: patient.gender
   };
   return renderPageWithMessage(res, 200, filename.patient.details, null, details);
 };
@@ -99,4 +105,55 @@ export const sendAppointmentList = async (req, res) => {
     return renderPageWithMessage(res, 200, filename.patient.appointment, null, appointments);
   }
   return renderPageWithMessage(res, 200, filename.patient.appointment, 'No Appointments yet');
+};
+
+/**
+ * Render make orders page
+ * @param {httpRequest} req
+ * @param {httpResponse} res
+ */
+export const sendMakeOrderPage = (req, res) => {
+  return renderPageWithMessage(res, 200, filename.patient.makeOrder, null, { message: null });
+};
+
+/**
+ * Add new order to database
+ * @param {httpRequest} req
+ * @param {httpResponse} res
+ */
+export const createOrder = async (req, res) => {
+  const patient = await findPatient(req.user.username);
+  const order = {
+    patientId: patient.id,
+    quantity: req.body.quantity,
+    medicineName: req.body.medicineName,
+    supplierId: req.body.supplierId || null,
+    status: 'confirmed',
+    date: moment().format('l')
+  };
+
+  if (!req.body.supplierId) {
+    const medicines = await findMedicine(req.body.medicineName);
+    const medicine = medicines[0].dataValues;
+    order.medicineId = medicine.id;
+    order.amount = Number(order.quantity) * medicine.pricePerTablet;
+  }
+
+  const result = await addOrder(order);
+  if (result) {
+    res.status = 201;
+    return res.redirect('/patient/orders');
+  }
+  return renderPageWithMessage(res, 200, filename.patient.makeOrder, 'Some error occurs. Try Again');
+};
+
+/**
+ * Render order details to patient
+ * @param {httpRequest} req
+ * @param {httpResponse} res
+ */
+export const sendOrderDetails = async (req, res) => {
+  const patient = await findPatient(req.user.username);
+  const orders = await findOrders(patient.id);
+  return renderPageWithMessage(res, 200, filename.patient.orders, null, orders);
 };
