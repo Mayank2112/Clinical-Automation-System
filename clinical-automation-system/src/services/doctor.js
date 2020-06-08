@@ -151,7 +151,9 @@ export const findDoctorById = id => sequelize.authenticate()
     })
       .then(doctor => {
         doctor[0].dataValues.password = 'Hidden';
-        doctor[0].dataValues.specialization = doctor[0].Specializations[0].dataValues;
+        if (doctor[0].Specializations.length) {
+          doctor[0].dataValues.specialization = doctor[0].Specializations[0].dataValues;
+        }
         return doctor[0].dataValues;
       })
       .catch(console.error)));

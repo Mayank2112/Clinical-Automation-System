@@ -63,7 +63,10 @@ export const redirectDashboard = (req, res) => {
  */
 export const redirectDetails = async (req, res) => {
   const doctor = await findDoctorById(req.user.id);
-  const specialization = doctor.Specializations[0].dataValues;
+  const specialization = { name: null };
+  if (doctor.specialization) {
+    specialization.name = doctor.specialization.name;
+  }
   const details = {
     name: doctor.name,
     email: doctor.email,
