@@ -72,6 +72,12 @@ create database "clinical-automation-system";
 
 4. Set database configurations in config file
 
+5. Run migrations to create tables
+
+```
+npm run migration
+```
+
 <h1>Command to run</h1>
 
 ```
