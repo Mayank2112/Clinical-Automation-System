@@ -3,29 +3,25 @@
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('Admins', {
     id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: Sequelize.INTEGER
-    },
-    adminId: {
-      type: Sequelize.STRING,
+      type: Sequelize.UUID,
       unique: true,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
-    adminName: {
+    name: {
       type: Sequelize.STRING,
-      unique: true,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     gender: {
-      type: Sequelize.STRING,
+      type: Sequelize.ENUM({
+        values: ['male', 'female', 'other']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -45,9 +41,11 @@ export function up(queryInterface, Sequelize) {
         notEmpty: true
       }
     },
-    emailId: {
+    email: {
       type: Sequelize.STRING,
+      unique: true,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }

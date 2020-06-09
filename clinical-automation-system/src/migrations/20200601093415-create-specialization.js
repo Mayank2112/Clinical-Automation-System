@@ -11,45 +11,14 @@ export function up(queryInterface, Sequelize) {
         notEmpty: true
       }
     },
+    doctorId: {
+      type: Sequelize.UUID,
+      validate: {
+        notEmpty: true
+      }
+    },
     name: {
       type: Sequelize.STRING,
-      unique: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
-    companyName: {
-      type: Sequelize.STRING
-    },
-    companyAddress: {
-      type: Sequelize.STRING
-    },
-    mobileNumber: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
-    email: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
-    status: {
-      type: Sequelize.ENUM({
-        values: ['registered', 'pending', 'approved']
-      }),
       allowNull: false,
       validate: {
         notEmpty: true

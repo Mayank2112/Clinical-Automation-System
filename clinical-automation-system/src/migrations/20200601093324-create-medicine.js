@@ -3,20 +3,15 @@
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('Medicines', {
     id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: Sequelize.INTEGER
-    },
-    medicineId: {
-      type: Sequelize.STRING,
+      type: Sequelize.UUID,
       unique: true,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
-    medicineName: {
+    name: {
       type: Sequelize.STRING,
       unique: true,
       allowNull: false,
@@ -51,14 +46,6 @@ export function up(queryInterface, Sequelize) {
       validate: {
         notEmpty: true
       }
-    },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE
     }
   });
 }

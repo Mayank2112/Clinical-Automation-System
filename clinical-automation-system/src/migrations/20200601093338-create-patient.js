@@ -3,22 +3,16 @@
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('Patients', {
     id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: Sequelize.INTEGER
-    },
-    patientId: {
-      type: Sequelize.STRING,
+      type: Sequelize.UUID,
       unique: true,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
-    patientName: {
+    name: {
       type: Sequelize.STRING,
-      unique: true,
       allowNull: false,
       validate: {
         notEmpty: true
@@ -32,7 +26,9 @@ export function up(queryInterface, Sequelize) {
       }
     },
     gender: {
-      type: Sequelize.STRING,
+      type: Sequelize.ENUM({
+        values: ['male', 'female', 'other']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -52,9 +48,11 @@ export function up(queryInterface, Sequelize) {
         notEmpty: true
       }
     },
-    emailId: {
+    email: {
       type: Sequelize.STRING,
+      unique: true,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }
