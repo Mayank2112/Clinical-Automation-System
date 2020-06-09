@@ -2,17 +2,16 @@
 
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('Doctors', {
-    doctorId: {
-      type: Sequelize.INTEGER,
+    id: {
+      type: Sequelize.UUID,
       unique: true,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
-    doctorName: {
+    name: {
       type: Sequelize.STRING,
       unique: true,
       allowNull: false,
@@ -28,42 +27,35 @@ export function up(queryInterface, Sequelize) {
       }
     },
     gender: {
-      type: Sequelize.STRING,
+      type: Sequelize.ENUM({
+        values: ['male', 'female', 'other']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     degree: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: Sequelize.ENUM({
+        values: ['MBBS', 'MD']
+      })
     },
-    specialized: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+    startTime: {
+      type: Sequelize.INTEGER
     },
-    experience: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+    endTime: {
+      type: Sequelize.INTEGER
+    },
+    experienceFrom: {
+      type: Sequelize.DATE
     },
     appointmentFee: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: Sequelize.INTEGER
     },
     status: {
-      type: Sequelize.STRING,
+      type: Sequelize.ENUM({
+        values: ['registered', 'pending', 'approved']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -76,8 +68,9 @@ export function up(queryInterface, Sequelize) {
         notEmpty: true
       }
     },
-    emailId: {
+    email: {
       type: Sequelize.STRING,
+      unique: true,
       allowNull: false,
       primaryKey: true,
       validate: {

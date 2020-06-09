@@ -2,55 +2,52 @@
 
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('PatientOrders', {
-    orderId: {
-      type: Sequelize.INTEGER,
+    id: {
+      type: Sequelize.UUID,
       unique: true,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
     patientId: {
-      type: Sequelize.INTEGER,
-      unique: true,
+      type: Sequelize.UUID,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     medicineId: {
-      type: Sequelize.INTEGER,
-      unique: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: Sequelize.UUID
+    },
+    supplierId: {
+      type: Sequelize.UUID
     },
     quantity: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     amount: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: Sequelize.FLOAT
     },
-    orderDate: {
+    date: {
       type: Sequelize.DATE,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
+    medicineName: {
+      type: Sequelize.TEXT
+    },
     status: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.ENUM({
+        values: ['pending', 'confirmed', 'delivered']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true

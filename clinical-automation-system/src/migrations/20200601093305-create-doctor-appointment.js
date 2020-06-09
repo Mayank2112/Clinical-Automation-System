@@ -2,26 +2,24 @@
 
 export function up(queryInterface, Sequelize) {
   return queryInterface.createTable('DoctorAppointments', {
-    appointmentId: {
-      type: Sequelize.INTEGER,
+    id: {
+      type: Sequelize.UUID,
       unique: true,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
     patientId: {
-      type: Sequelize.INTEGER,
-      unique: true,
+      type: Sequelize.UUID,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     doctorId: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false,
       validate: {
         notEmpty: true
@@ -37,15 +35,24 @@ export function up(queryInterface, Sequelize) {
     description: {
       type: Sequelize.STRING
     },
-    appointmentDate: {
-      type: Sequelize.DATE,
+    date: {
+      type: Sequelize.DATEONLY,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    time: {
+      type: Sequelize.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     status: {
-      type: Sequelize.STRING,
+      type: Sequelize.ENUM({
+        values: ['pending', 'confirmed', 'completed']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
