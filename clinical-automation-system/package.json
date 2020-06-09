@@ -6,7 +6,9 @@
   "scripts": {
     "premigration": "babel src -d dist",
     "migration": "npx sequelize-cli db:migrate",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "testMigration": "babel src -d dist && NODE_ENV=test npx sequelize-cli db:migrate",
+    "pretest": "babel src -d dist && babel test -d distTest",
+    "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text mocha --exit distTest/**/**/*.js",
     "prestart": "babel src -d dist",
     "start": "nodemon dist/app.js"
   },
