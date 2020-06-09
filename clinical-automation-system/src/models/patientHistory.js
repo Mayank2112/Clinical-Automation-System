@@ -1,7 +1,7 @@
 export default (sequelize, DataTypes) => {
   const patientHistory = sequelize.define('PatientHistory', {
-    historyId: {
-      type: DataTypes.STRING,
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
       primaryKey: true,
@@ -9,8 +9,8 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    appotmentId: {
-      type: DataTypes.STRING,
+    appointmentId: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
       primaryKey: true,
@@ -19,25 +19,10 @@ export default (sequelize, DataTypes) => {
       }
     },
     disease: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
-    tablets: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.STRING
     },
     remark: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.STRING
     },
     patientReport: {
       type: DataTypes.STRING

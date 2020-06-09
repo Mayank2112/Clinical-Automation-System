@@ -1,7 +1,7 @@
 export default (sequelize, DataTypes) => {
   const doctorAppointment = sequelize.define('DoctorAppointment', {
-    appointmentId: {
-      type: DataTypes.STRING,
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
       primaryKey: true,
@@ -10,15 +10,14 @@ export default (sequelize, DataTypes) => {
       }
     },
     patientId: {
-      type: DataTypes.STRING,
-      unique: true,
+      type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     doctorId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notEmpty: true
@@ -34,15 +33,24 @@ export default (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING
     },
-    appointmentDate: {
-      type: DataTypes.DATE,
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    time: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM({
+        values: ['pending', 'confirmed', 'completed']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -55,7 +63,7 @@ export default (sequelize, DataTypes) => {
 
     doctorAppointment.hasOne(PatientHistory, {
       foreignKey: 'appointmentId',
-      sourceKey: 'appointmentId'
+      sourceKey: 'id'
     });
   };
   return doctorAppointment;

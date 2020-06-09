@@ -1,14 +1,15 @@
 export default (sequelize, DataTypes) => {
   const supplier = sequelize.define('Supplier', {
-    supplierId: {
-      type: DataTypes.STRING,
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true
       }
     },
-    supplierName: {
+    name: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
@@ -17,18 +18,10 @@ export default (sequelize, DataTypes) => {
       }
     },
     companyName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.STRING
     },
     companyAddress: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.STRING
     },
     mobileNumber: {
       type: DataTypes.STRING,
@@ -37,7 +30,7 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    emailId: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -46,6 +39,15 @@ export default (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    status: {
+      type: DataTypes.ENUM({
+        values: ['registered', 'pending', 'approved']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true

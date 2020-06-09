@@ -1,7 +1,7 @@
 export default (sequelize, DataTypes) => {
   const patientOrder = sequelize.define('PatientOrder', {
-    orderId: {
-      type: DataTypes.STRING,
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
       primaryKey: true,
@@ -10,44 +10,42 @@ export default (sequelize, DataTypes) => {
       }
     },
     patientId: {
-      type: DataTypes.STRING,
-      unique: true,
+      type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     medicineId: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.UUID
+    },
+    supplierId: {
+      type: DataTypes.UUID
     },
     quantity: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     amount: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.FLOAT
     },
-    orderDate: {
+    date: {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
+    medicineName: {
+      type: DataTypes.TEXT
+    },
     status: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.ENUM({
+        values: ['pending', 'confirmed', 'delivered']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -56,16 +54,21 @@ export default (sequelize, DataTypes) => {
   });
 
   patientOrder.associate = models => {
-    const { Patient, Medicine } = models;
+    const { Patient, Medicine, Supplier } = models;
 
     patientOrder.belongsTo(Patient, {
       foreignKey: 'patientId',
-      targetKey: 'patientId'
+      targetKey: 'id'
     });
 
-    patientOrder.hasMany(Medicine, {
+    patientOrder.belongsTo(Medicine, {
       foreignKey: 'medicineId',
-      sourceKey: 'medicineId'
+      targetKey: 'id'
+    });
+
+    patientOrder.belongsTo(Supplier, {
+      foreignKey: 'supplierId',
+      targetKey: 'id'
     });
   };
   return patientOrder;

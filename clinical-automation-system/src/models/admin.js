@@ -1,7 +1,7 @@
 export default (sequelize, DataTypes) => {
   const admin = sequelize.define('Admin', {
-    adminId: {
-      type: DataTypes.STRING,
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
       primaryKey: true,
@@ -9,16 +9,17 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    adminName: {
+    name: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     gender: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM({
+        values: ['male', 'female', 'other']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -38,8 +39,9 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    emailId: {
+    email: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
       primaryKey: true,
       validate: {

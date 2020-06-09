@@ -1,7 +1,7 @@
 export default (sequelize, DataTypes) => {
   const patient = sequelize.define('Patient', {
-    patientId: {
-      type: DataTypes.STRING,
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
       primaryKey: true,
@@ -9,9 +9,8 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    patientName: {
+    name: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
       validate: {
         notEmpty: true
@@ -25,7 +24,9 @@ export default (sequelize, DataTypes) => {
       }
     },
     gender: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM({
+        values: ['male', 'female', 'other']
+      }),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -45,8 +46,9 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    emailId: {
+    email: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
       primaryKey: true,
       validate: {
@@ -67,7 +69,7 @@ export default (sequelize, DataTypes) => {
 
     patient.hasMany(DoctorAppointment, {
       foreignKey: 'patientId',
-      sourceKey: 'patientId'
+      sourceKey: 'id'
     });
   };
   return patient;

@@ -1,7 +1,7 @@
 export default (sequelize, DataTypes) => {
   return sequelize.define('Medicine', {
-    medicineId: {
-      type: DataTypes.STRING,
+    id: {
+      type: DataTypes.UUID,
       unique: true,
       allowNull: false,
       primaryKey: true,
@@ -9,7 +9,7 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    medicineName: {
+    name: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
