@@ -1,5 +1,6 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { isValidPatient } from '../services/patient';
 import { isValidDoctor } from '../services/doctor';
 import { isValidSupplier } from '../services/supplier';
@@ -14,8 +15,10 @@ export const passportSetup = app => {
   // Used to serialalize the user for session
   passport.serializeUser(async (user, done) => {
     const userInfo = await getUserDetails(user.username);
-    user.type = userInfo.type;
-    user.status = userInfo.status;
+    if (userInfo) {
+      user.type = userInfo.type;
+      user.status = userInfo.status;
+    }
     done(null, user);
   });
 
@@ -73,6 +76,20 @@ export const passportSetup = app => {
           }
           return done(null, false);
         });
+    }
+  ));
+
+  // Middleware for google strategy of Authentication
+  passport.use(new GoogleStrategy({
+    clientID: process.env.AUTH_ID,
+    clientSecret: process.env.AUTH_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL
+  },
+    (token, refreshToken, profile, done) => {
+      return done(null, {
+        username: profile.emails[0].value,
+        token: token
+      });
     }
   ));
 };
