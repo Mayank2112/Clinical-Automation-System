@@ -21,7 +21,10 @@ export const createAppointment = appointment => sequelize.authenticate()
       date: appointment.date,
       time: appointment.time,
     })))
-  .catch(() => false);
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
 
 /**
  * Find appointment of doctor with time
@@ -36,11 +39,10 @@ export const findAppointmentByTime = (doctorId, date, time) => sequelize.authent
         doctorId: doctorId,
         date: date,
         time: time,
-        status: 'approved'
+        status: 'confirmed'
       }
     })
-      .then(appointment => appointment[0].dataValues)
-      .catch(err => undefined)))
+      .then(appointment => appointment[0].dataValues)))
   .catch(console.error);
 
 /**
@@ -60,8 +62,7 @@ export const findAppointmentByPatient = id => sequelize.authenticate()
           result.push(appointment.dataValues);
         });
         return result;
-      })
-      .catch(err => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -83,8 +84,7 @@ export const findAppointmentByDoctor = (id, status) => sequelize.authenticate()
           result.push(appointment.dataValues);
         });
         return result;
-      })
-      .catch(err => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -103,9 +103,11 @@ export const changeAppointmentStatus = (id, statusFrom, statusTo) => sequelize.a
           id: id,
           status: statusFrom
         }
-      })
-      .catch(console.error)))
-  .catch(console.error);
+      })))
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
 
 /**
  * Delete appointment from database
@@ -117,8 +119,7 @@ export const deleteAppointment = id => sequelize.authenticate()
       where: {
         id: id
       }
-    })
-      .catch(() => undefined)))
+    })))
   .catch(console.error);
 
 /**
@@ -142,6 +143,5 @@ export const findAppointmentWithHistory = id => sequelize.authenticate()
           result.push(appointment.dataValues);
         });
         return result;
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);

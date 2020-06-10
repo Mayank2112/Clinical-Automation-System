@@ -20,7 +20,10 @@ export const createSupplier = supplier => sequelize.authenticate()
       password: hashSync(supplier.password, 10),
       status: 'registered'
     })))
-  .catch(err => false);
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
 
 /**
  * Find supplier with given emailId in database
@@ -33,8 +36,7 @@ export const findSupplier = email => sequelize.authenticate()
         email: email
       }
     })
-      .then(supplier => supplier[0].dataValues)
-      .catch(() => undefined)))
+      .then(supplier => supplier[0].dataValues)))
   .catch(console.error);
 
 /**
@@ -64,8 +66,7 @@ export const addDetails = supplier => sequelize.authenticate()
         where: {
           email: supplier.email
         }
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -82,13 +83,11 @@ export const findSupplierByStatus = status => sequelize.authenticate()
       .then(suppliers => {
         const result = [];
         suppliers.forEach(supplier => {
-          supplier.dataValues.id = 'Hidden';
           supplier.dataValues.password = 'Hidden';
           result.push(supplier.dataValues);
         });
         return result;
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -104,8 +103,7 @@ export const approveSupplier = email => sequelize.authenticate()
         where: {
           email: email
         }
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -119,8 +117,7 @@ export const deleteSupplier = email => sequelize.authenticate()
         where: {
           email: email
         }
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -140,8 +137,7 @@ export const getSupplierList = () => sequelize.authenticate()
           result.push(supplier.dataValues);
         });
         return result;
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -182,6 +178,5 @@ export const changeOrderStatus = (orderId, status) => sequelize.authenticate()
         where: {
           id: orderId
         }
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);

@@ -23,7 +23,10 @@ export const createDoctor = doctor => sequelize.authenticate()
       email: doctor.email,
       password: hashSync(doctor.password, 10)
     })))
-  .catch(() => false);
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
 
 /**
  * Find doctor with given emailId in database
@@ -39,10 +42,8 @@ export const findDoctor = email => sequelize.authenticate()
         model: Specialization
       }]
     })
-      .then(doctor => doctor[0].dataValues)
-      .catch(() => undefined)))
+      .then(doctor => doctor[0].dataValues)))
   .catch(console.error);
-
 /**
  * Checks doctor with given emailId and password is valid or not
  * @param {String} email
@@ -73,8 +74,7 @@ export const addDetails = doctor => sequelize.authenticate()
         where: {
           email: doctor.email
         }
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -99,8 +99,7 @@ export const findDoctorByStatus = status => sequelize.authenticate()
           result.push(doctor.dataValues);
         });
         return result;
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -116,8 +115,7 @@ export const approveDoctor = email => sequelize.authenticate()
         where: {
           email: email
         }
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);
 
 /**
@@ -131,13 +129,12 @@ export const deleteDoctor = email => sequelize.authenticate()
         where: {
           email: email
         }
-      })
-      .catch(() => undefined)))
+      })))
   .catch(console.error);
 
 /**
  * Find doctor with given id in database
- * @param {UUID} email
+ * @param {UUID} id
  */
 export const findDoctorById = id => sequelize.authenticate()
   .then(() => Doctor.sync({ force: false })
@@ -155,8 +152,8 @@ export const findDoctorById = id => sequelize.authenticate()
           doctor[0].dataValues.specialization = doctor[0].Specializations[0].dataValues;
         }
         return doctor[0].dataValues;
-      })
-      .catch(console.error)));
+      })))
+  .catch(console.error);
 
 /**
  * Add doctor's specialization
@@ -170,4 +167,7 @@ export const addDoctorSpecialization = (doctorId, specialization) => sequelize.a
       doctorId: doctorId,
       name: specialization
     })))
-  .catch(() => false);
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
