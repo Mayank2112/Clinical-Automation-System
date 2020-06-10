@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import invalidRoutes from './invalidRoutes';
 import {
   resetLoginFailure,
   checkUserCredentials,
@@ -12,9 +13,14 @@ import {
   redirectHome,
   redirectRegister,
   redirectLogin,
-  logoutUser
+  logoutUser,
+  googleAuthenticationResponseHandler
 } from '../controllers/user';
-import invalidRoutes from './invalidRoutes';
+
+import {
+  googleAuthenticationRequest,
+  googleAuthenticationCallback
+} from '../middlewares/authentication';
 
 const router = Router();
 
@@ -32,6 +38,14 @@ router.post('/login', redirectUserToProfessionLogin);
 
 // Routing for login page
 router.get('/login', redirectLogin);
+
+// Login route to authenticate user using google OAuth strategy
+router.get('/login/auth/google', googleAuthenticationRequest);
+
+// Callback end point, google calls after verification
+router.get('/login/auth/google/callback',
+  googleAuthenticationCallback,
+  googleAuthenticationResponseHandler);
 
 // Routing for login failure
 router.get('/login/failure', setLoginFailure);

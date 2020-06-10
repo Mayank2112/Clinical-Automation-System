@@ -27,3 +27,14 @@ export const adminLocalAuthentication = passport.authenticate('admin-authenticat
   successRedirect: '/admin/dashboard',
   session: true
 });
+
+// Middleware for Google Authentication
+export const googleAuthenticationRequest = passport.authenticate('google', {
+  scope: ['https://www.googleapis.com/auth/userinfo.email']
+});
+
+// Middleware for google callback authentication process
+export const googleAuthenticationCallback = passport.authenticate('google', {
+  failureRedirect: '/login/failure',
+  session: true
+});

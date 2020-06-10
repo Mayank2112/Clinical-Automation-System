@@ -8,6 +8,10 @@ import renderPageWithMessage from '../helpers/responseRenderer';
  */
 export const logoutUser = (req, res) => {
   req.logout();
+  if (req.app.locals.googleLogin) {
+    req.app.locals.googleLogin = false;
+    return res.redirect('/');
+  }
   return renderPageWithMessage(res, 204, filename.user.homepage, 'Successfully Logout');
 };
 
@@ -48,6 +52,24 @@ export const redirectRegister = (req, res) => {
  */
 export const registerFailure = (req, res) => {
   renderPageWithMessage(res, 400, filename.user.register, 'Invalid Credentials');
+};
+
+/**
+ * Set session variables and redirect to dashboard
+ * @param {httpRequest} req
+ * @param {htpResponse} res
+ */
+export const googleAuthenticationResponseHandler = (req, res) => {
+  req.app.locals.googleLogin = true;
+  if (req.user.type) {
+    return res.redirect(`/${req.user.type}/dashboard`);
+  }
+  return renderPageWithMessage(
+    res,
+    403,
+    filename.user.login,
+    'Register your email first then you are eligible to login with google'
+  );
 };
 
 /**
