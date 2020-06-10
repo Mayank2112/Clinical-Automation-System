@@ -5,6 +5,8 @@ import { serverConfig } from 'config';
 import router from './routes';
 import { passportSetup } from './lib/passport';
 
+require('dotenv').config();
+
 const app = express();
 const port = serverConfig.port;
 
