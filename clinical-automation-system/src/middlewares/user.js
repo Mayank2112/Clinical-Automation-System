@@ -1,10 +1,10 @@
 import { filename } from 'config';
 import { registerFailure } from '../controllers/user';
-import { isValidEmail, isValidPassword, isValidNumber } from '../helpers/validator';
 import { registerPatient } from '../controllers/patient';
 import { registerDoctor } from '../controllers/doctor';
 import { registerSupplier } from '../controllers/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
+import regEx from '../helpers/regEx';
 import {
   adminLocalAuthentication,
   doctorLocalAuthentication,
@@ -65,9 +65,9 @@ export const resetLoginFailure = (req, res, next) => {
 };
 
 export const checkUserCredentials = (req, res, next) => {
-  if (isValidEmail(req.body.email)
-    && isValidPassword(req.body.password)
-    && isValidNumber(req.body.mobileNumber)) {
+  if (regEx.email.test(req.body.email)
+    && regEx.password.test(req.body.password)
+    && regEx.phone.test(req.body.mobileNumber)) {
     return next();
   }
   return registerFailure(req, res);
