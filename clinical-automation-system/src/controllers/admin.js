@@ -88,13 +88,8 @@ export const sendAddMedicinesPage = (req, res) => renderPageWithMessage(
  * @param {httpResponse} res
  */
 export const addMedicine = async (req, res) => {
-  const medicine = {
-    name: req.body.medicineName,
-    manufacturingDate: req.body.manufacturingDate,
-    expiryDate: req.body.expiryDate,
-    pricePerTablet: req.body.pricePerTablet,
-    quantity: req.body.quantity
-  };
+  const medicine = req.body;
+  medicine.name = req.body.medicineName;
 
   const result = await addNewMedicine(medicine);
   if (result) {

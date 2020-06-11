@@ -23,8 +23,8 @@ import {
 export const registerDoctor = async (req, res) => {
   const doctor = req.body;
   doctor.dateOfBirth = new Date(req.body.dateOfBirth).getTime();
-
   const result = await createDoctor(doctor);
+
   if (result) {
     return renderPageWithMessage(
       req,
@@ -63,23 +63,10 @@ export const redirectDashboard = (req, res) => {
  */
 export const redirectDetails = async (req, res) => {
   const doctor = await findDoctorById(req.user.id);
-  const specialization = { name: null };
+  const details = doctor;
   if (doctor.specialization) {
-    specialization.name = doctor.specialization.name;
+    details.specialization = doctor.specialization.name;
   }
-  const details = {
-    name: doctor.name,
-    email: doctor.email,
-    status: doctor.status,
-    degree: doctor.degree,
-    dateOfBirth: doctor.dateOfBirth,
-    gender: doctor.gender,
-    startTime: doctor.startTime,
-    endTime: doctor.endTime,
-    specialization: specialization.name,
-    experienceFrom: doctor.experienceFrom,
-    appointmentFee: doctor.appointmentFee
-  };
   return renderPageWithMessage(req, res, 200, filename.doctor.details, null, details);
 };
 
@@ -92,12 +79,12 @@ export const addCredentials = async (req, res) => {
   const doctor = req.body;
   doctor.email = req.user.username;
   doctor.experienceFrom = new Date(req.body.experienceFrom).getTime();
-
   const specialization = await addDoctorSpecialization(req.user.id, req.body.specialization);
   const result = await addDetails(doctor);
+
   if (result && specialization) {
     req.user.status = 'pending';
-    res.redirect('/doctor/details');
+    return res.redirect('/doctor/details');
   }
   return renderPageWithMessage(
     req,
@@ -187,7 +174,6 @@ export const sendAppointmentList = async (req, res) => {
 export const sendPatientInformation = async (req, res) => {
   const patient = await findPatientById(req.params.patientId);
   const patientInformation = await findAppointmentWithHistory(req.params.patientId);
-
   return renderPageWithMessage(req,
     res,
     200,
@@ -223,6 +209,7 @@ export const sendDoctorInformation = async (req, res) => {
  */
 export const saveReport = async (req, res) => {
   const result = await savePatientReport(req.body);
+
   if (result) {
     return res.redirect('/doctor/appointment');
   }

@@ -1,9 +1,7 @@
 import { v4 } from 'uuid';
 import db from '../models';
 
-const DoctorAppointment = db.DoctorAppointment;
-const PatientHistory = db.PatientHistory;
-const sequelize = db.sequelize;
+const { DoctorAppointment, PatientHistory, sequelize } = db;
 
 /**
  * create new appointment in database

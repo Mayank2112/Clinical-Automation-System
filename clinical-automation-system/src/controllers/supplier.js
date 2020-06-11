@@ -16,8 +16,8 @@ import {
  */
 export const registerSupplier = async (req, res) => {
   const supplier = req.body;
-
   const result = await createSupplier(supplier);
+
   if (result) {
     return renderPageWithMessage(
       req,
@@ -56,15 +56,7 @@ export const redirectDashboard = (req, res) => {
  */
 export const redirectDetails = async (req, res) => {
   const supplier = await findSupplier(req.user.username);
-  const details = {
-    name: supplier.name,
-    email: supplier.email,
-    status: supplier.status,
-    companyName: supplier.companyName,
-    companyAddress: supplier.companyAddress,
-    mobileNumber: supplier.mobileNumber
-  };
-  return renderPageWithMessage(req, res, 200, filename.supplier.details, null, details);
+  return renderPageWithMessage(req, res, 200, filename.supplier.details, null, supplier);
 };
 
 /**
@@ -75,8 +67,8 @@ export const redirectDetails = async (req, res) => {
 export const addCredentials = async (req, res) => {
   const supplier = req.body;
   supplier.email = req.user.username;
-
   const result = await addDetails(supplier);
+
   if (result) {
     req.user.status = 'pending';
     res.redirect('/supplier/details');

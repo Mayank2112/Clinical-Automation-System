@@ -19,8 +19,8 @@ import {
 export const registerPatient = async (req, res) => {
   const patient = req.body;
   patient.dateOfBirth = new Date(req.body.dateOfBirth).getTime();
-
   const result = await createPatient(patient);
+
   if (result) {
     return renderPageWithMessage(
       req,
@@ -58,6 +58,7 @@ export const redirectDashboard = (req, res) => renderPageWithMessage(
  */
 export const sendDoctorList = async (req, res) => {
   const doctors = await findDoctorByStatus('approved');
+
   if (doctors.length > 0) {
     return renderPageWithMessage(
       req,
@@ -83,20 +84,14 @@ export const sendDoctorList = async (req, res) => {
  * @param {httpResponse} res
  */
 export const makeAppointmentRequest = async (req, res) => {
-  const time = Number(req.body.time) % 100;
-  const appointment = {
-    patientId: req.user.id,
-    doctorId: req.body.doctorId,
-    subject: req.body.subject,
-    description: req.body.description || null,
-    date: moment().format('l'),
-    time: time,
-    status: 'pending'
-  };
-
+  const appointment = req.body;
+  appointment.patientId = req.user.id;
+  appointment.date = moment().format('l');
+  appointment.status = 'pending';
   const result = await createAppointment(appointment);
+
   if (result) {
-    res.redirect('/patient/appointment');
+    return res.redirect('/patient/appointment');
   }
   return renderPageWithMessage(
     req,
@@ -114,13 +109,7 @@ export const makeAppointmentRequest = async (req, res) => {
  */
 export const sendPersonalDetail = async (req, res) => {
   const patient = await findPatientById(req.user.id);
-  const details = {
-    name: patient.name,
-    email: patient.email,
-    dateOfBirth: patient.dateOfBirth,
-    gender: patient.gender
-  };
-  return renderPageWithMessage(req, res, 200, filename.patient.details, null, details);
+  return renderPageWithMessage(req, res, 200, filename.patient.details, null, patient);
 };
 
 /**
@@ -172,14 +161,10 @@ export const sendMakeOrderPage = (req, res) => renderPageWithMessage(
  * @param {httpResponse} res
  */
 export const createOrder = async (req, res) => {
-  const order = {
-    patientId: req.user.id,
-    quantity: req.body.quantity,
-    medicineName: req.body.medicineName,
-    supplierId: req.body.supplierId || null,
-    status: 'confirmed',
-    date: moment().format('l')
-  };
+  const order = req.body;
+  order.patientId = req.user.id;
+  order.status = 'confirmed';
+  order.date = moment().format('l');
 
   if (!req.body.supplierId) {
     const medicines = await findMedicine(req.body.medicineName);

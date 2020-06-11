@@ -2,9 +2,7 @@ import { hashSync, compareSync } from 'bcryptjs';
 import { v4 } from 'uuid';
 import db from '../models';
 
-const Supplier = db.Supplier;
-const PatientOrder = db.PatientOrder;
-const sequelize = db.sequelize;
+const { Supplier, PatientOrder, sequelize } = db;
 
 /**
  * create new user in database

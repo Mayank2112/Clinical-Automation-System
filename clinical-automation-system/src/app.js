@@ -6,7 +6,7 @@ import router from './routes';
 import { passportSetup } from './lib/passport';
 
 const app = express();
-const port = serverConfig.port;
+const { port } = serverConfig;
 
 // setup for parsing data
 app.use(urlencoded({ extended: true }));

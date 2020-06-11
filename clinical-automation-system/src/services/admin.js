@@ -2,9 +2,7 @@ import { compareSync } from 'bcryptjs';
 import { v4 } from 'uuid';
 import db from '../models';
 
-const Admin = db.Admin;
-const Medicine = db.Medicine;
-const sequelize = db.sequelize;
+const { Admin, Medicine, sequelize } = db;
 
 /**
  * Find admin with given emailId in database
@@ -17,7 +15,7 @@ export const findAdmin = email => sequelize.authenticate()
         email: email
       }
     })
-    .then(admin => admin[0].dataValues)))
+      .then(admin => admin[0].dataValues)))
   .catch(console.error);
 
 /**
