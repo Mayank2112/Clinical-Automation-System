@@ -18,19 +18,22 @@ import {
  * @param {httResponse} res
  */
 export const registerUser = (req, res) => {
-  if (req.body.profession === 'patient') {
-    return registerPatient(req, res);
-  }
+  const registration = {
+    doctor: registerDoctor,
+    patient: registerPatient,
+    supplier: registerSupplier
+  };
 
-  if (req.body.profession === 'doctor') {
-    return registerDoctor(req, res);
+  if (registration[req.body.profession]) {
+    return registration[req.body.profession](req, res);
   }
-
-  if (req.body.profession === 'supplier') {
-    return registerSupplier(req, res);
-  }
-
-  return renderPageWithMessage(res, 403, filename.user.register, 'Please select profession');
+  return renderPageWithMessage(
+    req,
+    res,
+    403,
+    filename.user.register,
+    'Please select profession'
+  );
 };
 
 /**
@@ -41,7 +44,7 @@ export const registerUser = (req, res) => {
  */
 export const destroySession = (req, res, next) => {
   req.session.destroy();
-  next();
+  return next();
 };
 
 /**
@@ -61,9 +64,15 @@ export const setLoginFailure = (req, res) => {
  */
 export const resetLoginFailure = (req, res, next) => {
   req.app.locals.loginFailure = false;
-  next();
+  return next();
 };
 
+/**
+ * Check user credentials on registration
+ * @param {httpRequest} req
+ * @param {httpResopnse} res
+ * @param {Function} next
+ */
 export const checkUserCredentials = (req, res, next) => {
   if (regEx.email.test(req.body.email)
     && regEx.password.test(req.body.password)
@@ -73,21 +82,23 @@ export const checkUserCredentials = (req, res, next) => {
   return registerFailure(req, res);
 };
 
+/**
+ * Set appropriate authentication strategy based on user profile
+ * @param {httpRequest} req
+ * @param {httpResopnse} res
+ * @param {Function} next
+ */
 export const redirectUserToProfessionLogin = (req, res) => {
-  if (req.body.profession === 'admin') {
-    return adminLocalAuthentication(req, res);
-  }
+  const authentication = {
+    admin: adminLocalAuthentication,
+    doctor: doctorLocalAuthentication,
+    patient: patientLocalAuthentication,
+    supplier: supplierLocalAuthentication
+  };
+  req.app.locals.userType = req.body.profession;
 
-  if (req.body.profession === 'doctor') {
-    return doctorLocalAuthentication(req, res);
-  }
-
-  if (req.body.profession === 'patient') {
-    return patientLocalAuthentication(req, res);
-  }
-
-  if (req.body.profession === 'supplier') {
-    return supplierLocalAuthentication(req, res);
+  if (authentication[req.body.profession]) {
+    return authentication[req.body.profession](req, res);
   }
   return setLoginFailure(req, res);
 };

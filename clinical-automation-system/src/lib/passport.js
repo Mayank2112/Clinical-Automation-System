@@ -17,6 +17,7 @@ export const passportSetup = app => {
     const userInfo = await getUserDetails(user.username);
     if (userInfo) {
       user.type = userInfo.type;
+      user.name = userInfo.name;
       user.status = userInfo.status;
     }
     done(null, user);
