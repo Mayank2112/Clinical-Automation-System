@@ -40,7 +40,6 @@ app.use(express.static(join(__dirname, '../views/styles')));
 app.use('/', router);
 
 app.locals.loginFailure = false;
-app.locals.googleLogin = false;
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
 

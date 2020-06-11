@@ -82,7 +82,6 @@ export const googleAuthenticationResponseHandler = (req, res) => {
   console.log(req.session.passport.user);
 
   if (req.user.type) {
-    req.app.locals.googleLogin = true;
     return res.redirect(`/${req.user.type}/dashboard`);
   }
   return renderPageWithMessage(
