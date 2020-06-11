@@ -19,7 +19,10 @@ export const createSupplier = supplier => sequelize.authenticate()
       password: hashSync(supplier.password, 10),
       status: 'registered'
     })))
-  .catch(err => false);
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
 
 /**
  * Find supplier with given emailId in database
@@ -32,8 +35,7 @@ export const findSupplier = email => sequelize.authenticate()
         email: email
       }
     })
-      .then(supplier => supplier[0].dataValues)
-      .catch(() => undefined)))
+      .then(supplier => supplier[0].dataValues)))
   .catch(console.error);
 
 /**

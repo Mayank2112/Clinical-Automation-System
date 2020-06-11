@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import db from '../models';
 
 const Doctor = db.Doctor;
+const Specialization = db.Specialization;
 const sequelize = db.sequelize;
 
 /**
@@ -22,7 +23,10 @@ export const createDoctor = doctor => sequelize.authenticate()
       email: doctor.email,
       password: hashSync(doctor.password, 10)
     })))
-  .catch(() => false);
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
 
 /**
  * Find doctor with given emailId in database
@@ -33,10 +37,12 @@ export const findDoctor = email => sequelize.authenticate()
     .then(() => Doctor.findAll({
       where: {
         email: email
-      }
+      },
+      include: [{
+        model: Specialization
+      }]
     })
-      .then(doctor => doctor[0].dataValues)
-      .catch(() => undefined)))
+      .then(doctor => doctor[0].dataValues)))
   .catch(console.error);
 
 /**

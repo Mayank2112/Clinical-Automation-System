@@ -21,7 +21,10 @@ export const createPatient = patient => sequelize.authenticate()
       email: patient.email,
       password: hashSync(patient.password, 10)
     })))
-  .catch(() => false);
+  .catch(err => {
+    console.error(err);
+    return false;
+  });
 
 /**
  * Find patient with given emailId in database
@@ -34,8 +37,7 @@ export const findPatient = email => sequelize.authenticate()
         email: email
       }
     })
-      .then(patient => patient[0].dataValues)
-      .catch(() => undefined)))
+      .then(patient => patient[0].dataValues)))
   .catch(console.error);
 
 /**
