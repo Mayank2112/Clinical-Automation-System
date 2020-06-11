@@ -10,23 +10,26 @@ import { createSupplier } from '../services/supplier';
 export const registerSupplier = async (req, res) => {
   const supplier = req.body;
 
-  const result = await createSupplier(supplier);
-  if (result) {
+  try {
+    const result = await createSupplier(supplier);
+    if (result) {
+      return renderPageWithMessage(
+        req,
+        res,
+        201,
+        filename.user.homepage,
+        `${supplier.username} registered successfully. Login to continue`
+      );
+    }
+  } catch (error) {
     return renderPageWithMessage(
       req,
       res,
-      201,
-      filename.user.homepage,
-      `${supplier.username} registered successfully. Login to continue`
+      400,
+      filename.user.register,
+      'Username or email is already in use'
     );
   }
-  return renderPageWithMessage(
-    req,
-    res,
-    400,
-    filename.user.register,
-    'Username or email is already in use'
-  );
 };
 
 /**

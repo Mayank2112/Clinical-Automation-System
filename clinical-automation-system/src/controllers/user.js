@@ -78,9 +78,6 @@ export const registerFailure = (req, res) => renderPageWithMessage(
  * @param {htpResponse} res
  */
 export const googleAuthenticationResponseHandler = (req, res) => {
-  console.log(req.user);
-  console.log(req.session.passport.user);
-
   if (req.user.type) {
     return res.redirect(`/${req.user.type}/dashboard`);
   }

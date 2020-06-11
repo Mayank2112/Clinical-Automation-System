@@ -11,23 +11,26 @@ export const registerPatient = async (req, res) => {
   const patient = req.body;
   patient.dateOfBirth = new Date(req.body.dateOfBirth).getTime();
 
-  const result = await createPatient(patient);
-  if (result) {
+  try {
+    const result = await createPatient(patient);
+    if (result) {
+      return renderPageWithMessage(
+        req,
+        res,
+        201,
+        filename.user.homepage,
+        `${patient.username} registered successfully. Login to continue`
+      );
+    }
+  } catch (error) {
     return renderPageWithMessage(
       req,
       res,
-      201,
-      filename.user.homepage,
-      `${patient.username} registered successfully. Login to continue`
+      400,
+      filename.user.register,
+      error.message
     );
   }
-  return renderPageWithMessage(
-    req,
-    res,
-    400,
-    filename.user.register,
-    'Username or email is already in use'
-  );
 };
 
 /**
