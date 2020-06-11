@@ -1,9 +1,8 @@
 import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import { isValidPatient } from '../services/patient';
-import { isValidDoctor } from '../services/doctor';
-import { isValidSupplier } from '../services/supplier';
-import { isValidAdmin } from '../services/admin';
+import patient from '../strategies/patient';
+import doctor from '../strategies/doctor';
+import supplier from '../strategies/supplier';
+import admin from '../strategies/admin';
 import { getUserDetails } from '../services/user';
 
 export const passportSetup = app => {
@@ -27,56 +26,16 @@ export const passportSetup = app => {
   });
 
   // Middleware for local strategy Authentication for Patient
-  passport.use('patient-authentication', new LocalStrategy(
-    (username, password, done) => {
-      isValidPatient(username, password)
-        .then(result => {
-          if (result) {
-            return done(null, { username: username });
-          }
-          return done(null, false);
-        });
-    }
-  ));
+  passport.use('patient-authentication', patient);
 
   // Middleware for local strategy Authentication for Doctor
-  passport.use('doctor-authentication', new LocalStrategy(
-    (username, password, done) => {
-      isValidDoctor(username, password)
-        .then(result => {
-          if (result) {
-            return done(null, { username: username });
-          }
-          return done(null, false);
-        });
-    }
-  ));
+  passport.use('doctor-authentication', doctor);
 
   // Middleware for local strategy Authentication for Supplier
-  passport.use('supplier-authentication', new LocalStrategy(
-    (username, password, done) => {
-      isValidSupplier(username, password)
-        .then(result => {
-          if (result) {
-            return done(null, { username: username });
-          }
-          return done(null, false);
-        });
-    }
-  ));
+  passport.use('supplier-authentication', supplier);
 
   // Middleware for local strategy Authentication for Admin
-  passport.use('admin-authentication', new LocalStrategy(
-    (username, password, done) => {
-      isValidAdmin(username, password)
-        .then(result => {
-          if (result) {
-            return done(null, { username: username });
-          }
-          return done(null, false);
-        });
-    }
-  ));
+  passport.use('admin-authentication', admin);
 };
 
 export default passport;
