@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,17 +16,77 @@
   <h1>Clinical Automation System</h1>
   <br>
   <form action="/register" method="post">
-    Name : <input type="text" name="username" required="required" placeholder="Atleast 6 characters"><br>
-    Date of Birth : <input type="datetime" name="dateOfBirth" required="required"><br>
-    Gender : <input type="radio" name="gender" value="male"> Male <input type="radio" name="gender" value="female"> FeMale <input type="radio" name="gender" value="other"> Other <br>
-    SignIn As : <input type="radio" name="profession" value="patient"> Patient <input type="radio" name="profession" value="doctor"> Doctor <input type="radio" name="profession" value="supplier"> Supplier <br>
-    Mobile Number : <input type="number" name="mobileNumber" required="required"><br>
-    address : <input type="text" name="address" required="required"><br>
-    Email : <input type="email" name="email" required="required" placeholder="Enter valid email address"><br>
-    Password : <input type="password" name="password" required="required" placeholder="Atleast contain 8 characters"><br>
+    <table>
+      <tr>
+        <td>
+          Name
+        </td>
+        <td>
+          <input type="text" name="username" required="required" placeholder="Atleast 6 characters">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Date of Birth
+        </td>
+        <td>
+          <input type="datetime" name="dateOfBirth" required="required">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Gender
+        </td>
+        <td>
+          <input type="radio" name="gender" value="male"> Male <input type="radio" name="gender" value="female"> Female
+          <input type="radio" name="gender" value="other"> Other
+        </td>
+      </tr>
+      <tr>
+        <td>
+          SignIn As
+        </td>
+        <td>
+          <input type="radio" name="profession" value="patient"> Patient <input type="radio" name="profession"
+            value="doctor"> Doctor <input type="radio" name="profession" value="supplier"> Supplier
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Mobile Number
+        </td>
+        <td>
+          <input type="number" name="mobileNumber" required="required">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          address
+        </td>
+        <td>
+          <input type="text" name="address" required="required">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Email
+        </td>
+        <td>
+          <input type="email" name="email" required="required" placeholder="Enter valid email address">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Password
+        </td>
+        <td>
+          <input type="password" name="password" required="required" placeholder="Atleast contain 8 characters">
+        </td>
+      </tr>
+    </table>
     <div style='color: red;'>
-      <% if (messageHolder) { %>
-      <%= messageHolder.message %>
+      <% if (message) { %>
+      <%= message %>
       <% } %>
     </div>
     <br>
