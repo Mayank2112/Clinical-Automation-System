@@ -15,7 +15,7 @@ export const findAdmin = email => sequelize.authenticate()
         email: email
       }
     })
-    .then(admin => admin[0].dataValues)))
+      .then(admin => admin[0].dataValues)))
   .catch(console.error);
 
 /**

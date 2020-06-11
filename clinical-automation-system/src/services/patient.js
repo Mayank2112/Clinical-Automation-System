@@ -23,7 +23,7 @@ export const createPatient = patient => sequelize.authenticate()
     })))
   .catch(err => {
     console.error(err);
-    return false;
+    throw new Error(' User name or Email is already registered');
   });
 
 /**

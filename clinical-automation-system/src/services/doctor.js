@@ -25,7 +25,7 @@ export const createDoctor = doctor => sequelize.authenticate()
     })))
   .catch(err => {
     console.error(err);
-    return false;
+    throw new Error(' User name or email is already registered');
   });
 
 /**
