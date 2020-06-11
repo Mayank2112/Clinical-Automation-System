@@ -13,9 +13,21 @@ export const registerDoctor = async (req, res) => {
 
   const result = await createDoctor(doctor);
   if (result) {
-    return renderPageWithMessage(res, 201, filename.user.homepage, `${doctor.username} registered successfully. Login to continue`);
+    return renderPageWithMessage(
+      req,
+      res,
+      201,
+      filename.user.homepage,
+      `${doctor.username} registered successfully. Login to continue`
+    );
   }
-  return renderPageWithMessage(res, 400, filename.user.register, 'Username or email is already in use');
+  return renderPageWithMessage(
+    req,
+    res,
+    400,
+    filename.user.register,
+    'Username or email is already in use'
+  );
 };
 
 /**
@@ -24,5 +36,9 @@ export const registerDoctor = async (req, res) => {
  * @param {httResponse} res
  */
 export const redirectDashboard = (req, res) => {
-  res.render(filename.doctor.dashboard, { username: req.user.username });
+  const details = {
+    name: req.user.username,
+    status: req.user.status
+  };
+  return renderPageWithMessage(req, res, 200, filename.doctor.dashboard, null, details);
 };

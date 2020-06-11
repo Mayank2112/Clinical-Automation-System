@@ -8,11 +8,13 @@ import renderPageWithMessage from '../helpers/responseRenderer';
  */
 export const logoutUser = (req, res) => {
   req.logout();
-  if (req.app.locals.googleLogin) {
-    req.app.locals.googleLogin = false;
-    return res.redirect('/');
-  }
-  return renderPageWithMessage(res, 204, filename.user.homepage, 'Successfully Logout');
+  return renderPageWithMessage(
+    req,
+    res,
+    204,
+    filename.user.homepage,
+    'Successfully Logout'
+  );
 };
 
 /**
@@ -20,9 +22,12 @@ export const logoutUser = (req, res) => {
  * @param {httpRequest} req
  * @param {httResponse} res
  */
-export const redirectHome = (req, res) => {
-  renderPageWithMessage(res, 200, filename.user.homepage, null);
-};
+export const redirectHome = (req, res) => renderPageWithMessage(
+  req,
+  res,
+  200,
+  filename.user.homepage
+);
 
 /**
  * Redirect to login page
@@ -31,9 +36,15 @@ export const redirectHome = (req, res) => {
  */
 export const redirectLogin = (req, res) => {
   if (req.app.locals.loginFailure) {
-    return renderPageWithMessage(res, 403, filename.user.login, 'Invalid Login credentials');
+    return renderPageWithMessage(
+      req,
+      res,
+      403,
+      filename.user.login,
+      'Invalid Login credentials'
+    );
   }
-  return renderPageWithMessage(res, 200, filename.user.login, null);
+  return renderPageWithMessage(req, res, 200, filename.user.login, null);
 };
 
 /**
@@ -41,18 +52,25 @@ export const redirectLogin = (req, res) => {
  * @param {httpRequest} req
  * @param {httResponse} res
  */
-export const redirectRegister = (req, res) => {
-  renderPageWithMessage(res, 200, filename.user.register, null);
-};
+export const redirectRegister = (req, res) => renderPageWithMessage(
+  req,
+  res,
+  200,
+  filename.user.register
+);
 
 /**
  * Redirect to registeration page
  * @param {httpRequest} req
  * @param {httResponse} res
  */
-export const registerFailure = (req, res) => {
-  renderPageWithMessage(res, 400, filename.user.register, 'Invalid Credentials');
-};
+export const registerFailure = (req, res) => renderPageWithMessage(
+  req,
+  res,
+  400,
+  filename.user.register,
+  'Invalid Credentials'
+);
 
 /**
  * Set session variables and redirect to dashboard
@@ -60,11 +78,15 @@ export const registerFailure = (req, res) => {
  * @param {htpResponse} res
  */
 export const googleAuthenticationResponseHandler = (req, res) => {
-  req.app.locals.googleLogin = true;
+  console.log(req.user);
+  console.log(req.session.passport.user);
+
   if (req.user.type) {
+    req.app.locals.googleLogin = true;
     return res.redirect(`/${req.user.type}/dashboard`);
   }
   return renderPageWithMessage(
+    req,
     res,
     403,
     filename.user.login,

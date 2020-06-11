@@ -4,10 +4,15 @@
  * @param {Number} statusCode
  * @param {String} page File name
  * @param {String} message
+ * @param {Object} details
  */
-const renderPageWithMessage = (res, statusCode, page, message) => {
+const renderPageWithMessage = (req, res, statusCode, page, message = null, details = null) => {
   res.status(statusCode);
-  return res.render(page, { messageHolder: { message } });
+  let username = null;
+  if (req.user) {
+    username = req.user.name;
+  }
+  return res.render(page, { message, details, username });
 };
 
 export default renderPageWithMessage;
