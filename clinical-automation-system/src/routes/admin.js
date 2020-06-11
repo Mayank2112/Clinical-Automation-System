@@ -17,16 +17,16 @@ const router = Router();
 router.get('/dashboard', resetLoginFailure, redirectDashboard);
 
 // Route to see doctor requests
-router.get('/doctorRequest', redirectDoctorRequest);
+router.get('/doctor-request', redirectDoctorRequest);
 
 // Route to handle admin decision on doctor requests
-router.post('/doctorRequest', configureDoctor);
+router.post('/doctor-request', configureDoctor);
 
 // Route to see supplier requests
-router.get('/supplierRequest', redirectSupplierRequest);
+router.get('/supplier-request', redirectSupplierRequest);
 
 // Route to handle admin decision on supplier requests
-router.post('/supplierRequest', configureSupplier);
+router.post('/supplier-request', configureSupplier);
 
 // Route for admin to give medicine information to store in database
 router.get('/medicine', sendAddMedicinesPage);

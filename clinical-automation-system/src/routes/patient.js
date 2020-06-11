@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { resetLoginFailure } from '../middlewares/user';
 import { checkDoctorAvailability, checkAppointmentData } from '../middlewares/appointment';
+import { checkMedicineAvailabilty } from '../middlewares/patient';
 import invalidRoutes from './invalidRoutes';
 import {
   redirectDashboard,
@@ -12,7 +13,6 @@ import {
   sendOrderDetails,
   createOrder
 } from '../controllers/patient';
-import { checkMedicineAvailabilty } from '../middlewares/patient';
 
 const router = Router();
 
@@ -23,10 +23,10 @@ router.get('/dashboard', resetLoginFailure, redirectDashboard);
 router.get('/details', sendPersonalDetail);
 
 // Route for getting confirmed doctors list and make appointments
-router.get('/appointmentRequest', sendDoctorList);
+router.get('/appointment-request', sendDoctorList);
 
 // Route for making appointment requests to doctors
-router.post('/appointmentRequest', checkAppointmentData, checkDoctorAvailability, makeAppointmentRequest);
+router.post('/appointment-request', checkAppointmentData, checkDoctorAvailability, makeAppointmentRequest);
 
 // Route to get all appointments
 router.get('/appointment', sendAppointmentList);

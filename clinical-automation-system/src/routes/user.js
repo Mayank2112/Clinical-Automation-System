@@ -40,6 +40,6 @@ router.get('/login/failure', setLoginFailure);
 router.get('/logout', destroySession, logoutUser);
 
 // Invalid routes or methods
-router.all('/', invalidRoutes);
+router.all(/ */, invalidRoutes);
 
 export default router;

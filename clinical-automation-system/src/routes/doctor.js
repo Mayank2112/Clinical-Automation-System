@@ -27,10 +27,10 @@ router.get('/details', redirectDetails);
 router.post('/details', checkCredentials, addCredentials, redirectDetails);
 
 // Route to get appointment requests
-router.get('/appointmentRequest', sendAppointmentRequestList);
+router.get('/appointment-request', sendAppointmentRequestList);
 
 // Route to handle decision of approve or reject appointment
-router.post('/appointmentRequest', configureAppointmentRequest);
+router.post('/appointment-request', configureAppointmentRequest);
 
 // Route to get confirmed appointments
 router.get('/appointment', sendAppointmentList);

@@ -36,7 +36,7 @@
         <th>Reject</th>
         <th>Response</th>
         <% details.forEach(appointment => { %>
-        <form action="/doctor/appointmentRequest" method="post">
+        <form action="/doctor/appointment-request" method="post">
           <tr>
             <td><input type="text" name="appointmentId" readonly="readonly" value= <%= appointment.id %> ></td>
             <td><a href="/doctor/appointment/patient-information/<%= appointment.patientId%>">View</a></td>
