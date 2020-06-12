@@ -1,104 +1,90 @@
-import { filename } from 'config';
-import { registerFailure } from '../controllers/user';
+import { templatePaths } from 'config';
+import User from '../controllers/user';
 import { isValidEmail, isValidPassword, isValidNumber } from '../helpers/validator';
-import { registerPatient } from '../controllers/patient';
-import { registerDoctor } from '../controllers/doctor';
-import { registerSupplier } from '../controllers/supplier';
+import Register from '../controllers/registration';
 import renderPageWithMessage from '../helpers/responseRenderer';
-import {
-  adminLocalAuthentication,
-  doctorLocalAuthentication,
-  patientLocalAuthentication,
-  supplierLocalAuthentication
-} from './authentication';
+import authentication from './authentication';
 
-/**
- * Register new user to database
- * @param {httpRequest} req
- * @param {httResponse} res
- */
-export const registerUser = (req, res) => {
-  const registration = {
-    doctor: registerDoctor,
-    patient: registerPatient,
-    supplier: registerSupplier
-  };
+export default class UserMiddleware {
+  /**
+   * Register new user to database
+   * @param {httpRequest} req
+   * @param {httResponse} res
+   */
+  registerUser(req, res) {
+    const register = new Register();
 
-  if (registration[req.body.profession]) {
-    return registration[req.body.profession](req, res);
+    if (register[req.body.profession]) {
+      return register[req.body.profession](req, res);
+    }
+    return renderPageWithMessage(
+      req,
+      res,
+      403,
+      templatePaths.user.register,
+      'Please select profession'
+    );
   }
-  return renderPageWithMessage(
-    req,
-    res,
-    403,
-    filename.user.register,
-    'Please select profession'
-  );
-};
 
-/**
- * Destroy the session of user
- * @param {httpRequest} req
- * @param {httpResponse} res
- * @param {callback function} next
- */
-export const destroySession = (req, res, next) => {
-  req.session.destroy();
-  return next();
-};
-
-/**
- * Update loginFailure local variable
- * @param {httpRequest} req
- * @param {httpResponse} res
- */
-export const setLoginFailure = (req, res) => {
-  req.app.locals.loginFailure = true;
-  res.redirect('/login');
-};
-
-/**
- * Reset loginFailure local variable
- * @param {httpRequest} req
- * @param {httpResponse} res
- */
-export const resetLoginFailure = (req, res, next) => {
-  req.app.locals.loginFailure = false;
-  return next();
-};
-
-/**
- * Check user credentials on registration
- * @param {httpRequest} req
- * @param {httpResopnse} res
- * @param {Function} next
- */
-export const checkUserCredentials = (req, res, next) => {
-  if (isValidEmail(req.body.email)
-    && isValidPassword(req.body.password)
-    && isValidNumber(req.body.mobileNumber)) {
+  /**
+   * Destroy the session of user
+   * @param {httpRequest} req
+   * @param {httpResponse} res
+   * @param {callback function} next
+   */
+  destroySession(req, res, next) {
+    req.session.destroy();
     return next();
   }
-  return registerFailure(req, res);
-};
 
-/**
- * Set appropriate authentication strategy based on user profile
- * @param {httpRequest} req
- * @param {httpResopnse} res
- * @param {Function} next
- */
-export const redirectUserToProfessionLogin = (req, res) => {
-  const authentication = {
-    admin: adminLocalAuthentication,
-    doctor: doctorLocalAuthentication,
-    patient: patientLocalAuthentication,
-    supplier: supplierLocalAuthentication
-  };
-  req.app.locals.userType = req.body.profession;
-
-  if (authentication[req.body.profession]) {
-    return authentication[req.body.profession](req, res);
+  /**
+   * Update loginFailure local variable
+   * @param {httpRequest} req
+   * @param {httpResponse} res
+   */
+  setLoginFailure(req, res) {
+    req.app.locals.loginFailure = true;
+    res.redirect('/login');
   }
-  return setLoginFailure(req, res);
-};
+
+  /**
+   * Reset loginFailure local variable
+   * @param {httpRequest} req
+   * @param {httpResponse} res
+   */
+  resetLoginFailure(req, res, next) {
+    req.app.locals.loginFailure = false;
+    return next();
+  }
+
+  /**
+   * Check user credentials on registration
+   * @param {httpRequest} req
+   * @param {httpResopnse} res
+   * @param {Function} next
+   */
+  checkUserCredentials(req, res, next) {
+    if (isValidEmail(req.body.email)
+      && isValidPassword(req.body.password)
+      && isValidNumber(req.body.mobileNumber)) {
+      return next();
+    }
+    const user = new User();
+    return user.registerFailure(req, res);
+  }
+
+  /**
+   * Set appropriate authentication strategy based on user profile
+   * @param {httpRequest} req
+   * @param {httpResopnse} res
+   * @param {Function} next
+   */
+  redirectUserToProfessionLogin(req, res) {
+    req.app.locals.userType = req.body.profession;
+
+    if (authentication[req.body.profession]) {
+      return authentication[req.body.profession](req, res);
+    }
+    return this.setLoginFailure(req, res);
+  }
+}

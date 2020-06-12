@@ -1,48 +1,41 @@
 import { Router } from 'express';
-import { resetLoginFailure } from '../middlewares/user';
+import UserMiddleware from '../middlewares/user';
 import { checkCredentials } from '../middlewares/doctor';
 import invalidRoutes from './invalidRoutes';
-import { appointmentCompleted } from '../middlewares/appointment';
-import {
-  redirectDashboard,
-  redirectDetails,
-  addCredentials,
-  sendAppointmentRequestList,
-  configureAppointmentRequest,
-  sendAppointmentList,
-  sendPatientInformation,
-  saveReport,
-  sendDoctorInformation
-} from '../controllers/doctor';
+import Appointment from '../middlewares/appointment';
+import Doctor from '../controllers/doctor';
 
 const router = Router();
+const doctor = new Doctor();
+const appointment = new Appointment();
+const userMiddleware = new UserMiddleware();
 
 // Dashborad route to access dashboard after login
-router.get('/dashboard', resetLoginFailure, redirectDashboard);
+router.get('/dashboard', userMiddleware.resetLoginFailure, doctor.redirectDashboard);
 
 // Route to get personal details
-router.get('/details', redirectDetails);
+router.get('/details', doctor.redirectDetails);
 
 // Route to add additional informations of doctors
-router.post('/details', checkCredentials, addCredentials, redirectDetails);
+router.post('/details', checkCredentials, doctor.addCredentials, doctor.redirectDetails);
 
 // Route to get appointment requests
-router.get('/appointment-request', sendAppointmentRequestList);
+router.get('/appointment-request', doctor.sendAppointmentRequestList);
 
 // Route to handle decision of approve or reject appointment
-router.post('/appointment-request', configureAppointmentRequest);
+router.post('/appointment-request', doctor.configureAppointmentRequest);
 
 // Route to get confirmed appointments
-router.get('/appointment', sendAppointmentList);
+router.get('/appointment', doctor.sendAppointmentList);
 
 // Route to add patient report
-router.post('/appointment/patient-report', appointmentCompleted, saveReport);
+router.post('/appointment/patient-report', appointment.completed, doctor.saveReport);
 
 // Route to get information of patients
-router.get('/appointment/patient-information/:patientId', sendPatientInformation);
+router.get('/appointment/patient-information/:patientId', doctor.sendPatientInformation);
 
 // Route to get information of doctors
-router.get('/information/:doctorId', sendDoctorInformation);
+router.get('/information/:doctorId', doctor.sendDoctorInformation);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);

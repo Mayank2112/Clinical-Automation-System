@@ -1,43 +1,33 @@
 import { Router } from 'express';
-import {
-  resetLoginFailure,
-  checkUserCredentials,
-  registerUser,
-  redirectUserToProfessionLogin,
-  setLoginFailure,
-  destroySession
-} from '../middlewares/user';
+import UserMiddleware from '../middlewares/user';
 
-import {
-  redirectHome,
-  redirectRegister,
-  redirectLogin,
-  logoutUser
-} from '../controllers/user';
+import User from '../controllers/user';
 import invalidRoutes from './invalidRoutes';
 
 const router = Router();
+const user = new User();
+const userMiddleware = new UserMiddleware();
 
 // Routing for base URL
-router.get('/', resetLoginFailure, redirectHome);
+router.get('/', userMiddleware.resetLoginFailure, user.redirectHome);
 
 // Route for registering user
-router.post('/register', checkUserCredentials, registerUser);
+router.post('/register', userMiddleware.checkUserCredentials, userMiddleware.registerUser);
 
 // Routing for registration page
-router.get('/register', redirectRegister);
+router.get('/register', user.redirectRegister);
 
 // Login route to authenticate user using local strategy
-router.post('/login', redirectUserToProfessionLogin);
+router.post('/login', userMiddleware.redirectUserToProfessionLogin);
 
 // Routing for login page
-router.get('/login', redirectLogin);
+router.get('/login', user.redirectLogin);
 
 // Routing for login failure
-router.get('/login/failure', setLoginFailure);
+router.get('/login/failure', userMiddleware.setLoginFailure);
 
 // Routing for logout
-router.get('/logout', destroySession, logoutUser);
+router.get('/logout', userMiddleware.destroySession, user.logoutUser);
 
 // Invalid routes or methods
 router.all(/ */, invalidRoutes);

@@ -1,29 +1,36 @@
 import passport from '../lib/passport';
 
 // Middleware for local Authentication for patient
-export const patientLocalAuthentication = passport.authenticate('patient-authentication', {
+const patientLocalAuthentication = passport.authenticate('patient-authentication', {
   failureRedirect: '/login/failure',
   successRedirect: '/patient/dashboard',
   session: true
 });
 
 // Middleware for local Authentication for doctor
-export const doctorLocalAuthentication = passport.authenticate('doctor-authentication', {
+const doctorLocalAuthentication = passport.authenticate('doctor-authentication', {
   failureRedirect: '/login/failure',
   successRedirect: '/doctor/dashboard',
   session: true
 });
 
 // Middleware for local Authentication for supplier
-export const supplierLocalAuthentication = passport.authenticate('supplier-authentication', {
+const supplierLocalAuthentication = passport.authenticate('supplier-authentication', {
   failureRedirect: '/login/failure',
   successRedirect: '/supplier/dashboard',
   session: true
 });
 
 // Middleware for local Authentication for admin
-export const adminLocalAuthentication = passport.authenticate('admin-authentication', {
+const adminLocalAuthentication = passport.authenticate('admin-authentication', {
   failureRedirect: '/login/failure',
   successRedirect: '/admin/dashboard',
   session: true
 });
+
+export default {
+  admin: adminLocalAuthentication,
+  patient: patientLocalAuthentication,
+  doctor: doctorLocalAuthentication,
+  supplier: supplierLocalAuthentication
+};

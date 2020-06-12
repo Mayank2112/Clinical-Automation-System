@@ -1,93 +1,101 @@
-import { filename } from 'config';
+import { templatePaths } from 'config';
 import renderPageWithMessage from '../helpers/responseRenderer';
 
-/**
- * Logout user and redirect to homepage
- * @param {httpRequest} req
- * @param {httResponse} res
- */
-export const logoutUser = (req, res) => {
-  req.logout();
-  return renderPageWithMessage(
-    req,
-    res,
-    204,
-    filename.user.homepage,
-    'Successfully Logout'
-  );
-};
-
-/**
- * Redirect to home page
- * @param {httpRequest} req
- * @param {httResponse} res
- */
-export const redirectHome = (req, res) => renderPageWithMessage(
-  req,
-  res,
-  200,
-  filename.user.homepage
-);
-
-/**
- * Redirect to login page
- * @param {httpRequest} req
- * @param {httResponse} res
- */
-export const redirectLogin = (req, res) => {
-  if (req.app.locals.loginFailure) {
+export default class User {
+  /**
+   * Logout user and redirect to homepage
+   * @param {httpRequest} req
+   * @param {httResponse} res
+   */
+  logoutUser(req, res) {
+    req.logout();
     return renderPageWithMessage(
       req,
       res,
-      403,
-      filename.user.login,
-      'Invalid Login credentials'
+      204,
+      templatePaths.user.homepage,
+      'Successfully Logout'
     );
   }
-  return renderPageWithMessage(req, res, 200, filename.user.login, null);
-};
 
-/**
- * Redirect to registeration page
- * @param {httpRequest} req
- * @param {httResponse} res
- */
-export const redirectRegister = (req, res) => renderPageWithMessage(
-  req,
-  res,
-  200,
-  filename.user.register
-);
+  /**
+   * Redirect to home page
+   * @param {httpRequest} req
+   * @param {httResponse} res
+   */
+  redirectHome(req, res) {
+    return renderPageWithMessage(
+      req,
+      res,
+      200,
+      templatePaths.user.homepage
+    );
+  }
 
-/**
- * Redirect to registeration page
- * @param {httpRequest} req
- * @param {httResponse} res
- */
-export const registerFailure = (req, res) => renderPageWithMessage(
-  req,
-  res,
-  400,
-  filename.user.register,
-  'Invalid Credentials'
-);
+  /**
+   * Redirect to login page
+   * @param {httpRequest} req
+   * @param {httResponse} res
+   */
+  redirectLogin(req, res) {
+    if (req.app.locals.loginFailure) {
+      return renderPageWithMessage(
+        req,
+        res,
+        403,
+        templatePaths.user.login,
+        'Invalid Login credentials'
+      );
+    }
+    return renderPageWithMessage(req, res, 200, templatePaths.user.login, null);
+  }
 
-/**
- * Send error response 404
- * @param {httpRequest} req
- * @param {httResponse} res
- */
-export const resourceNotFoundError = (req, res) => {
-  res.status(404);
-  return res.end('Resource not found');
-};
+  /**
+   * Redirect to registeration page
+   * @param {httpRequest} req
+   * @param {httResponse} res
+   */
+  redirectRegister(req, res) {
+    return renderPageWithMessage(
+      req,
+      res,
+      200,
+      templatePaths.user.register
+    );
+  }
 
-/**
- * Send error resopnse 405
- * @param {httpRequest} req
- * @param {httResponse} res
- */
-export const methodNotAllowedError = (req, res) => {
-  res.status(405);
-  return res.end('Method not allowed');
-};
+  /**
+   * Redirect to registeration page
+   * @param {httpRequest} req
+   * @param {httResponse} res
+   */
+  registerFailure(req, res) {
+    return renderPageWithMessage(
+      req,
+      res,
+      400,
+      templatePaths.user.register,
+      'Invalid Credentials'
+    );
+  }
+
+  /**
+   * Send error response 404
+   * @param {httpRequest} req
+   * @param {httResponse} res
+   */
+  resourceNotFoundError(req, res) {
+    res.status(404);
+    return res.end('Resource not found');
+  }
+
+  /**
+   * Send error resopnse 405
+   * @param {httpRequest} req
+   * @param {httResponse} res
+   */
+  methodNotAllowedError(req, res) {
+    res.status(405);
+    return res.end('Method not allowed');
+  }
+}

@@ -1,44 +1,41 @@
 import { Router } from 'express';
-import { resetLoginFailure } from '../middlewares/user';
-import { checkDoctorAvailability, checkAppointmentData } from '../middlewares/appointment';
+import UserMiddleware from '../middlewares/user';
+import Appointment from '../middlewares/appointment';
 import { checkMedicineAvailabilty } from '../middlewares/patient';
 import invalidRoutes from './invalidRoutes';
-import {
-  redirectDashboard,
-  sendDoctorList,
-  makeAppointmentRequest,
-  sendAppointmentList,
-  sendPersonalDetail,
-  sendMakeOrderPage,
-  sendOrderDetails,
-  createOrder
-} from '../controllers/patient';
+import Patient from '../controllers/patient';
 
 const router = Router();
+const patient = new Patient();
+const appointment = new Appointment();
+const userMiddleware = new UserMiddleware();
 
 // Dashborad route to access dashboard after login
-router.get('/dashboard', resetLoginFailure, redirectDashboard);
+router.get('/dashboard', userMiddleware.resetLoginFailure, patient.redirectDashboard);
 
 // Route to get personal details
-router.get('/details', sendPersonalDetail);
+router.get('/details', patient.sendPersonalDetail);
 
 // Route for getting confirmed doctors list and make appointments
-router.get('/appointment-request', sendDoctorList);
+router.get('/appointment-request', patient.sendDoctorList);
 
 // Route for making appointment requests to doctors
-router.post('/appointment-request', checkAppointmentData, checkDoctorAvailability, makeAppointmentRequest);
+router.post('/appointment-request',
+  appointment.checkData,
+  appointment.checkDoctorAvailability,
+  patient.makeAppointmentRequest);
 
 // Route to get all appointments
-router.get('/appointment', sendAppointmentList);
+router.get('/appointment', patient.sendAppointmentList);
 
 // Route for getting order information
-router.get('/order-medicine', sendMakeOrderPage);
+router.get('/order-medicine', patient.sendMakeOrderPage);
 
 // Route for creating order
-router.post('/order-medicine', checkMedicineAvailabilty, createOrder);
+router.post('/order-medicine', checkMedicineAvailabilty, patient.createOrder);
 
 // Route to get order details
-router.get('/orders', sendOrderDetails);
+router.get('/orders', patient.sendOrderDetails);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);

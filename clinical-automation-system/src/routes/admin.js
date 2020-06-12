@@ -1,38 +1,32 @@
 import { Router } from 'express';
-import { resetLoginFailure } from '../middlewares/user';
+import UserMiddleware from '../middlewares/user';
 import invalidRoutes from './invalidRoutes';
-import {
-  redirectDashboard,
-  redirectDoctorRequest,
-  configureDoctor,
-  redirectSupplierRequest,
-  configureSupplier,
-  addMedicine,
-  sendAddMedicinesPage
-} from '../controllers/admin';
+import Admin from '../controllers/admin';
 
 const router = Router();
+const admin = new Admin();
+const userMiddleware = new UserMiddleware();
 
 // Dashborad route to access dashboard after login
-router.get('/dashboard', resetLoginFailure, redirectDashboard);
+router.get('/dashboard', userMiddleware.resetLoginFailure, admin.redirectDashboard);
 
 // Route to see doctor requests
-router.get('/doctor-request', redirectDoctorRequest);
+router.get('/doctor-request', admin.redirectDoctorRequest);
 
 // Route to handle admin decision on doctor requests
-router.post('/doctor-request', configureDoctor);
+router.post('/doctor-request', admin.configureDoctor);
 
 // Route to see supplier requests
-router.get('/supplier-request', redirectSupplierRequest);
+router.get('/supplier-request', admin.redirectSupplierRequest);
 
 // Route to handle admin decision on supplier requests
-router.post('/supplier-request', configureSupplier);
+router.post('/supplier-request', admin.configureSupplier);
 
 // Route for admin to give medicine information to store in database
-router.get('/medicine', sendAddMedicinesPage);
+router.get('/medicine', admin.sendAddMedicinesPage);
 
 // Rout for admin to add medicines
-router.post('/medicine', addMedicine);
+router.post('/medicine', admin.addMedicine);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);

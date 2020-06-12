@@ -1,21 +1,7 @@
-import { filename } from 'config';
+import { templatePaths } from 'config';
 import { findMedicine } from '../services/patient';
 import { getSupplierList } from '../services/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
-
-/**
- * Checks patient is logged in or not
- * @param {httpRequest} req
- * @param {httpResponse} res
- * @param {callback function} next
- */
-export const isPatientLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated() && req.user.type === 'patient') {
-    return next();
-  }
-  res.status(401);
-  return res.redirect('/login');
-};
 
 /**
  * Checks medicine availability at store
@@ -34,7 +20,7 @@ export const checkMedicineAvailabilty = async (req, res, next) => {
     req,
     res,
     200,
-    filename.patient.makeOrder,
+    templatePaths.patient.makeOrder,
     'Not available at store',
     {
       medicine: req.body,
