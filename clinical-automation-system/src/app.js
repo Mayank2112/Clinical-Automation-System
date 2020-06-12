@@ -1,7 +1,7 @@
 import express, { urlencoded, json } from 'express';
 import session from 'express-session';
 import { join } from 'path';
-import { serverConfig } from 'config';
+import serverConfig from '../config/server';
 import router from './routes';
 import { passportSetup } from './lib/passport';
 

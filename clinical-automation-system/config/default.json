@@ -1,5 +1,5 @@
 {
-  "filename": {
+  "templatePaths": {
     "user": {
       "homepage": "pages/user/home.ejs",
       "login": "pages/user/login.ejs",
@@ -33,10 +33,5 @@
       "orders": "pages/supplier/orders.ejs",
       "patientInformation": "pages/supplier/patientInformation.ejs"
     }
-  },
-  "serverConfig": {
-    "port": 3000,
-    "cookieTime": 600000,
-    "cookieSecret": "this-is-a-secret-key"
   }
 }
