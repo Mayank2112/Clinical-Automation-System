@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import UserMiddleware from '../middlewares/user';
 import Appointment from '../middlewares/appointment';
-import { checkMedicineAvailabilty } from '../middlewares/patient';
+import checkMedicineAvailabilty from '../middlewares/patient';
 import invalidRoutes from './invalidRoutes';
 import Patient from '../controllers/patient';
 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import UserMiddleware from '../middlewares/user';
-import { checkCredentials } from '../middlewares/doctor';
+import checkCredentials from '../middlewares/doctor';
 import invalidRoutes from './invalidRoutes';
 import Appointment from '../middlewares/appointment';
 import Doctor from '../controllers/doctor';

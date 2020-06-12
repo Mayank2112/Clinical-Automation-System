@@ -1,14 +1,18 @@
-import { isValidTypes } from '../helpers/validator';
-
 /**
  * Check credentials of doctor
  * @param {httpRequest} req
  * @param {httpResopnse} res
  * @param {Function} next
  */
-export const checkCredentials = (req, res, next) => {
-  if (isValidTypes(req.body) && Number(req.body.startTime) < Number(req.body.endTime)) {
+const checkCredentials = (req, res, next) => {
+  const doctor = req.body;
+  if (typeof doctor.degree == 'string'
+    && !isNaN(doctor.apointmentFee)
+    && doctor.experienceFrom
+    && Number(doctor.startTime) < Number(doctor.endTime)) {
     return next();
   }
   return res.redirect('/doctor/dashboard');
 };
+
+export default checkCredentials;

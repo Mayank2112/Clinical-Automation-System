@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import UserMiddleware from '../middlewares/user';
-import { checkCredentials } from '../middlewares/supplier';
+import checkCredentials from '../middlewares/supplier';
 import invalidRoutes from './invalidRoutes';
 import Supplier from '../controllers/supplier';
 

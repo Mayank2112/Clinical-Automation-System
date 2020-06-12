@@ -9,7 +9,7 @@ import renderPageWithMessage from '../helpers/responseRenderer';
  * @param {httpResponse} res
  * @param {callback function} next
  */
-export const checkMedicineAvailabilty = async (req, res, next) => {
+const checkMedicineAvailabilty = async (req, res, next) => {
   const medicine = await findMedicine(req.body.medicineName, req.body.quantity);
 
   if (medicine.length || req.body.supplierId) {
@@ -28,3 +28,5 @@ export const checkMedicineAvailabilty = async (req, res, next) => {
     }
   );
 };
+
+export default checkMedicineAvailabilty;

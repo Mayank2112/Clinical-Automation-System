@@ -53,7 +53,14 @@ export default class Admin {
    */
   async redirectSupplierRequest(req, res) {
     const suppliers = await findSupplierByStatus('pending');
-    return renderPageWithMessage(req, res, 200, templatePaths.admin.supplierRequest, null, suppliers);
+    return renderPageWithMessage(
+      req,
+      res,
+      200,
+      templatePaths.admin.supplierRequest,
+      null,
+      suppliers
+    );
   }
 
   /**

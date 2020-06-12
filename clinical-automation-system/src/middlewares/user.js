@@ -1,9 +1,9 @@
 import { templatePaths } from 'config';
 import User from '../controllers/user';
-import { isValidEmail, isValidPassword, isValidNumber } from '../helpers/validator';
 import Register from '../controllers/registration';
 import renderPageWithMessage from '../helpers/responseRenderer';
 import authentication from './authentication';
+import regEx from '../helpers/regEx';
 
 export default class UserMiddleware {
   /**
@@ -64,9 +64,9 @@ export default class UserMiddleware {
    * @param {Function} next
    */
   checkUserCredentials(req, res, next) {
-    if (isValidEmail(req.body.email)
-      && isValidPassword(req.body.password)
-      && isValidNumber(req.body.mobileNumber)) {
+    if (regEx.email.test(req.body.email)
+      && regEx.password.test(req.body.password)
+      && regEx.phone.test(req.body.mobileNumber)) {
       return next();
     }
     const user = new User();

@@ -3,7 +3,7 @@ import { findDoctor } from './doctor';
 import { findSupplier } from './supplier';
 import { findPatient } from './patient';
 
-export const getUserDetails = async email => {
+const getUserDetails = async email => {
   const admin = await findAdmin(email);
   if (admin) {
     admin.type = 'admin';
@@ -28,3 +28,5 @@ export const getUserDetails = async email => {
     return patient;
   }
 };
+
+export default getUserDetails;
