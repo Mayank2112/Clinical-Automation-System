@@ -1,8 +1,8 @@
 import moment from 'moment';
 import { templatePaths } from 'config';
+import DoctorService from '../services/doctor';
+import AppointmentService from '../services/appointment';
 import renderPageWithMessage from '../helpers/responseRenderer';
-import { findDoctorById } from '../services/doctor';
-import { findAppointmentByTime, changeAppointmentStatus } from '../services/appointment';
 
 export default class Appointment {
   /**
@@ -11,9 +11,9 @@ export default class Appointment {
    * @param {httpResopnse} res
    * @param {Function} next
    */
-  async checkData(req, res, next) {
+  static async checkData(req, res, next) {
     if (req.body.doctorId && req.body.subject && !isNaN(req.body.time)) {
-      const doctor = await findDoctorById(req.body.doctorId);
+      const doctor = await DoctorService.findDoctorById(req.body.doctorId);
       if (req.body.time >= doctor.startTime && req.body.time <= doctor.endTime) {
         return next();
       }
@@ -40,12 +40,12 @@ export default class Appointment {
    * @param {httpResopnse} res
    * @param {Function} next
    */
-  async checkDoctorAvailability(req, res, next) {
+  static async checkDoctorAvailability(req, res, next) {
     const time = Number(req.body.time) % 100;
-    const doctor = await findDoctorById(req.body.doctorId);
+    const doctor = await DoctorService.findDoctorById(req.body.doctorId);
 
     if (doctor) {
-      const appointment = await findAppointmentByTime(req.body.doctorId, moment().format('l'), time);
+      const appointment = await AppointmentService.findAppointmentByTime(req.body.doctorId, moment().format('l'), time);
 
       if (appointment) {
         return renderPageWithMessage(
@@ -73,8 +73,8 @@ export default class Appointment {
    * @param {httpResopnse} res
    * @param {Function} next
    */
-  async completed(req, res, next) {
-    const result = await changeAppointmentStatus(req.body.appointmentId, 'confirmed', 'completed');
+  static async completed(req, res, next) {
+    const result = await AppointmentService.changeAppointmentStatus(req.body.appointmentId, 'confirmed', 'completed');
 
     if (result) {
       return next();

@@ -1,6 +1,6 @@
 import { templatePaths } from 'config';
-import { findMedicine } from '../services/patient';
-import { getSupplierList } from '../services/supplier';
+import PatientService from '../services/patient';
+import SupplierService from '../services/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
 
 /**
@@ -10,12 +10,12 @@ import renderPageWithMessage from '../helpers/responseRenderer';
  * @param {callback function} next
  */
 const checkMedicineAvailabilty = async (req, res, next) => {
-  const medicine = await findMedicine(req.body.medicineName, req.body.quantity);
+  const medicine = await PatientService.findMedicine(req.body.medicineName, req.body.quantity);
 
   if (medicine.length || req.body.supplierId) {
     return next();
   }
-  const suppliers = await getSupplierList();
+  const suppliers = await SupplierService.getSupplierList();
   return renderPageWithMessage(
     req,
     res,

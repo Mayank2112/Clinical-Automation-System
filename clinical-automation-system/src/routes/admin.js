@@ -4,29 +4,27 @@ import invalidRoutes from './invalidRoutes';
 import Admin from '../controllers/admin';
 
 const router = Router();
-const admin = new Admin();
-const userMiddleware = new UserMiddleware();
 
 // Dashborad route to access dashboard after login
-router.get('/dashboard', userMiddleware.resetLoginFailure, admin.redirectDashboard);
+router.get('/dashboard', UserMiddleware.resetLoginFailure, Admin.redirectDashboard);
 
 // Route to see doctor requests
-router.get('/doctor-request', admin.redirectDoctorRequest);
+router.get('/doctor-request', Admin.redirectDoctorRequest);
 
 // Route to handle admin decision on doctor requests
-router.post('/doctor-request', admin.configureDoctor);
+router.post('/doctor-request', Admin.configureDoctor);
 
 // Route to see supplier requests
-router.get('/supplier-request', admin.redirectSupplierRequest);
+router.get('/supplier-request', Admin.redirectSupplierRequest);
 
 // Route to handle admin decision on supplier requests
-router.post('/supplier-request', admin.configureSupplier);
+router.post('/supplier-request', Admin.configureSupplier);
 
 // Route for admin to give medicine information to store in database
-router.get('/medicine', admin.sendAddMedicinesPage);
+router.get('/medicine', Admin.sendAddMedicinesPage);
 
 // Rout for admin to add medicines
-router.post('/medicine', admin.addMedicine);
+router.post('/medicine', Admin.addMedicine);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);

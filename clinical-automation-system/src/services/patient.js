@@ -2,15 +2,15 @@ import { hashSync, compareSync } from 'bcryptjs';
 import { v4 } from 'uuid';
 import db from '../models';
 
-const { Patient, PatientHistory, Medicine, PatientOrder, sequelize } = db;
+const { Patient, PatientHistory, Medicine, PatientOrder } = db;
 
-/**
- * create new user in database
- * @param {Object} patient - containing username, email and password
- */
-export const createPatient = patient => sequelize.authenticate()
-  .then(() => Patient.sync({ force: false })
-    .then(() => Patient.create({
+export default class PatientService {
+  /**
+   * create new user in database
+   * @param {Object} patient - containing username, email and password
+   */
+  static createPatient(patient) {
+    return Patient.create({
       id: v4(),
       name: patient.username,
       dateOfBirth: patient.dateOfBirth,
@@ -19,121 +19,109 @@ export const createPatient = patient => sequelize.authenticate()
       mobileNumber: patient.mobileNumber,
       email: patient.email,
       password: hashSync(patient.password, 10)
-    })))
-  .catch(err => {
-    console.error(err);
-    return false;
-  });
-
-/**
- * Find patient with given emailId in database
- * @param {String} email
- */
-export const findPatient = email => sequelize.authenticate()
-  .then(() => Patient.sync({ force: false })
-    .then(() => Patient.findAll({
-      where: {
-        email: email
-      }
     })
-      .then(patient => patient[0].dataValues)))
-  .catch(console.error);
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
 
-/**
- * Checks patient with given emailId and password is valid or not
- * @param {String} email
- * @param {String} password
- */
-export const isValidPatient = (email, password) => findPatient(email)
-  .then(patient => {
-    if (patient) {
-      return compareSync(password, patient.password);
-    }
-    return false;
-  });
+  /**
+   * Find patient with given emailId in database
+   * @param {String} email
+   */
+  static findPatient(email) {
+    return Patient.findAll(
+      {
+        where: { email }
+      })
+      .then(patient => patient[0].dataValues)
+      .catch(console.error);
+  }
 
-/**
- * Find patient with given id in database
- * @param {UUID} id
- */
-export const findPatientById = id => sequelize.authenticate()
-  .then(() => Patient.sync({ force: false })
-    .then(() => Patient.findAll({
-      where: {
-        id: id
-      }
-    })
-      .then(patient => patient[0].dataValues)))
-  .catch(console.error);
+  /**
+   * Checks patient with given emailId and password is valid or not
+   * @param {String} email
+   * @param {String} password
+   */
+  static isValidPatient(email, password) {
+    return this.findPatient(email)
+      .then(patient => {
+        if (patient) {
+          return compareSync(password, patient.password);
+        }
+        return false;
+      });
+  }
 
-/**
- * Save patient report to patientHistory table
- * @param {Object} report
- */
-export const savePatientReport = report => sequelize.authenticate()
-  .then(() => PatientHistory.sync({ force: false })
-    .then(() => PatientHistory.create({
-      id: v4(),
-      appointmentId: report.appointmentId,
-      disease: report.disease,
-      remark: report.remark,
-      patientReport: report.patientReport
-    })))
-  .catch(err => {
-    console.error(err);
-    return false;
-  });
+  /**
+   * Find patient with given id in database
+   * @param {UUID} id
+   */
+  static findPatientById(id) {
+    return Patient.findAll(
+      {
+        where: { id }
+      })
+      .then(patient => patient[0].dataValues)
+      .catch(console.error);
+  }
 
-/**
- * Find medicine from database
- * @param {Object} medicine
- */
-export const findMedicine = name => sequelize.authenticate()
-  .then(() => Medicine.sync({ force: false })
-    .then(() => Medicine.findAll({
-      where: {
-        name: name
-      }
-    })))
-  .catch(err => {
-    console.error(err);
-    return false;
-  });
+  /**
+   * Save patient report to patientHistory table
+   * @param {Object} report
+   */
+  static savePatientReport(report) {
+    report.id = v4();
+    return PatientHistory.create(report)
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
 
-/**
- * Add new order to database
- * @param {Object} order
- */
-export const addOrder = order => sequelize.authenticate()
-  .then(() => PatientOrder.sync({ force: false })
-    .then(() => PatientOrder.create({
-      id: v4(),
-      medicineId: order.medicineId || null,
-      supplierId: order.supplierId || null,
-      patientId: order.patientId,
-      quantity: order.quantity,
-      amount: order.amount || null,
-      date: order.date,
-      medicineName: order.medicineName,
-      status: order.status
-    })))
-  .catch(err => {
-    console.error(err);
-    return false;
-  });
+  /**
+   * Find medicine from database
+   * @param {Object} medicine
+   */
+  static findMedicine(name) {
+    return Medicine.findAll(
+      {
+        where: {
+          name
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
 
-/**
- * Find orders from database of patient
- * @param {Object} medicine
- */
-export const findOrders = patientId => sequelize.authenticate()
-  .then(() => PatientOrder.sync({ force: false })
-    .then(() => PatientOrder.findAll({
-      where: {
-        patientId: patientId
-      }
-    })))
-  .catch(err => {
-    console.error(err);
-    return false;
-  });
+  /**
+   * Add new order to database
+   * @param {Object} order
+   */
+  static addOrder(order) {
+    order.id = v4();
+    return PatientOrder.create(order)
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
+
+  /**
+   * Find orders from database of patient
+   * @param {Object} medicine
+   */
+  static findOrders(patientId) {
+    return PatientOrder.findAll(
+      {
+        where: { patientId }
+      })
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
+}

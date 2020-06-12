@@ -7,19 +7,18 @@ import supplier from './supplier';
 import LoggedIn from '../middlewares/loggedIn';
 
 const router = Router();
-const loggedIn = new LoggedIn();
 
 // Routes for admin
-router.use('/admin', loggedIn.admin, admin);
+router.use('/admin', LoggedIn.admin, admin);
 
 // Routes for doctors
-router.use('/doctor', loggedIn.doctor, doctor);
+router.use('/doctor', LoggedIn.doctor, doctor);
 
 // Routes for patients
-router.use('/patient', loggedIn.patient, patient);
+router.use('/patient', LoggedIn.patient, patient);
 
 // Routes for suppliers
-router.use('/supplier', loggedIn.supplier, supplier);
+router.use('/supplier', LoggedIn.supplier, supplier);
 
 // Routes for general users
 router.use('/', user);

@@ -1,145 +1,142 @@
 import { v4 } from 'uuid';
 import db from '../models';
 
-const { DoctorAppointment, PatientHistory, sequelize } = db;
+const { DoctorAppointment, PatientHistory } = db;
 
-/**
- * create new appointment in database
- * @param {Object} appointment
- */
-export const createAppointment = appointment => sequelize.authenticate()
-  .then(() => DoctorAppointment.sync({ force: false })
-    .then(() => DoctorAppointment.create({
-      id: v4(),
-      patientId: appointment.patientId,
-      doctorId: appointment.doctorId,
-      subject: appointment.subject,
-      status: appointment.status || 'pending',
-      description: appointment.description,
-      date: appointment.date,
-      time: appointment.time,
-    })))
-  .catch(err => {
-    console.error(err);
-    return false;
-  });
+export default class AppointmentService {
+  /**
+   * create new appointment in database
+   * @param {Object} appointment
+   */
+  static createAppointment(appointment) {
+    appointment.id = v4();
+    appointment.status = appointment.status || null;
+    return DoctorAppointment.create(appointment)
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
 
-/**
- * Find appointment of doctor with time
- * @param {UUID} doctorId
- * @param {Date} date
- * @param {Number} time
- */
-export const findAppointmentByTime = (doctorId, date, time) => sequelize.authenticate()
-  .then(() => DoctorAppointment.sync({ force: false })
-    .then(() => DoctorAppointment.findAll({
-      where: {
-        doctorId: doctorId,
-        date: date,
-        time: time,
-        status: 'confirmed'
-      }
-    })
-      .then(appointment => appointment[0].dataValues)))
-  .catch(console.error);
-
-/**
- * Find appointment with given patientId in database
- * @param {UUID} id
- */
-export const findAppointmentByPatient = id => sequelize.authenticate()
-  .then(() => DoctorAppointment.sync({ force: false })
-    .then(() => DoctorAppointment.findAll({
-      where: {
-        patientId: id
-      }
-    })
-      .then(appointments => {
-        const result = [];
-        appointments.forEach(appointment => {
-          result.push(appointment.dataValues);
-        });
-        return result;
-      })))
-  .catch(console.error);
-
-/**
- * Find appointment with given doctorId and status in database
- * @param {UUID} id
- * @param {String} status
- */
-export const findAppointmentByDoctor = (id, status) => sequelize.authenticate()
-  .then(() => DoctorAppointment.sync({ force: false })
-    .then(() => DoctorAppointment.findAll({
-      where: {
-        doctorId: id,
-        status: status
-      }
-    })
-      .then(appointments => {
-        const result = [];
-        appointments.forEach(appointment => {
-          result.push(appointment.dataValues);
-        });
-        return result;
-      })))
-  .catch(console.error);
-
-/**
- * Change appointment status in database
- * @param {UUID} id
- * @param {String} statusFrom
- * @param {String} statusTo
- */
-export const changeAppointmentStatus = (id, statusFrom, statusTo) => sequelize.authenticate()
-  .then(() => DoctorAppointment.sync({ force: false })
-    .then(() => DoctorAppointment.update({
-      status: statusTo
-    },
+  /**
+   * Find appointment of doctor with time
+   * @param {UUID} doctorId
+   * @param {Date} date
+   * @param {Number} time
+   */
+  static findAppointmentByTime(doctorId, date, time) {
+    return DoctorAppointment.findAll(
       {
         where: {
-          id: id,
-          status: statusFrom
+          doctorId,
+          date,
+          time,
+          status: 'confirmed'
         }
-      })))
-  .catch(err => {
-    console.error(err);
-    return false;
-  });
+      })
+      .then(appointment => appointment[0].dataValues)
+      .catch(console.error);
+  }
 
-/**
- * Delete appointment from database
- * @param {UUID} id
- */
-export const deleteAppointment = id => sequelize.authenticate()
-  .then(() => DoctorAppointment.sync({ force: false })
-    .then(() => DoctorAppointment.destroy({
-      where: {
-        id: id
-      }
-    })))
-  .catch(console.error);
-
-/**
- * Find appointment with patient history
- * @param {UUID} id
- */
-export const findAppointmentWithHistory = id => sequelize.authenticate()
-  .then(() => DoctorAppointment.sync({ force: false })
-    .then(() => DoctorAppointment.findAll({
-      where: {
-        patientId: id,
-        status: 'completed'
-      },
-      include: [{
-        model: PatientHistory
-      }]
-    })
+  /**
+   * Find appointment with given patientId in database
+   * @param {UUID} patientId
+   */
+  static findAppointmentByPatient(patientId) {
+    return DoctorAppointment.findAll(
+      {
+        where: { patientId }
+      })
       .then(appointments => {
         const result = [];
         appointments.forEach(appointment => {
           result.push(appointment.dataValues);
         });
         return result;
-      })))
-  .catch(console.error);
+      })
+      .catch(console.error);
+  }
+
+  /**
+   * Find appointment with given doctorId and status in database
+   * @param {UUID} doctorId
+   * @param {String} status
+   */
+  static findAppointmentByDoctor(doctorId, status) {
+    return DoctorAppointment.findAll(
+      {
+        where: {
+          doctorId,
+          status
+        }
+      })
+      .then(appointments => {
+        const result = [];
+        appointments.forEach(appointment => {
+          result.push(appointment.dataValues);
+        });
+        return result;
+      })
+      .catch(console.error);
+  }
+
+  /**
+   * Change appointment status in database
+   * @param {UUID} id
+   * @param {String} statusFrom
+   * @param {String} statusTo
+   */
+  static changeAppointmentStatus(id, statusFrom, statusTo) {
+    return DoctorAppointment.update(
+      {
+        status: statusTo
+      },
+      {
+        where: {
+          id,
+          status: statusFrom
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
+
+  /**
+   * Delete appointment from database
+   * @param {UUID} id
+   */
+  static deleteAppointment(id) {
+    return DoctorAppointment.destroy(
+      {
+        where: { id }
+      })
+      .catch(console.error);
+  }
+
+  /**
+   * Find appointment with patient history
+   * @param {UUID} patientId
+   */
+  static findAppointmentWithHistory(patientId) {
+    return DoctorAppointment.findAll(
+      {
+        where: {
+          patientId,
+          status: 'completed'
+        },
+        include: [{
+          model: PatientHistory
+        }]
+      })
+      .then(appointments => {
+        const result = [];
+        appointments.forEach(appointment => {
+          result.push(appointment.dataValues);
+        });
+        return result;
+      })
+      .catch(console.error);
+  }
+}

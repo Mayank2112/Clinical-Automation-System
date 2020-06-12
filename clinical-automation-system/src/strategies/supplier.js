@@ -1,14 +1,13 @@
 import { Strategy } from 'passport-local';
-import { isValidSupplier } from '../services/supplier';
+import SupplierService from '../services/supplier';
 
 // Authentication strategy for Supplier
 export default new Strategy(
-  (username, password, done) => {
-    isValidSupplier(username, password)
-      .then(result => {
-        if (result) {
-          return done(null, { username: username });
-        }
-        return done(null, false);
-      });
-  });
+  async (username, password, done) => {
+    const result = await SupplierService.isValidSupplier(username, password);
+    if (result) {
+      return done(null, { username });
+    }
+    return done(null, false);
+  }
+);

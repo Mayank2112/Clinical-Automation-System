@@ -1,7 +1,7 @@
 import { templatePaths } from 'config';
-import { createDoctor } from '../services/doctor';
-import { createPatient } from '../services/patient';
-import { createSupplier } from '../services/supplier';
+import DoctorService from '../services/doctor';
+import PatientService from '../services/patient';
+import SupplierService from '../services/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
 
 export default class Register {
@@ -10,10 +10,10 @@ export default class Register {
    * @param {httpRequest} req
    * @param {httResponse} res
   */
-  async doctor(req, res) {
+  static async doctor(req, res) {
     const doctor = req.body;
     doctor.dateOfBirth = new Date(req.body.dateOfBirth).getTime();
-    const result = await createDoctor(doctor);
+    const result = await DoctorService.createDoctor(doctor);
 
     if (result) {
       return renderPageWithMessage(
@@ -38,10 +38,10 @@ export default class Register {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  async patient(req, res) {
+  static async patient(req, res) {
     const patient = req.body;
     patient.dateOfBirth = new Date(req.body.dateOfBirth).getTime();
-    const result = await createPatient(patient);
+    const result = await PatientService.createPatient(patient);
 
     if (result) {
       return renderPageWithMessage(
@@ -66,9 +66,9 @@ export default class Register {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  async supplier(req, res) {
+  static async supplier(req, res) {
     const supplier = req.body;
-    const result = await createSupplier(supplier);
+    const result = await SupplierService.createSupplier(supplier);
 
     if (result) {
       return renderPageWithMessage(

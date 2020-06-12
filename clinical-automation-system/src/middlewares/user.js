@@ -1,9 +1,9 @@
 import { templatePaths } from 'config';
+import authentication from './authentication';
 import User from '../controllers/user';
 import Register from '../controllers/registration';
-import renderPageWithMessage from '../helpers/responseRenderer';
-import authentication from './authentication';
 import regEx from '../helpers/regEx';
+import renderPageWithMessage from '../helpers/responseRenderer';
 
 export default class UserMiddleware {
   /**
@@ -11,11 +11,9 @@ export default class UserMiddleware {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  registerUser(req, res) {
-    const register = new Register();
-
-    if (register[req.body.profession]) {
-      return register[req.body.profession](req, res);
+  static registerUser(req, res) {
+    if (Register[req.body.profession]) {
+      return Register[req.body.profession](req, res);
     }
     return renderPageWithMessage(
       req,
@@ -32,7 +30,7 @@ export default class UserMiddleware {
    * @param {httpResponse} res
    * @param {callback function} next
    */
-  destroySession(req, res, next) {
+  static destroySession(req, res, next) {
     req.session.destroy();
     return next();
   }
@@ -42,7 +40,7 @@ export default class UserMiddleware {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  setLoginFailure(req, res) {
+  static setLoginFailure(req, res) {
     req.app.locals.loginFailure = true;
     res.redirect('/login');
   }
@@ -52,7 +50,7 @@ export default class UserMiddleware {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  resetLoginFailure(req, res, next) {
+  static resetLoginFailure(req, res, next) {
     req.app.locals.loginFailure = false;
     return next();
   }
@@ -63,14 +61,13 @@ export default class UserMiddleware {
    * @param {httpResopnse} res
    * @param {Function} next
    */
-  checkUserCredentials(req, res, next) {
+  static checkUserCredentials(req, res, next) {
     if (regEx.email.test(req.body.email)
       && regEx.password.test(req.body.password)
       && regEx.phone.test(req.body.mobileNumber)) {
       return next();
     }
-    const user = new User();
-    return user.registerFailure(req, res);
+    return User.registerFailure(req, res);
   }
 
   /**
@@ -79,7 +76,7 @@ export default class UserMiddleware {
    * @param {httpResopnse} res
    * @param {Function} next
    */
-  redirectUserToProfessionLogin(req, res) {
+  static redirectUserToProfessionLogin(req, res) {
     req.app.locals.userType = req.body.profession;
 
     if (authentication[req.body.profession]) {

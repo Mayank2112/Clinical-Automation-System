@@ -1,7 +1,7 @@
 import { templatePaths } from 'config';
-import { findDoctorByStatus, approveDoctor, deleteDoctor } from '../services/doctor';
-import { findSupplierByStatus, approveSupplier, deleteSupplier } from '../services/supplier';
-import { addNewMedicine } from '../services/admin';
+import AdminService from '../services/admin';
+import DoctorService from '../services/doctor';
+import SupplierService from '../services/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
 
 export default class Admin {
@@ -10,7 +10,7 @@ export default class Admin {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  redirectDashboard(req, res) {
+  static redirectDashboard(req, res) {
     return renderPageWithMessage(
       req,
       res,
@@ -24,8 +24,8 @@ export default class Admin {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  async redirectDoctorRequest(req, res) {
-    const doctors = await findDoctorByStatus('pending');
+  static async redirectDoctorRequest(req, res) {
+    const doctors = await DoctorService.findDoctorByStatus('pending');
     return renderPageWithMessage(req, res, 200, templatePaths.admin.doctorRequest, null, doctors);
   }
 
@@ -34,10 +34,10 @@ export default class Admin {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async configureDoctor(req, res) {
+  static async configureDoctor(req, res) {
     const doctorOperation = {
-      approved: approveDoctor,
-      rejected: deleteDoctor
+      approved: DoctorService.approveDoctor,
+      rejected: DoctorService.deleteDoctor
     };
 
     if (doctorOperation[req.body.status]) {
@@ -51,8 +51,8 @@ export default class Admin {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  async redirectSupplierRequest(req, res) {
-    const suppliers = await findSupplierByStatus('pending');
+  static async redirectSupplierRequest(req, res) {
+    const suppliers = await SupplierService.findSupplierByStatus('pending');
     return renderPageWithMessage(
       req,
       res,
@@ -68,10 +68,10 @@ export default class Admin {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async configureSupplier(req, res) {
+  static async configureSupplier(req, res) {
     const supplierOperation = {
-      approved: approveSupplier,
-      rejected: deleteSupplier
+      approved: SupplierService.approveSupplier,
+      rejected: SupplierService.deleteSupplier
     };
 
     if (supplierOperation[req.body.status]) {
@@ -85,7 +85,7 @@ export default class Admin {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  sendAddMedicinesPage(req, res) {
+  static sendAddMedicinesPage(req, res) {
     return renderPageWithMessage(
       req,
       res,
@@ -99,11 +99,11 @@ export default class Admin {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async addMedicine(req, res) {
+  static async addMedicine(req, res) {
     const medicine = req.body;
     medicine.name = req.body.medicineName;
 
-    const result = await addNewMedicine(medicine);
+    const result = await AdminService.addNewMedicine(medicine);
     if (result) {
       return renderPageWithMessage(
         req,

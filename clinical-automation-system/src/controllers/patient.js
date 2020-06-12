@@ -1,15 +1,9 @@
 import moment from 'moment';
 import { templatePaths } from 'config';
+import DoctorService from '../services/doctor';
+import PatientService from '../services/patient';
+import AppointmentService from '../services/appointment';
 import renderPageWithMessage from '../helpers/responseRenderer';
-import { findDoctorByStatus } from '../services/doctor';
-import { createAppointment, findAppointmentByPatient } from '../services/appointment';
-import {
-  createPatient,
-  findMedicine,
-  addOrder,
-  findOrders,
-  findPatientById
-} from '../services/patient';
 
 export default class Patient {
   /**
@@ -17,10 +11,10 @@ export default class Patient {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  async registerPatient(req, res) {
+  static async registerPatient(req, res) {
     const patient = req.body;
     patient.dateOfBirth = new Date(req.body.dateOfBirth).getTime();
-    const result = await createPatient(patient);
+    const result = await PatientService.createPatient(patient);
 
     if (result) {
       return renderPageWithMessage(
@@ -45,7 +39,7 @@ export default class Patient {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  redirectDashboard(req, res) {
+  static redirectDashboard(req, res) {
     return renderPageWithMessage(
       req,
       res,
@@ -59,8 +53,8 @@ export default class Patient {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async sendDoctorList(req, res) {
-    const doctors = await findDoctorByStatus('approved');
+  static async sendDoctorList(req, res) {
+    const doctors = await DoctorService.findDoctorByStatus('approved');
 
     if (doctors.length > 0) {
       return renderPageWithMessage(
@@ -86,12 +80,12 @@ export default class Patient {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async makeAppointmentRequest(req, res) {
+  static async makeAppointmentRequest(req, res) {
     const appointment = req.body;
     appointment.patientId = req.user.id;
     appointment.date = moment().format('l');
     appointment.status = 'pending';
-    const result = await createAppointment(appointment);
+    const result = await AppointmentService.createAppointment(appointment);
 
     if (result) {
       return res.redirect('/patient/appointment');
@@ -110,8 +104,8 @@ export default class Patient {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  async sendPersonalDetail(req, res) {
-    const patient = await findPatientById(req.user.id);
+  static async sendPersonalDetail(req, res) {
+    const patient = await PatientService.findPatientById(req.user.id);
     return renderPageWithMessage(req, res, 200, templatePaths.patient.details, null, patient);
   }
 
@@ -120,8 +114,8 @@ export default class Patient {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async sendAppointmentList(req, res) {
-    const appointments = await findAppointmentByPatient(req.user.id);
+  static async sendAppointmentList(req, res) {
+    const appointments = await AppointmentService.findAppointmentByPatient(req.user.id);
 
     if (appointments.length) {
       return renderPageWithMessage(
@@ -147,7 +141,7 @@ export default class Patient {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  sendMakeOrderPage(req, res) {
+  static sendMakeOrderPage(req, res) {
     return renderPageWithMessage(
       req,
       res,
@@ -165,20 +159,20 @@ export default class Patient {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async createOrder(req, res) {
+  static async createOrder(req, res) {
     const order = req.body;
     order.patientId = req.user.id;
     order.status = 'confirmed';
     order.date = moment().format('l');
 
     if (!req.body.supplierId) {
-      const medicines = await findMedicine(req.body.medicineName);
+      const medicines = await PatientService.findMedicine(req.body.medicineName);
       const medicine = medicines[0].dataValues;
       order.medicineId = medicine.id;
       order.amount = Number(order.quantity) * medicine.pricePerTablet;
     }
 
-    const result = await addOrder(order);
+    const result = await PatientService.addOrder(order);
     if (result) {
       res.status = 201;
       return res.redirect('/patient/orders');
@@ -197,8 +191,8 @@ export default class Patient {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async sendOrderDetails(req, res) {
-    const orders = await findOrders(req.user.id);
+  static async sendOrderDetails(req, res) {
+    const orders = await PatientService.findOrders(req.user.id);
     return renderPageWithMessage(req, res, 200, templatePaths.patient.orders, null, orders);
   }
 }

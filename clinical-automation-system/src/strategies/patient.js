@@ -1,14 +1,13 @@
 import { Strategy } from 'passport-local';
-import { isValidPatient } from '../services/patient';
+import PatientService from '../services/patient';
 
 // Authentication strategy for Patient
 export default new Strategy(
-  (username, password, done) => {
-    isValidPatient(username, password)
-      .then(result => {
-        if (result) {
-          return done(null, { username: username });
-        }
-        return done(null, false);
-      });
-  });
+  async (username, password, done) => {
+    const result = await PatientService.isValidPatient(username, password);
+    if (result) {
+      return done(null, { username });
+    }
+    return done(null, false);
+  }
+);

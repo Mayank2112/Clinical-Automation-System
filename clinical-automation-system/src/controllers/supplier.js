@@ -1,13 +1,7 @@
 import { templatePaths } from 'config';
+import PatientService from '../services/patient';
+import SupplierService from '../services/supplier';
 import renderPageWithMessage from '../helpers/responseRenderer';
-import { findPatientById } from '../services/patient';
-import {
-  createSupplier,
-  findSupplier,
-  addDetails,
-  findOrdersBySupplier,
-  changeOrderStatus
-} from '../services/supplier';
 
 export default class Supplier {
   /**
@@ -15,9 +9,9 @@ export default class Supplier {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  async registerSupplier(req, res) {
+  static async registerSupplier(req, res) {
     const supplier = req.body;
-    const result = await createSupplier(supplier);
+    const result = await SupplierService.createSupplier(supplier);
 
     if (result) {
       return renderPageWithMessage(
@@ -42,7 +36,7 @@ export default class Supplier {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  redirectDashboard(req, res) {
+  static redirectDashboard(req, res) {
     const details = {
       name: req.user.username,
       status: req.user.status
@@ -55,8 +49,8 @@ export default class Supplier {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  async redirectDetails(req, res) {
-    const supplier = await findSupplier(req.user.username);
+  static async redirectDetails(req, res) {
+    const supplier = await SupplierService.findSupplier(req.user.username);
     return renderPageWithMessage(req, res, 200, templatePaths.supplier.details, null, supplier);
   }
 
@@ -65,10 +59,10 @@ export default class Supplier {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async addCredentials(req, res) {
+  static async addCredentials(req, res) {
     const supplier = req.body;
     supplier.email = req.user.username;
-    const result = await addDetails(supplier);
+    const result = await SupplierService.addDetails(supplier);
 
     if (result) {
       req.user.status = 'pending';
@@ -88,8 +82,8 @@ export default class Supplier {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async sendOrders(req, res) {
-    const orders = await findOrdersBySupplier(req.user.id);
+  static async sendOrders(req, res) {
+    const orders = await SupplierService.findOrdersBySupplier(req.user.id);
     return renderPageWithMessage(req, res, 200, templatePaths.supplier.orders, null, orders);
   }
 
@@ -98,8 +92,8 @@ export default class Supplier {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async orderDelivered(req, res) {
-    await changeOrderStatus(req.params.orderId, 'delivered');
+  static async orderDelivered(req, res) {
+    await SupplierService.changeOrderStatus(req.params.orderId, 'delivered');
     return res.redirect('/supplier/orders');
   }
 
@@ -108,8 +102,8 @@ export default class Supplier {
    * @param {httpRequest} req
    * @param {httpResponse} res
    */
-  async sendPatientInformation(req, res) {
-    const patient = await findPatientById(req.params.patientId);
+  static async sendPatientInformation(req, res) {
+    const patient = await PatientService.findPatientById(req.params.patientId);
     return renderPageWithMessage(
       req,
       res,

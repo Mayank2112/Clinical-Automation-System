@@ -3,7 +3,7 @@ import patient from '../strategies/patient';
 import doctor from '../strategies/doctor';
 import supplier from '../strategies/supplier';
 import admin from '../strategies/admin';
-import { getUserDetails } from '../services/user';
+import getUserDetails from '../services/user';
 
 export const passportSetup = app => {
   // passport middleware setup

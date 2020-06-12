@@ -6,36 +6,33 @@ import Appointment from '../middlewares/appointment';
 import Doctor from '../controllers/doctor';
 
 const router = Router();
-const doctor = new Doctor();
-const appointment = new Appointment();
-const userMiddleware = new UserMiddleware();
 
 // Dashborad route to access dashboard after login
-router.get('/dashboard', userMiddleware.resetLoginFailure, doctor.redirectDashboard);
+router.get('/dashboard', UserMiddleware.resetLoginFailure, Doctor.redirectDashboard);
 
 // Route to get personal details
-router.get('/details', doctor.redirectDetails);
+router.get('/details', Doctor.redirectDetails);
 
 // Route to add additional informations of doctors
-router.post('/details', checkCredentials, doctor.addCredentials, doctor.redirectDetails);
+router.post('/details', checkCredentials, Doctor.addCredentials, Doctor.redirectDetails);
 
 // Route to get appointment requests
-router.get('/appointment-request', doctor.sendAppointmentRequestList);
+router.get('/appointment-request', Doctor.sendAppointmentRequestList);
 
 // Route to handle decision of approve or reject appointment
-router.post('/appointment-request', doctor.configureAppointmentRequest);
+router.post('/appointment-request', Doctor.configureAppointmentRequest);
 
 // Route to get confirmed appointments
-router.get('/appointment', doctor.sendAppointmentList);
+router.get('/appointment', Doctor.sendAppointmentList);
 
 // Route to add patient report
-router.post('/appointment/patient-report', appointment.completed, doctor.saveReport);
+router.post('/appointment/patient-report', Appointment.completed, Doctor.saveReport);
 
 // Route to get information of patients
-router.get('/appointment/patient-information/:patientId', doctor.sendPatientInformation);
+router.get('/appointment/patient-information/:patientId', Doctor.sendPatientInformation);
 
 // Route to get information of doctors
-router.get('/information/:doctorId', doctor.sendDoctorInformation);
+router.get('/information/:doctorId', Doctor.sendDoctorInformation);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);

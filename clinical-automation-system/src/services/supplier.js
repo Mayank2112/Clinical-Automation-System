@@ -2,82 +2,82 @@ import { hashSync, compareSync } from 'bcryptjs';
 import { v4 } from 'uuid';
 import db from '../models';
 
-const { Supplier, PatientOrder, sequelize } = db;
+const { Supplier, PatientOrder } = db;
 
-/**
- * create new user in database
- * @param {Object} supplier - containing username, email and password
- */
-export const createSupplier = supplier => sequelize.authenticate()
-  .then(() => Supplier.sync({ force: false })
-    .then(() => Supplier.create({
-      id: v4(),
-      name: supplier.username,
-      mobileNumber: supplier.mobileNumber,
-      email: supplier.email,
-      password: hashSync(supplier.password, 10),
-      status: 'registered'
-    })))
-  .catch(err => {
-    console.error(err);
-    return false;
-  });
+export default class SupplierService {
+  /**
+   * create new user in database
+   * @param {Object} supplier - containing username, email and password
+   */
+  static createSupplier(supplier) {
+    return Supplier.create(
+      {
+        id: v4(),
+        name: supplier.username,
+        mobileNumber: supplier.mobileNumber,
+        email: supplier.email,
+        password: hashSync(supplier.password, 10),
+        status: 'registered'
+      })
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
+  /**
+   * Find supplier with given emailId in database
+   * @param {String} email
+   */
 
-/**
- * Find supplier with given emailId in database
- * @param {String} email
- */
-export const findSupplier = email => sequelize.authenticate()
-  .then(() => Supplier.sync({ force: false })
-    .then(() => Supplier.findAll({
-      where: {
-        email: email
-      }
-    })
-      .then(supplier => supplier[0].dataValues)))
-  .catch(console.error);
+  static findSupplier(email) {
+    return Supplier.findAll(
+      {
+        where: { email }
+      })
+      .then(supplier => supplier[0].dataValues)
+      .catch(console.error);
+  }
 
-/**
- * Checks supplier with given emailId and password is valid or not
- * @param {String} email
- * @param {String} password
- */
-export const isValidSupplier = (email, password) => findSupplier(email)
-  .then(supplier => {
-    if (supplier) {
-      return compareSync(password, supplier.password);
-    }
-    return false;
-  });
-/**
- * Add additional details of supplier to database
- * @param {Object} supplier
- */
-export const addDetails = supplier => sequelize.authenticate()
-  .then(() => Supplier.sync({ force: false })
-    .then(() => Supplier.update({
-      companyName: supplier.companyName,
-      companyAddress: supplier.companyAddress,
-      status: 'pending'
-    },
+  /**
+   * Checks supplier with given emailId and password is valid or not
+   * @param {String} email
+   * @param {String} password
+   */
+  static isValidSupplier(email, password) {
+    return this.findSupplier(email)
+      .then(supplier => {
+        if (supplier) {
+          return compareSync(password, supplier.password);
+        }
+        return false;
+      });
+  }
+
+  /**
+   * Add additional details of supplier to database
+   * @param {Object} supplier
+   */
+  static addDetails(supplier) {
+    supplier.status = 'pending';
+    return Supplier.update(
+      supplier,
       {
         where: {
           email: supplier.email
         }
-      })))
-  .catch(console.error);
+      })
+      .catch(console.error);
+  }
 
-/**
- * Find supplier with given status
- * @param {String} email
- */
-export const findSupplierByStatus = status => sequelize.authenticate()
-  .then(() => Supplier.sync({ force: false })
-    .then(() => Supplier.findAll({
-      where: {
-        status: status
-      }
-    })
+  /**
+   * Find supplier with given status
+   * @param {String} email
+   */
+  static findSupplierByStatus(status) {
+    return Supplier.findAll(
+      {
+        where: { status }
+      })
       .then(suppliers => {
         const result = [];
         suppliers.forEach(supplier => {
@@ -85,49 +85,47 @@ export const findSupplierByStatus = status => sequelize.authenticate()
           result.push(supplier.dataValues);
         });
         return result;
-      })))
-  .catch(console.error);
+      })
+      .catch(console.error);
+  }
 
-/**
- * Change status from pending to approved for doctor
- * @param {String} email
- */
-export const approveSupplier = email => sequelize.authenticate()
-  .then(() => Supplier.sync({ force: false })
-    .then(() => Supplier.update({
-      status: 'approved'
-    },
+  /**
+   * Change status from pending to approved for doctor
+   * @param {String} email
+   */
+  static approveSupplier(email) {
+    return Supplier.update(
       {
-        where: {
-          email: email
-        }
-      })))
-  .catch(console.error);
-
-/**
- * Delete supplier from database
- * @param {String} email
- */
-export const deleteSupplier = email => sequelize.authenticate()
-  .then(() => Supplier.sync({ force: false })
-    .then(() => Supplier.destroy(
-      {
-        where: {
-          email: email
-        }
-      })))
-  .catch(console.error);
-
-/**
- * Get list of suppliers
- */
-export const getSupplierList = () => sequelize.authenticate()
-  .then(() => Supplier.sync({ force: false })
-    .then(() => Supplier.findAll({
-      where: {
         status: 'approved'
-      }
-    })
+      },
+      {
+        where: { email }
+      })
+      .catch(console.error);
+  }
+
+  /**
+   * Delete supplier from database
+   * @param {String} email
+   */
+  static deleteSupplier(email) {
+    return Supplier.destroy(
+      {
+        where: { email }
+      })
+      .catch(console.error);
+  }
+
+  /**
+   * Get list of suppliers
+   */
+  static getSupplierList() {
+    return Supplier.findAll(
+      {
+        where: {
+          status: 'approved'
+        }
+      })
       .then(suppliers => {
         const result = [];
         suppliers.forEach(supplier => {
@@ -135,46 +133,47 @@ export const getSupplierList = () => sequelize.authenticate()
           result.push(supplier.dataValues);
         });
         return result;
-      })))
-  .catch(console.error);
+      })
+      .catch(console.error);
+  }
 
-/**
- * Find orders from database of supplier
- * @param {Object} medicine
- */
-export const findOrdersBySupplier = supplierId => sequelize.authenticate()
-  .then(() => PatientOrder.sync({ force: false })
-    .then(() => PatientOrder.findAll({
-      where: {
-        supplierId: supplierId,
-        status: 'confirmed'
-      }
-    })
+  /**
+   * Find orders from database of supplier
+   * @param {Object} medicine
+   */
+  static findOrdersBySupplier(supplierId) {
+    return PatientOrder.findAll(
+      {
+        where: {
+          supplierId,
+          status: 'confirmed'
+        }
+      })
       .then(orders => {
         const result = [];
         orders.forEach(order => {
           result.push(order.dataValues);
         });
         return result;
-      })))
-  .catch(err => {
-    console.error(err);
-    return false;
-  });
+      })
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
 
-/**
- * Change order status to given status
- * @param {Object} orderId
- * @param {String} status
- */
-export const changeOrderStatus = (orderId, status) => sequelize.authenticate()
-  .then(() => PatientOrder.sync({ force: false })
-    .then(() => PatientOrder.update({
-      status: status
-    },
+  /**
+   * Change order status to given status
+   * @param {Object} orderId
+   * @param {String} status
+   */
+  static changeOrderStatus(orderId, status) {
+    return PatientOrder.update({ status },
       {
         where: {
           id: orderId
         }
-      })))
-  .catch(console.error);
+      })
+      .catch(console.error);
+  }
+}

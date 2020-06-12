@@ -5,7 +5,7 @@ export default class LoggedIn {
    * @param {httpResponse} res
    * @param {callback function} next
   */
-  admin(req, res, next) {
+  static admin(req, res, next) {
     if (req.isAuthenticated() && req.user.type === 'admin') {
       return next();
     }
@@ -19,7 +19,7 @@ export default class LoggedIn {
    * @param {httpResponse} res
    * @param {callback function} next
    */
-  doctor(req, res, next) {
+  static doctor(req, res, next) {
     if (req.isAuthenticated() && req.user.type === 'doctor') {
       return next();
     }
@@ -33,7 +33,7 @@ export default class LoggedIn {
    * @param {httpResponse} res
    * @param {callback function} next
    */
-  patient(req, res, next) {
+  static patient(req, res, next) {
     if (req.isAuthenticated() && req.user.type === 'patient') {
       return next();
     }
@@ -47,7 +47,7 @@ export default class LoggedIn {
    * @param {httpResponse} res
    * @param {callback function} next
    */
-  supplier(req, res, next) {
+  static supplier(req, res, next) {
     if (req.isAuthenticated() && req.user.type === 'supplier') {
       return next();
     }

@@ -7,7 +7,7 @@ export default class User {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  logoutUser(req, res) {
+  static logoutUser(req, res) {
     req.logout();
     return renderPageWithMessage(
       req,
@@ -23,7 +23,7 @@ export default class User {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  redirectHome(req, res) {
+  static redirectHome(req, res) {
     return renderPageWithMessage(
       req,
       res,
@@ -37,7 +37,7 @@ export default class User {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  redirectLogin(req, res) {
+  static redirectLogin(req, res) {
     if (req.app.locals.loginFailure) {
       return renderPageWithMessage(
         req,
@@ -55,7 +55,7 @@ export default class User {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  redirectRegister(req, res) {
+  static redirectRegister(req, res) {
     return renderPageWithMessage(
       req,
       res,
@@ -69,7 +69,7 @@ export default class User {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  registerFailure(req, res) {
+  static registerFailure(req, res) {
     return renderPageWithMessage(
       req,
       res,
@@ -84,7 +84,7 @@ export default class User {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  resourceNotFoundError(req, res) {
+  static resourceNotFoundError(req, res) {
     res.status(404);
     return res.end('Resource not found');
   }
@@ -94,7 +94,7 @@ export default class User {
    * @param {httpRequest} req
    * @param {httResponse} res
    */
-  methodNotAllowedError(req, res) {
+  static methodNotAllowedError(req, res) {
     res.status(405);
     return res.end('Method not allowed');
   }
