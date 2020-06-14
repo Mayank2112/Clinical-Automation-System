@@ -9,19 +9,17 @@ export default class SupplierService {
    * create new user in database
    * @param {Object} supplier - containing username, email and password
    */
-  static createSupplier(supplier) {
-    return Supplier.create(
-      {
-        id: v4(),
-        name: supplier.username,
-        mobileNumber: supplier.mobileNumber,
-        email: supplier.email,
-        password: hashSync(supplier.password, 10),
-        status: 'registered'
-      })
+  static add(supplier) {
+    return Supplier.create({
+      id: v4(),
+      name: supplier.username,
+      mobileNumber: supplier.mobileNumber,
+      email: supplier.email,
+      password: hashSync(supplier.password, 10),
+      status: 'registered'
+    })
       .catch(err => {
-        console.error(err);
-        return false;
+        throw new Error(`Unable to register supplier due to ${err.message}`);
       });
   }
   /**
@@ -29,13 +27,14 @@ export default class SupplierService {
    * @param {String} email
    */
 
-  static findSupplier(email) {
-    return Supplier.findAll(
-      {
-        where: { email }
-      })
+  static find(email) {
+    return Supplier.findAll({
+      where: { email }
+    })
       .then(supplier => supplier[0].dataValues)
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('User not exist');
+      });
   }
 
   /**
@@ -43,13 +42,13 @@ export default class SupplierService {
    * @param {String} email
    * @param {String} password
    */
-  static isValidSupplier(email, password) {
-    return this.findSupplier(email)
+  static verify(email, password) {
+    return this.find(email)
       .then(supplier => {
         if (supplier) {
           return compareSync(password, supplier.password);
         }
-        return false;
+        throw new Error('Incorrect password');
       });
   }
 
@@ -66,18 +65,19 @@ export default class SupplierService {
           email: supplier.email
         }
       })
-      .catch(console.error);
+      .catch(err => {
+        throw new Error(`Can't add details of ${supplier.email} due to ${err.message}`);
+      });
   }
 
   /**
    * Find supplier with given status
    * @param {String} email
    */
-  static findSupplierByStatus(status) {
-    return Supplier.findAll(
-      {
-        where: { status }
-      })
+  static findByStatus(status) {
+    return Supplier.findAll({
+      where: { status }
+    })
       .then(suppliers => {
         const result = [];
         suppliers.forEach(supplier => {
@@ -86,46 +86,49 @@ export default class SupplierService {
         });
         return result;
       })
-      .catch(console.error);
+      .catch(() => {
+        throw new Error(`No supplier found with status: ${status}`);
+      });
   }
 
   /**
-   * Change status from pending to approved for doctor
+   * Change status from pending to approved for supplier
    * @param {String} email
    */
-  static approveSupplier(email) {
-    return Supplier.update(
-      {
-        status: 'approved'
-      },
+  static approve(email) {
+    return Supplier.update({
+      status: 'approved'
+    },
       {
         where: { email }
       })
-      .catch(console.error);
+      .catch(err => {
+        throw new Error(`Can't update supplier status due to ${err.message}`);
+      });
   }
 
   /**
    * Delete supplier from database
    * @param {String} email
    */
-  static deleteSupplier(email) {
-    return Supplier.destroy(
-      {
-        where: { email }
-      })
-      .catch(console.error);
+  static delete(email) {
+    return Supplier.destroy({
+      where: { email }
+    })
+      .catch(err => {
+        throw new Error(`Can't delete supplier due to ${err.message}`);
+      });
   }
 
   /**
    * Get list of suppliers
    */
-  static getSupplierList() {
-    return Supplier.findAll(
-      {
-        where: {
-          status: 'approved'
-        }
-      })
+  static getList() {
+    return Supplier.findAll({
+      where: {
+        status: 'approved'
+      }
+    })
       .then(suppliers => {
         const result = [];
         suppliers.forEach(supplier => {
@@ -134,21 +137,22 @@ export default class SupplierService {
         });
         return result;
       })
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('No supplier available wait for some time and Try again');
+      });
   }
 
   /**
    * Find orders from database of supplier
-   * @param {Object} medicine
+   * @param {Object} supplierId
    */
-  static findOrdersBySupplier(supplierId) {
-    return PatientOrder.findAll(
-      {
-        where: {
-          supplierId,
-          status: 'confirmed'
-        }
-      })
+  static findOrders(supplierId) {
+    return PatientOrder.findAll({
+      where: {
+        supplierId,
+        status: 'confirmed'
+      }
+    })
       .then(orders => {
         const result = [];
         orders.forEach(order => {
@@ -156,9 +160,8 @@ export default class SupplierService {
         });
         return result;
       })
-      .catch(err => {
-        console.error(err);
-        return false;
+      .catch(() => {
+        throw new Error('No orders yet');
       });
   }
 
@@ -174,6 +177,8 @@ export default class SupplierService {
           id: orderId
         }
       })
-      .catch(console.error);
+      .catch(err => {
+        throw new Error(`Can't update order status due to ${err.message}`);
+      });
   }
 }

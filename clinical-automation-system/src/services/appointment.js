@@ -8,13 +8,12 @@ export default class AppointmentService {
    * create new appointment in database
    * @param {Object} appointment
    */
-  static createAppointment(appointment) {
+  static create(appointment) {
     appointment.id = v4();
     appointment.status = appointment.status || null;
     return DoctorAppointment.create(appointment)
       .catch(err => {
-        console.error(err);
-        return false;
+        throw new Error(`Appointment not created due to ${err.message}`);
       });
   }
 
@@ -24,29 +23,28 @@ export default class AppointmentService {
    * @param {Date} date
    * @param {Number} time
    */
-  static findAppointmentByTime(doctorId, date, time) {
-    return DoctorAppointment.findAll(
-      {
-        where: {
-          doctorId,
-          date,
-          time,
-          status: 'confirmed'
-        }
-      })
-      .then(appointment => appointment[0].dataValues)
-      .catch(console.error);
+  static findByTime(doctorId, date, time) {
+    return DoctorAppointment.findAll({
+      where: {
+        doctorId,
+        date,
+        time,
+        status: 'confirmed'
+      }
+    })
+      .catch(() => {
+        throw new Error('No confirmed Appointment');
+      });
   }
 
   /**
    * Find appointment with given patientId in database
    * @param {UUID} patientId
    */
-  static findAppointmentByPatient(patientId) {
-    return DoctorAppointment.findAll(
-      {
-        where: { patientId }
-      })
+  static findByPatient(patientId) {
+    return DoctorAppointment.findAll({
+      where: { patientId }
+    })
       .then(appointments => {
         const result = [];
         appointments.forEach(appointment => {
@@ -54,7 +52,9 @@ export default class AppointmentService {
         });
         return result;
       })
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('No Appointments');
+      });
   }
 
   /**
@@ -62,14 +62,13 @@ export default class AppointmentService {
    * @param {UUID} doctorId
    * @param {String} status
    */
-  static findAppointmentByDoctor(doctorId, status) {
-    return DoctorAppointment.findAll(
-      {
-        where: {
-          doctorId,
-          status
-        }
-      })
+  static findByDoctor(doctorId, status) {
+    return DoctorAppointment.findAll({
+      where: {
+        doctorId,
+        status
+      }
+    })
       .then(appointments => {
         const result = [];
         appointments.forEach(appointment => {
@@ -77,7 +76,9 @@ export default class AppointmentService {
         });
         return result;
       })
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('No Appointments');
+      });
   }
 
   /**
@@ -86,11 +87,10 @@ export default class AppointmentService {
    * @param {String} statusFrom
    * @param {String} statusTo
    */
-  static changeAppointmentStatus(id, statusFrom, statusTo) {
-    return DoctorAppointment.update(
-      {
-        status: statusTo
-      },
+  static changeStatus(id, statusFrom, statusTo) {
+    return DoctorAppointment.update({
+      status: statusTo
+    },
       {
         where: {
           id,
@@ -98,8 +98,7 @@ export default class AppointmentService {
         }
       })
       .catch(err => {
-        console.error(err);
-        return false;
+        throw new Error(`Can't change Appointment status due to ${err.message}`);
       });
   }
 
@@ -107,29 +106,29 @@ export default class AppointmentService {
    * Delete appointment from database
    * @param {UUID} id
    */
-  static deleteAppointment(id) {
-    return DoctorAppointment.destroy(
-      {
-        where: { id }
-      })
-      .catch(console.error);
+  static delete(id) {
+    return DoctorAppointment.destroy({
+      where: { id }
+    })
+      .catch(err => {
+        throw new Error(`Can't delete Appointment due to ${err.message}`);
+      });
   }
 
   /**
    * Find appointment with patient history
    * @param {UUID} patientId
    */
-  static findAppointmentWithHistory(patientId) {
-    return DoctorAppointment.findAll(
-      {
-        where: {
-          patientId,
-          status: 'completed'
-        },
-        include: [{
-          model: PatientHistory
-        }]
-      })
+  static findWithPatientHistory(patientId) {
+    return DoctorAppointment.findAll({
+      where: {
+        patientId,
+        status: 'completed'
+      },
+      include: [{
+        model: PatientHistory
+      }]
+    })
       .then(appointments => {
         const result = [];
         appointments.forEach(appointment => {
@@ -137,6 +136,8 @@ export default class AppointmentService {
         });
         return result;
       })
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('Patient has no history');
+      });
   }
 }

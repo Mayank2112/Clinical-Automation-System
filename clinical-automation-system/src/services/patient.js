@@ -9,7 +9,7 @@ export default class PatientService {
    * create new user in database
    * @param {Object} patient - containing username, email and password
    */
-  static createPatient(patient) {
+  static add(patient) {
     return Patient.create({
       id: v4(),
       name: patient.username,
@@ -21,8 +21,7 @@ export default class PatientService {
       password: hashSync(patient.password, 10)
     })
       .catch(err => {
-        console.error(err);
-        return false;
+        throw new Error(`Unable to register patient due to ${err.message}`);
       });
   }
 
@@ -30,13 +29,14 @@ export default class PatientService {
    * Find patient with given emailId in database
    * @param {String} email
    */
-  static findPatient(email) {
-    return Patient.findAll(
-      {
-        where: { email }
-      })
+  static find(email) {
+    return Patient.findAll({
+      where: { email }
+    })
       .then(patient => patient[0].dataValues)
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('User not exist');
+      });
   }
 
   /**
@@ -44,13 +44,13 @@ export default class PatientService {
    * @param {String} email
    * @param {String} password
    */
-  static isValidPatient(email, password) {
-    return this.findPatient(email)
+  static verify(email, password) {
+    return this.find(email)
       .then(patient => {
         if (patient) {
           return compareSync(password, patient.password);
         }
-        return false;
+        throw new Error('Incorrect password');
       });
   }
 
@@ -58,25 +58,25 @@ export default class PatientService {
    * Find patient with given id in database
    * @param {UUID} id
    */
-  static findPatientById(id) {
-    return Patient.findAll(
-      {
-        where: { id }
-      })
+  static findById(id) {
+    return Patient.findAll({
+      where: { id }
+    })
       .then(patient => patient[0].dataValues)
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('User not found');
+      });
   }
 
   /**
    * Save patient report to patientHistory table
    * @param {Object} report
    */
-  static savePatientReport(report) {
+  static saveReport(report) {
     report.id = v4();
     return PatientHistory.create(report)
       .catch(err => {
-        console.error(err);
-        return false;
+        throw new Error(`Can't save patient report due to ${err.message}`);
       });
   }
 
@@ -85,15 +85,13 @@ export default class PatientService {
    * @param {Object} medicine
    */
   static findMedicine(name) {
-    return Medicine.findAll(
-      {
-        where: {
-          name
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        return false;
+    return Medicine.findAll({
+      where: {
+        name
+      }
+    })
+      .catch(() => {
+        throw new Error('Not available at store');
       });
   }
 
@@ -105,8 +103,7 @@ export default class PatientService {
     order.id = v4();
     return PatientOrder.create(order)
       .catch(err => {
-        console.error(err);
-        return false;
+        throw new Error(`Order is not created due to ${err.message}`);
       });
   }
 
@@ -115,13 +112,11 @@ export default class PatientService {
    * @param {Object} medicine
    */
   static findOrders(patientId) {
-    return PatientOrder.findAll(
-      {
-        where: { patientId }
-      })
-      .catch(err => {
-        console.error(err);
-        return false;
+    return PatientOrder.findAll({
+      where: { patientId }
+    })
+      .catch(() => {
+        throw new Error('No orders');
       });
   }
 }

@@ -9,7 +9,7 @@ export default class DoctorService {
    * create new user in database
    * @param {Object} doctor - containing username, email and password
    */
-  static createDoctor(doctor) {
+  static add(doctor) {
     return Doctor.create({
       id: v4(),
       name: doctor.username,
@@ -22,8 +22,7 @@ export default class DoctorService {
       password: hashSync(doctor.password, 10)
     })
       .catch(err => {
-        console.error(err);
-        return false;
+        throw new Error(`Unable to register doctor due to ${err.message}`);
       });
   }
 
@@ -31,7 +30,7 @@ export default class DoctorService {
    * Find doctor with given emailId in database
    * @param {String} email
    */
-  static findDoctor(email) {
+  static find(email) {
     return Doctor.findAll({
       where: {
         email
@@ -41,7 +40,9 @@ export default class DoctorService {
       }]
     })
       .then(doctor => doctor[0].dataValues)
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('User not exist');
+      });
   }
 
   /**
@@ -49,13 +50,13 @@ export default class DoctorService {
    * @param {String} email
    * @param {String} password
    */
-  static isValidDoctor(email, password) {
-    return this.findDoctor(email)
+  static verify(email, password) {
+    return this.find(email)
       .then(doctor => {
         if (doctor) {
           return compareSync(password, doctor.password);
         }
-        return false;
+        throw new Error('Incorrect password');
       });
   }
 
@@ -72,21 +73,22 @@ export default class DoctorService {
           email: doctor.email
         }
       })
-      .catch(console.error);
+      .catch(err => {
+        throw new Error(`Can't add details of ${doctor.email} due to ${err.message}`);
+      });
   }
 
   /**
    * Find doctor with given status
    * @param {String} email
    */
-  static findDoctorByStatus(status) {
-    return Doctor.findAll(
-      {
-        where: { status },
-        include: [{
-          model: Specialization
-        }]
-      })
+  static findByStatus(status) {
+    return Doctor.findAll({
+      where: { status },
+      include: [{
+        model: Specialization
+      }]
+    })
       .then(doctors => {
         const result = [];
         doctors.forEach(doctor => {
@@ -96,48 +98,51 @@ export default class DoctorService {
         });
         return result;
       })
-      .catch(console.error);
+      .catch(() => {
+        throw new Error(`No doctor found with status: ${status}`);
+      });
   }
 
   /**
    * Change status from pending to approved for doctor
    * @param {String} email
    */
-  static approveDoctor(email) {
-    return Doctor.update(
-      {
-        status: 'approved'
-      },
+  static approve(email) {
+    return Doctor.update({
+      status: 'approved'
+    },
       {
         where: { email }
       })
-      .catch(console.error);
+      .catch(err => {
+        throw new Error(`Can't update doctor status due to ${err.message}`);
+      });
   }
 
   /**
    * Delete doctor from database
    * @param {String} email
    */
-  static deleteDoctor(email) {
-    return Doctor.destroy(
-      {
-        where: { email }
-      })
-      .catch(console.error);
+  static delete(email) {
+    return Doctor.destroy({
+      where: { email }
+    })
+      .catch(err => {
+        throw new Error(`Can't delete doctor due to ${err.message}`);
+      });
   }
 
   /**
    * Find doctor with given id in database
    * @param {UUID} id
    */
-  static findDoctorById(id) {
-    return Doctor.findAll(
-      {
-        where: { id },
-        include: [{
-          model: Specialization
-        }]
-      })
+  static findById(id) {
+    return Doctor.findAll({
+      where: { id },
+      include: [{
+        model: Specialization
+      }]
+    })
       .then(doctor => {
         doctor[0].dataValues.password = 'Hidden';
         if (doctor[0].Specializations.length) {
@@ -145,7 +150,9 @@ export default class DoctorService {
         }
         return doctor[0].dataValues;
       })
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('Doctor not found');
+      });
   }
 
   /**
@@ -153,16 +160,14 @@ export default class DoctorService {
    * @param {UUID} doctorId
    * @param {STrin} specialization
    */
-  static addDoctorSpecialization(doctorId, specialization) {
-    return Specialization.create(
-      {
-        id: v4(),
-        doctorId,
-        name: specialization
-      })
+  static addSpecialization(doctorId, specialization) {
+    return Specialization.create({
+      id: v4(),
+      doctorId,
+      name: specialization
+    })
       .catch(err => {
-        console.error(err);
-        return false;
+        throw new Error(`Can't add doctor's specialization due to ${err.message}`);
       });
   }
 }

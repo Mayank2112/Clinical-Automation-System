@@ -14,7 +14,9 @@ export default class AdminService {
       where: { email }
     })
       .then(admin => admin[0].dataValues)
-      .catch(console.error);
+      .catch(() => {
+        throw new Error('User not exist');
+      });
   }
 
   /**
@@ -22,13 +24,13 @@ export default class AdminService {
    * @param {String} email
    * @param {String} password
    */
-  static isValidAdmin(email, password) {
+  static verify(email, password) {
     return this.find(email)
       .then(admin => {
         if (admin) {
           return compareSync(password, admin.password);
         }
-        return false;
+        throw new Error('Incorrect Password');
       });
   }
 
@@ -39,9 +41,8 @@ export default class AdminService {
   static addNewMedicine(medicine) {
     medicine.id = v4();
     return Medicine.create(medicine)
-      .catch(err => {
-        console.error(err);
-        return false;
+      .catch(() => {
+        throw new Error('Medicine not added');
       });
   }
 }
