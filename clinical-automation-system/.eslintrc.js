@@ -14,8 +14,11 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  rules: { 
+  rules: {
     "comma-dangle": ["error", "never"],
-    "arrow-parens": ["error", "as-needed"]
+    "arrow-parens": ["error", "as-needed"],
+    "no-param-reassign": ["error", { "props": false }],
+    "no-console": "off",
+    "brace-style": "off"
   },
 };
