@@ -7,7 +7,7 @@
 const checkCredentials = (req, res, next) => {
   const doctor = req.body;
   if (typeof doctor.degree == 'string'
-    && !isNaN(doctor.apointmentFee)
+    && !isNaN(doctor.appointmentFee)
     && doctor.experienceFrom
     && Number(doctor.startTime) < Number(doctor.endTime)) {
     return next();

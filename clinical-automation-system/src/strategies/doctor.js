@@ -4,10 +4,12 @@ import DoctorService from '../services/doctor';
 // Authentication strategy for Doctor
 export default new Strategy(
   async (username, password, done) => {
-    const result = await DoctorService.isValidDoctor(username, password);
-    if (result) {
+    try {
+      await DoctorService.verify(username, password);
       return done(null, { username });
     }
-    return done(null, false);
+    catch (err) {
+      return done(null, false);
+    }
   }
 );

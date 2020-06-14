@@ -14,7 +14,7 @@ router.get('/dashboard', UserMiddleware.resetLoginFailure, Doctor.redirectDashbo
 router.get('/details', Doctor.redirectDetails);
 
 // Route to add additional informations of doctors
-router.post('/details', checkCredentials, Doctor.addCredentials, Doctor.redirectDetails);
+router.post('/details', checkCredentials, Doctor.addCredentials);
 
 // Route to get appointment requests
 router.get('/appointment-request', Doctor.sendAppointmentRequestList);

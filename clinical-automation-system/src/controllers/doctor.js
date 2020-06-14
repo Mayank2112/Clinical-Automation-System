@@ -24,12 +24,17 @@ export default class Doctor {
    * @param {httResponse} res
    */
   static async redirectDetails(req, res) {
-    const doctor = await DoctorService.findDoctorById(req.user.id);
-    const details = doctor;
-    if (doctor.specialization) {
-      details.specialization = doctor.specialization.name;
+    try {
+      const doctor = await DoctorService.findById(req.user.id);
+      const details = doctor;
+      if (doctor.specialization) {
+        details.specialization = doctor.specialization.name;
+      }
+      return renderPageWithMessage(req, res, 200, templatePaths.doctor.details, null, details);
     }
-    return renderPageWithMessage(req, res, 200, templatePaths.doctor.details, null, details);
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -41,23 +46,24 @@ export default class Doctor {
     const doctor = req.body;
     doctor.email = req.user.username;
     doctor.experienceFrom = new Date(req.body.experienceFrom).getTime();
-    const result = await DoctorService.addDetails(doctor);
-    const specialization = await DoctorService.addDoctorSpecialization(
-      req.user.id,
-      req.body.specialization
-    );
-
-    if (result && specialization) {
+    try {
+      await DoctorService.addDetails(doctor);
+      await DoctorService.addSpecialization(
+        req.user.id,
+        req.body.specialization
+      );
       req.user.status = 'pending';
       return res.redirect('/doctor/details');
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      400,
-      templatePaths.doctor.details,
-      'Data submitted is not correct'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        400,
+        templatePaths.doctor.details,
+        err.message
+      );
+    }
   }
 
   /**
@@ -66,25 +72,30 @@ export default class Doctor {
    * @param {httpResponse} res
    */
   static async sendAppointmentRequestList(req, res) {
-    const appointments = await AppointmentService.findAppointmentByDoctor(req.user.id, 'pending');
+    try {
+      const appointments = await AppointmentService.findByDoctor(req.user.id, 'pending');
 
-    if (appointments.length) {
+      if (appointments.length) {
+        return renderPageWithMessage(
+          req,
+          res,
+          200,
+          templatePaths.doctor.appointmentRequest,
+          null,
+          appointments
+        );
+      }
       return renderPageWithMessage(
         req,
         res,
         200,
         templatePaths.doctor.appointmentRequest,
-        null,
-        appointments
+        'No Appointments yet'
       );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      200,
-      templatePaths.doctor.appointmentRequest,
-      'No Appointments yet'
-    );
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -94,18 +105,23 @@ export default class Doctor {
    */
   static async configureAppointmentRequest(req, res) {
     const appointmentOperation = {
-      approved: AppointmentService.changeAppointmentStatus,
-      rejected: AppointmentService.deleteAppointment
+      approved: AppointmentService.changeStatus,
+      rejected: AppointmentService.delete
     };
 
-    if (appointmentOperation[req.body.status]) {
-      await appointmentOperation[req.body.status](
-        req.body.appointmentId,
-        'pending',
-        'confirmed'
-      );
+    try {
+      if (appointmentOperation[req.body.status]) {
+        await appointmentOperation[req.body.status](
+          req.body.appointmentId,
+          'pending',
+          'confirmed'
+        );
+      }
+      return res.redirect('/doctor/appointment-request');
     }
-    return res.redirect('/doctor/appointment-request');
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -114,28 +130,33 @@ export default class Doctor {
    * @param {httpResponse} res
    */
   static async sendAppointmentList(req, res) {
-    const appointments = await AppointmentService.findAppointmentByDoctor(
-      req.user.id,
-      'confirmed'
-    );
+    try {
+      const appointments = await AppointmentService.findByDoctor(
+        req.user.id,
+        'confirmed'
+      );
 
-    if (appointments.length) {
+      if (appointments.length) {
+        return renderPageWithMessage(
+          req,
+          res,
+          200,
+          templatePaths.doctor.appointment,
+          null,
+          appointments
+        );
+      }
       return renderPageWithMessage(
         req,
         res,
         200,
         templatePaths.doctor.appointment,
-        null,
-        appointments
+        'No Appointments yet'
       );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      200,
-      templatePaths.doctor.appointment,
-      'No Appointments yet'
-    );
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -144,20 +165,33 @@ export default class Doctor {
    * @param {httpResponse} res
    */
   static async sendPatientInformation(req, res) {
-    const patient = await PatientService.findPatientById(req.params.patientId);
-    const patientInformation = await AppointmentService.findAppointmentWithHistory(
-      req.params.patientId
-    );
+    try {
+      const patient = await PatientService.findById(req.params.patientId);
+      const patientInformation = await AppointmentService.findWithPatientHistory(
+        req.params.patientId
+      );
 
-    return renderPageWithMessage(req,
-      res,
-      200,
-      templatePaths.doctor.patientInformation,
-      null,
-      {
-        patient,
-        patientInformation
-      });
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.doctor.patientInformation,
+        null,
+        {
+          patient,
+          patientInformation
+        }
+      );
+    }
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.doctor.patientInformation,
+        err.message
+      );
+    }
   }
 
   /**
@@ -166,15 +200,20 @@ export default class Doctor {
    * @param {httpResponse} res
    */
   static async sendDoctorInformation(req, res) {
-    const doctor = await DoctorService.findDoctorById(req.params.doctorId);
-    return renderPageWithMessage(
-      req,
-      res,
-      200,
-      templatePaths.doctor.doctorInformation,
-      null,
-      doctor
-    );
+    try {
+      const doctor = await DoctorService.findById(req.params.doctorId);
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.doctor.doctorInformation,
+        null,
+        doctor
+      );
+    }
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -183,17 +222,18 @@ export default class Doctor {
    * @param {httpResponse} res
    */
   static async saveReport(req, res) {
-    const result = await PatientService.savePatientReport(req.body);
-
-    if (result) {
+    try {
+      await PatientService.saveReport(req.body);
       return res.redirect('/doctor/appointment');
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      500,
-      templatePaths.doctor.appointment,
-      'Some error occurs please try again'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        500,
+        templatePaths.doctor.appointment,
+        err.message
+      );
+    }
   }
 }

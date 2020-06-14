@@ -12,26 +12,37 @@ export default class Appointment {
    * @param {Function} next
    */
   static async checkData(req, res, next) {
-    if (req.body.doctorId && req.body.subject && !isNaN(req.body.time)) {
-      const doctor = await DoctorService.findDoctorById(req.body.doctorId);
-      if (req.body.time >= doctor.startTime && req.body.time <= doctor.endTime) {
-        return next();
+    try {
+      if (req.body.doctorId && req.body.subject && !isNaN(req.body.time)) {
+        const doctor = await DoctorService.findById(req.body.doctorId);
+        if (req.body.time >= doctor.startTime && req.body.time <= doctor.endTime) {
+          return next();
+        }
+        return renderPageWithMessage(
+          req,
+          res,
+          403,
+          templatePaths.patient.appointmentRequest,
+          'Select appropriate time'
+        );
       }
       return renderPageWithMessage(
         req,
         res,
         403,
         templatePaths.patient.appointmentRequest,
-        'Select appropriate time'
+        'Request credentials are not correct'
       );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      403,
-      templatePaths.patient.appointmentRequest,
-      'Request credentials are not correct'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        403,
+        templatePaths.patient.appointmentRequest,
+        'Request credentials are not correct'
+      );
+    }
   }
 
   /**
@@ -42,29 +53,34 @@ export default class Appointment {
    */
   static async checkDoctorAvailability(req, res, next) {
     const time = Number(req.body.time) % 100;
-    const doctor = await DoctorService.findDoctorById(req.body.doctorId);
+    try {
+      const doctor = await DoctorService.findById(req.body.doctorId);
 
-    if (doctor) {
-      const appointment = await AppointmentService.findAppointmentByTime(req.body.doctorId, moment().format('l'), time);
+      if (doctor) {
+        const appointment = await AppointmentService.findByTime(req.body.doctorId, moment().format('l'), time);
 
-      if (appointment) {
-        return renderPageWithMessage(
-          req,
-          res,
-          400,
-          templatePaths.patient.appointmentRequest,
-          'Doctor already has fixed appointment at given time. Please select another timing'
-        );
+        if (appointment.length) {
+          return renderPageWithMessage(
+            req,
+            res,
+            400,
+            templatePaths.patient.appointmentRequest,
+            'Doctor already has fixed appointment at given time. Please select another timing'
+          );
+        }
+        return next();
       }
-      return next();
+      return renderPageWithMessage(
+        req,
+        res,
+        400,
+        templatePaths.patient.appointmentRequest,
+        'Please select valid doctor'
+      );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      400,
-      templatePaths.patient.appointmentRequest,
-      'Please select valid doctor'
-    );
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -74,17 +90,18 @@ export default class Appointment {
    * @param {Function} next
    */
   static async completed(req, res, next) {
-    const result = await AppointmentService.changeAppointmentStatus(req.body.appointmentId, 'confirmed', 'completed');
-
-    if (result) {
+    try {
+      await AppointmentService.changeStatus(req.body.appointmentId, 'confirmed', 'completed');
       return next();
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      403,
-      templatePaths.doctor.appointment,
-      'Request is not processed. Please enter correct credentials and try again'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        403,
+        templatePaths.doctor.appointment,
+        err.message
+      );
+    }
   }
 }

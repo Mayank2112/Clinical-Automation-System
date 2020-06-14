@@ -78,10 +78,14 @@ export default class UserMiddleware {
    */
   static redirectUserToProfessionLogin(req, res) {
     req.app.locals.userType = req.body.profession;
-
-    if (authentication[req.body.profession]) {
-      return authentication[req.body.profession](req, res);
+    try {
+      if (authentication[req.body.profession]) {
+        return authentication[req.body.profession](req, res);
+      }
+      return this.setLoginFailure(req, res);
     }
-    return this.setLoginFailure(req, res);
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 }

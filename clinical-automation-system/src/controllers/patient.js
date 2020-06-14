@@ -7,34 +7,6 @@ import renderPageWithMessage from '../helpers/responseRenderer';
 
 export default class Patient {
   /**
-   * Register new user to database
-   * @param {httpRequest} req
-   * @param {httResponse} res
-   */
-  static async registerPatient(req, res) {
-    const patient = req.body;
-    patient.dateOfBirth = new Date(req.body.dateOfBirth).getTime();
-    const result = await PatientService.createPatient(patient);
-
-    if (result) {
-      return renderPageWithMessage(
-        req,
-        res,
-        201,
-        templatePaths.user.homepage,
-        `${patient.username} registered successfully. Login to continue`
-      );
-    }
-    return renderPageWithMessage(
-      req,
-      res,
-      400,
-      templatePaths.user.register,
-      'Username or email is already in use'
-    );
-  }
-
-  /**
    * Redirect to dashboard page
    * @param {httpRequest} req
    * @param {httResponse} res
@@ -54,25 +26,30 @@ export default class Patient {
    * @param {httpResponse} res
    */
   static async sendDoctorList(req, res) {
-    const doctors = await DoctorService.findDoctorByStatus('approved');
+    try {
+      const doctors = await DoctorService.findByStatus('approved');
 
-    if (doctors.length > 0) {
+      if (doctors.length > 0) {
+        return renderPageWithMessage(
+          req,
+          res,
+          200,
+          templatePaths.patient.appointmentRequest,
+          null,
+          doctors
+        );
+      }
       return renderPageWithMessage(
         req,
         res,
         200,
         templatePaths.patient.appointmentRequest,
-        null,
-        doctors
+        'No doctor registered successfully yet'
       );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      200,
-      templatePaths.patient.appointmentRequest,
-      'No doctor registered successfully yet'
-    );
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -85,18 +62,20 @@ export default class Patient {
     appointment.patientId = req.user.id;
     appointment.date = moment().format('l');
     appointment.status = 'pending';
-    const result = await AppointmentService.createAppointment(appointment);
 
-    if (result) {
+    try {
+      await AppointmentService.create(appointment);
       return res.redirect('/patient/appointment');
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      500,
-      templatePaths.patient.appointmentRequest,
-      'Some error occurs please try again'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        500,
+        templatePaths.patient.appointmentRequest,
+        'Some error occurs please try again'
+      );
+    }
   }
 
   /**
@@ -105,8 +84,13 @@ export default class Patient {
    * @param {httResponse} res
    */
   static async sendPersonalDetail(req, res) {
-    const patient = await PatientService.findPatientById(req.user.id);
-    return renderPageWithMessage(req, res, 200, templatePaths.patient.details, null, patient);
+    try {
+      const patient = await PatientService.findById(req.user.id);
+      return renderPageWithMessage(req, res, 200, templatePaths.patient.details, null, patient);
+    }
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -115,25 +99,29 @@ export default class Patient {
    * @param {httpResponse} res
    */
   static async sendAppointmentList(req, res) {
-    const appointments = await AppointmentService.findAppointmentByPatient(req.user.id);
-
-    if (appointments.length) {
+    try {
+      const appointments = await AppointmentService.findByPatient(req.user.id);
+      if (appointments.length) {
+        return renderPageWithMessage(
+          req,
+          res,
+          200,
+          templatePaths.patient.appointment,
+          null,
+          appointments
+        );
+      }
       return renderPageWithMessage(
         req,
         res,
         200,
         templatePaths.patient.appointment,
-        null,
-        appointments
+        'No Appointments yet'
       );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      200,
-      templatePaths.patient.appointment,
-      'No Appointments yet'
-    );
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -165,25 +153,29 @@ export default class Patient {
     order.status = 'confirmed';
     order.date = moment().format('l');
 
-    if (!req.body.supplierId) {
-      const medicines = await PatientService.findMedicine(req.body.medicineName);
-      const medicine = medicines[0].dataValues;
-      order.medicineId = medicine.id;
-      order.amount = Number(order.quantity) * medicine.pricePerTablet;
-    }
+    try {
+      if (!req.body.supplierId) {
+        const medicines = await PatientService.findMedicine(req.body.medicineName);
+        const medicine = medicines[0].dataValues;
+        order.medicineId = medicine.id;
+        order.amount = Number(order.quantity) * medicine.pricePerTablet;
+      }
 
-    const result = await PatientService.addOrder(order);
-    if (result) {
-      res.status = 201;
-      return res.redirect('/patient/orders');
+      const result = await PatientService.addOrder(order);
+      if (result) {
+        res.status = 201;
+        return res.redirect('/patient/orders');
+      }
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      200,
-      templatePaths.patient.makeOrder,
-      'Some error occurs. Try Again'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.patient.makeOrder,
+        err.message
+      );
+    }
   }
 
   /**
@@ -192,7 +184,25 @@ export default class Patient {
    * @param {httpResponse} res
    */
   static async sendOrderDetails(req, res) {
-    const orders = await PatientService.findOrders(req.user.id);
-    return renderPageWithMessage(req, res, 200, templatePaths.patient.orders, null, orders);
+    try {
+      const orders = await PatientService.findOrders(req.user.id);
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.patient.orders,
+        null,
+        orders
+      );
+    }
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.patient.orders,
+        err.message
+      );
+    }
   }
 }

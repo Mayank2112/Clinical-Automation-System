@@ -5,33 +5,6 @@ import renderPageWithMessage from '../helpers/responseRenderer';
 
 export default class Supplier {
   /**
-   * Register new user to database
-   * @param {httpRequest} req
-   * @param {httResponse} res
-   */
-  static async registerSupplier(req, res) {
-    const supplier = req.body;
-    const result = await SupplierService.createSupplier(supplier);
-
-    if (result) {
-      return renderPageWithMessage(
-        req,
-        res,
-        201,
-        templatePaths.user.homepage,
-        `${supplier.username} registered successfully. Login to continue`
-      );
-    }
-    return renderPageWithMessage(
-      req,
-      res,
-      400,
-      templatePaths.user.register,
-      'Username or email is already in use'
-    );
-  }
-
-  /**
    * Redirect to dashboard page
    * @param {httpRequest} req
    * @param {httResponse} res
@@ -50,8 +23,13 @@ export default class Supplier {
    * @param {httResponse} res
    */
   static async redirectDetails(req, res) {
-    const supplier = await SupplierService.findSupplier(req.user.username);
-    return renderPageWithMessage(req, res, 200, templatePaths.supplier.details, null, supplier);
+    try {
+      const supplier = await SupplierService.find(req.user.username);
+      return renderPageWithMessage(req, res, 200, templatePaths.supplier.details, null, supplier);
+    }
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -62,19 +40,20 @@ export default class Supplier {
   static async addCredentials(req, res) {
     const supplier = req.body;
     supplier.email = req.user.username;
-    const result = await SupplierService.addDetails(supplier);
-
-    if (result) {
+    try {
+      await SupplierService.addDetails(supplier);
       req.user.status = 'pending';
       res.redirect('/supplier/details');
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      400,
-      templatePaths.supplier.details,
-      'Data submitted is not correct'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        400,
+        templatePaths.supplier.details,
+        err.message
+      );
+    }
   }
 
   /**
@@ -83,8 +62,26 @@ export default class Supplier {
    * @param {httpResponse} res
    */
   static async sendOrders(req, res) {
-    const orders = await SupplierService.findOrdersBySupplier(req.user.id);
-    return renderPageWithMessage(req, res, 200, templatePaths.supplier.orders, null, orders);
+    try {
+      const orders = await SupplierService.findOrders(req.user.id);
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.supplier.orders,
+        null,
+        orders
+      );
+    }
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.supplier.orders,
+        err.message
+      );
+    }
   }
 
   /**
@@ -93,8 +90,13 @@ export default class Supplier {
    * @param {httpResponse} res
    */
   static async orderDelivered(req, res) {
-    await SupplierService.changeOrderStatus(req.params.orderId, 'delivered');
-    return res.redirect('/supplier/orders');
+    try {
+      await SupplierService.changeOrderStatus(req.params.orderId, 'delivered');
+      return res.redirect('/supplier/orders');
+    }
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -103,14 +105,19 @@ export default class Supplier {
    * @param {httpResponse} res
    */
   static async sendPatientInformation(req, res) {
-    const patient = await PatientService.findPatientById(req.params.patientId);
-    return renderPageWithMessage(
-      req,
-      res,
-      200,
-      templatePaths.supplier.patientInformation,
-      null,
-      patient
-    );
+    try {
+      const patient = await PatientService.findById(req.params.patientId);
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.supplier.patientInformation,
+        null,
+        patient
+      );
+    }
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 }

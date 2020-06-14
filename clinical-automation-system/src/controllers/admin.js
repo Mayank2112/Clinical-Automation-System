@@ -25,8 +25,13 @@ export default class Admin {
    * @param {httResponse} res
    */
   static async redirectDoctorRequest(req, res) {
-    const doctors = await DoctorService.findDoctorByStatus('pending');
-    return renderPageWithMessage(req, res, 200, templatePaths.admin.doctorRequest, null, doctors);
+    try {
+      const doctors = await DoctorService.findByStatus('pending');
+      return renderPageWithMessage(req, res, 200, templatePaths.admin.doctorRequest, null, doctors);
+    }
+    catch (err) {
+      return renderPageWithMessage(req, res, 200, templatePaths.admin.doctorRequest, err.message);
+    }
   }
 
   /**
@@ -36,12 +41,17 @@ export default class Admin {
    */
   static async configureDoctor(req, res) {
     const doctorOperation = {
-      approved: DoctorService.approveDoctor,
-      rejected: DoctorService.deleteDoctor
+      approved: DoctorService.approve,
+      rejected: DoctorService.delete
     };
 
-    if (doctorOperation[req.body.status]) {
-      await doctorOperation[req.body.status](req.body.doctorEmail);
+    try {
+      if (doctorOperation[req.body.status]) {
+        await doctorOperation[req.body.status](req.body.doctorEmail);
+      }
+    }
+    catch (err) {
+      return res.send(err.message);
     }
     return res.redirect('/admin/doctor-request');
   }
@@ -52,15 +62,26 @@ export default class Admin {
    * @param {httResponse} res
    */
   static async redirectSupplierRequest(req, res) {
-    const suppliers = await SupplierService.findSupplierByStatus('pending');
-    return renderPageWithMessage(
-      req,
-      res,
-      200,
-      templatePaths.admin.supplierRequest,
-      null,
-      suppliers
-    );
+    try {
+      const suppliers = await SupplierService.findByStatus('pending');
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.admin.supplierRequest,
+        null,
+        suppliers
+      );
+    }
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.admin.supplierRequest,
+        err.message
+      );
+    }
   }
 
   /**
@@ -70,14 +91,19 @@ export default class Admin {
    */
   static async configureSupplier(req, res) {
     const supplierOperation = {
-      approved: SupplierService.approveSupplier,
-      rejected: SupplierService.deleteSupplier
+      approved: SupplierService.approve,
+      rejected: SupplierService.delete
     };
 
-    if (supplierOperation[req.body.status]) {
-      await supplierOperation[req.body.status](req.body.supplierEmail);
+    try {
+      if (supplierOperation[req.body.status]) {
+        await supplierOperation[req.body.status](req.body.supplierEmail);
+      }
+      return res.redirect('/admin/supplier-request');
     }
-    return res.redirect('/admin/supplier-request');
+    catch (err) {
+      return res.send(err.message);
+    }
   }
 
   /**
@@ -103,8 +129,8 @@ export default class Admin {
     const medicine = req.body;
     medicine.name = req.body.medicineName;
 
-    const result = await AdminService.addNewMedicine(medicine);
-    if (result) {
+    try {
+      await AdminService.addNewMedicine(medicine);
       return renderPageWithMessage(
         req,
         res,
@@ -113,12 +139,14 @@ export default class Admin {
         'Added successfully'
       );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      403,
-      templatePaths.admin.addMedicine,
-      'Medicine already available at store'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        403,
+        templatePaths.admin.addMedicine,
+        'Medicine already available at store'
+      );
+    }
   }
 }

@@ -13,9 +13,8 @@ export default class Register {
   static async doctor(req, res) {
     const doctor = req.body;
     doctor.dateOfBirth = new Date(req.body.dateOfBirth).getTime();
-    const result = await DoctorService.createDoctor(doctor);
-
-    if (result) {
+    try {
+      await DoctorService.add(doctor);
       return renderPageWithMessage(
         req,
         res,
@@ -24,13 +23,15 @@ export default class Register {
         `${doctor.username} registered successfully. Login to continue`
       );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      400,
-      templatePaths.user.register,
-      'Username or email is already in use'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        400,
+        templatePaths.user.register,
+        err.message
+      );
+    }
   }
 
   /**
@@ -41,9 +42,8 @@ export default class Register {
   static async patient(req, res) {
     const patient = req.body;
     patient.dateOfBirth = new Date(req.body.dateOfBirth).getTime();
-    const result = await PatientService.createPatient(patient);
-
-    if (result) {
+    try {
+      await PatientService.add(patient);
       return renderPageWithMessage(
         req,
         res,
@@ -52,13 +52,15 @@ export default class Register {
         `${patient.username} registered successfully. Login to continue`
       );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      400,
-      templatePaths.user.register,
-      'Username or email is already in use'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        400,
+        templatePaths.user.register,
+        'Username or email is already in use'
+      );
+    }
   }
 
   /**
@@ -68,9 +70,8 @@ export default class Register {
    */
   static async supplier(req, res) {
     const supplier = req.body;
-    const result = await SupplierService.createSupplier(supplier);
-
-    if (result) {
+    try {
+      await SupplierService.add(supplier);
       return renderPageWithMessage(
         req,
         res,
@@ -79,12 +80,14 @@ export default class Register {
         `${supplier.username} registered successfully. Login to continue`
       );
     }
-    return renderPageWithMessage(
-      req,
-      res,
-      400,
-      templatePaths.user.register,
-      'Username or email is already in use'
-    );
+    catch (err) {
+      return renderPageWithMessage(
+        req,
+        res,
+        400,
+        templatePaths.user.register,
+        err.message
+      );
+    }
   }
 }
