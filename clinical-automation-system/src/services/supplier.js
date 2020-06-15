@@ -19,7 +19,9 @@ export default class SupplierService {
       status: 'registered'
     })
       .catch(err => {
-        throw new Error(`Unable to register supplier due to ${err.message}`);
+        throw new Error(
+          `Unable to register supplier due to ${err.message} Email is already in use`
+        );
       });
   }
   /**
@@ -57,9 +59,13 @@ export default class SupplierService {
    * @param {Object} supplier
    */
   static addDetails(supplier) {
-    supplier.status = 'pending';
-    return Supplier.update(
-      supplier,
+    const { companyName, companyAddress } = supplier;
+    const status = 'pending';
+    return Supplier.update({
+      companyName,
+      companyAddress,
+      status
+    },
       {
         where: {
           email: supplier.email

@@ -22,7 +22,9 @@ export default class DoctorService {
       password: hashSync(doctor.password, 10)
     })
       .catch(err => {
-        throw new Error(`Unable to register doctor due to ${err.message}`);
+        throw new Error(
+          `Unable to register doctor due to ${err.message}, Email is already in use`
+        );
       });
   }
 
@@ -65,9 +67,15 @@ export default class DoctorService {
    * @param {Object} doctor
    */
   static addDetails(doctor) {
-    doctor.status = 'pending';
-    return Doctor.update(
-      doctor,
+    const { degree, startTime, endTime, experienceFrom } = doctor;
+    const status = 'pending';
+    return Doctor.update({
+      degree,
+      startTime,
+      endTime,
+      experienceFrom,
+      status
+    },
       {
         where: {
           email: doctor.email

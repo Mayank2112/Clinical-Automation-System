@@ -40,7 +40,7 @@ export default class Appointment {
         res,
         403,
         templatePaths.patient.appointmentRequest,
-        'Request credentials are not correct'
+        err.message
       );
     }
   }
