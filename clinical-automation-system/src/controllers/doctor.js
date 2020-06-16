@@ -187,7 +187,7 @@ export default class Doctor {
       return renderPageWithMessage(
         req,
         res,
-        200,
+        404,
         templatePaths.doctor.patientInformation,
         err.message
       );

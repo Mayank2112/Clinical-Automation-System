@@ -29,7 +29,7 @@ const checkMedicineAvailabilty = async (req, res, next) => {
       }
     );
   }
-  catch(err) {
+  catch (err) {
     res.send(err.message);
   }
 };

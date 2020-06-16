@@ -171,7 +171,7 @@ export default class Patient {
       return renderPageWithMessage(
         req,
         res,
-        200,
+        400,
         templatePaths.patient.makeOrder,
         err.message
       );
@@ -199,7 +199,7 @@ export default class Patient {
       return renderPageWithMessage(
         req,
         res,
-        200,
+        404,
         templatePaths.patient.orders,
         err.message
       );

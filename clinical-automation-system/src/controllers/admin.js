@@ -30,7 +30,7 @@ export default class Admin {
       return renderPageWithMessage(req, res, 200, templatePaths.admin.doctorRequest, null, doctors);
     }
     catch (err) {
-      return renderPageWithMessage(req, res, 200, templatePaths.admin.doctorRequest, err.message);
+      return renderPageWithMessage(req, res, 404, templatePaths.admin.doctorRequest, err.message);
     }
   }
 
@@ -77,7 +77,7 @@ export default class Admin {
       return renderPageWithMessage(
         req,
         res,
-        200,
+        404,
         templatePaths.admin.supplierRequest,
         err.message
       );
@@ -143,7 +143,7 @@ export default class Admin {
       return renderPageWithMessage(
         req,
         res,
-        403,
+        400,
         templatePaths.admin.addMedicine,
         'Medicine already available at store'
       );

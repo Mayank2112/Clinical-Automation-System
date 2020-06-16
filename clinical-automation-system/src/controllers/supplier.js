@@ -77,7 +77,7 @@ export default class Supplier {
       return renderPageWithMessage(
         req,
         res,
-        200,
+        404,
         templatePaths.supplier.orders,
         err.message
       );
