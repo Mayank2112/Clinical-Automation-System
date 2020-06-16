@@ -1,12 +1,14 @@
 import express, { urlencoded, json } from 'express';
 import session from 'express-session';
 import { join } from 'path';
-import serverConfig from '../config/server';
 import router from './routes';
 import { passportSetup } from './lib/passport';
 
+const env = process.env.NODE_ENV || 'development';
+const { server } = require('../config/' + env);
+
 const app = express();
-const { port } = serverConfig;
+const { port } = server;
 
 // setup for parsing data
 app.use(urlencoded({ extended: true }));
@@ -16,12 +18,12 @@ app.use(json());
 const cookieObject = {
   secure: false,
   httpOnly: true,
-  maxAge: serverConfig.cookieTime
+  maxAge: server.cookieTime
 };
 
 // express session middleware setup
 app.use(session({
-  secret: serverConfig.cookieSecret,
+  secret: server.cookieSecret,
   resave: false,
   saveUninitialized: false,
   cookie: cookieObject

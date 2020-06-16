@@ -5,14 +5,14 @@ import { basename as _basename, join } from 'path';
 import Sequelize from 'sequelize';
 const basename = _basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require('../../config/' + env);
+const { database } = require('../../config/' + env);
 const db = {};
 
 let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+if (database.use_env_variable) {
+  sequelize = new Sequelize(process.env[database.use_env_variable], database);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(database.name, database.username, database.password, database);
 }
 
 readdirSync(__dirname)

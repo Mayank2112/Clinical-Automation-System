@@ -1,8 +1,15 @@
 {
-  "username": "deqode",
-  "password": "deq@123",
-  "database": "clinical-automation-system",
-  "host": "localhost",
-  "dialect": "postgres",
-  "logging": false
+  "database": {
+    "username": "deqode",
+    "password": "deq@123",
+    "database": "clinical-automation-system",
+    "host": "localhost",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "server": {
+    "port": 3000,
+    "cookieTime": 600000,
+    "cookieSecret": "this-is-a-secret-key"
+  }
 }
