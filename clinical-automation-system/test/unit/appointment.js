@@ -1,0 +1,89 @@
+import moment from 'moment';
+import { expect } from 'chai';
+import { v4 } from 'uuid';
+import AppointmentService from '../../src/services/appointment';
+
+describe('Appointment functionality', () => {
+  const appointment = {
+    patientId: v4(),
+    doctorId: v4(),
+    subject: 'Fever',
+    description: 'with cough and cold',
+    date: moment('06-09-2020', 'MM-DD-YYYY'),
+    status: 'pending',
+    time: '10'
+  };
+
+  it('Should create appointment and return sequelize appointment object', async () => {
+    const result = await AppointmentService.create(appointment);
+    expect(result).to.be.a('Object')
+      .to.have.property('dataValues');
+    expect(result.dataValues)
+      .to.be.a('Object')
+      .to.include({ patientId: appointment.patientId });
+    appointment.id = result.dataValues.id;
+  });
+
+  it('Should change appointment status to confirmed', async () => {
+    const result = await AppointmentService.changeStatus(appointment.id, 'pending', 'confirmed');
+    expect(result).to.be.a('Array');
+  });
+
+  it('Should return empty array if previous status is not valid', async () => {
+    const result = await AppointmentService.changeStatus(appointment.id, 'pending', 'confirmed');
+    expect(result).to.be.a('Array');
+  });
+
+  it('Should return appointment object if time is correct', async () => {
+    const result = await AppointmentService.findByTime(
+      appointment.doctorId,
+      appointment.date,
+      appointment.time
+    );
+
+    expect(result).to.be.a('Array')
+      .to.be.lengthOf(1);
+    expect(result[0]).to.be.a('Object')
+      .to.include({ id: appointment.id });
+  });
+
+  it('Should return empty Array if no appointment at that time', async () => {
+    const result = await AppointmentService.findByTime(appointment.doctorId, appointment.date, 9);
+    expect(result).to.be.a('Array')
+      .to.be.lengthOf(0);
+  });
+
+  it('Should return list of appointments of patient', async () => {
+    const result = await AppointmentService.findByPatient(appointment.patientId);
+    expect(result).to.be.a('Array');
+    expect(result[0]).to.include({ id: appointment.id });
+  });
+
+  it('Should return empty array if patient has no appointments', async () => {
+    const result = await AppointmentService.findByPatient(v4());
+    expect(result).to.be.a('Array')
+      .to.be.lengthOf(0);
+  });
+
+  it('Should return list of appointments of doctor', async () => {
+    const result = await AppointmentService.findByDoctor(appointment.doctorId, 'confirmed');
+    expect(result).to.be.a('Array');
+    expect(result[0]).to.include({ id: appointment.id });
+  });
+
+  it('Should return error if doctor has no appointments', async () => {
+    let result;
+    try {
+    result = await AppointmentService.findByDoctor(v4(), 'approved');
+    }
+    catch(err) {
+      result = err;
+    }
+    expect(result).to.be.a('Error');
+  });
+
+  it('Should delete appointment and return 1', async () => {
+    const result = await AppointmentService.delete(appointment.id);
+    expect(result).to.be.equal(1);
+  });
+});
