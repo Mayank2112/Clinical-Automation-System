@@ -32,6 +32,17 @@ describe('Patient functionalities', () => {
       patient.id = result.dataValues.id;
     });
 
+    it('Should return error if try to register with already registered email', async () => {
+      let result;
+      try {
+        result = await PatientService.add(patient);
+      }
+      catch (err) {
+        result = err;
+      }
+      expect(result).to.be.a('Error');
+    });
+
     it('Should return patient type', async () => {
       const result = await getUserDetails(patient.email);
       expect(result).to.be.a('Object')
@@ -123,12 +134,36 @@ describe('Patient functionalities', () => {
         .to.include({ name: order.medicineName });
     });
 
+    it('Should return error if medicine is not available', async () => {
+      let result;
+      try {
+        result = await PatientService.findMedicine();
+      }
+      catch (err) {
+        result = err;
+      }
+      expect(result).to.be.a('Error');
+    });
+
     it('Should create order entry in database', async () => {
       order.patientId = patient.id;
       const result = await PatientService.addOrder(order);
       expect(result).to.be.a('Object')
         .to.have.property('dataValues');
       expect(result.dataValues).to.be.a('Object');
+    });
+
+    it('Should return error if order does not contain medicine', async () => {
+      const orderDetails = { order };
+      orderDetails.medicineName = null;
+      let result;
+      try {
+        result = await PatientService.addOrder(orderDetails);
+      }
+      catch (err) {
+        result = err;
+      }
+      expect(result).to.be.a('Error');
     });
 
     it('Should return list of patient orders', async () => {

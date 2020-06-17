@@ -24,6 +24,19 @@ describe('Appointment functionality', () => {
     appointment.id = result.dataValues.id;
   });
 
+  it('Should return error if patientId is not given', async () => {
+    const appointmentData = { appointment };
+    appointmentData.patientId = null;
+    let result;
+    try {
+      result = await AppointmentService.create(appointmentData);
+    }
+    catch (err) {
+      result = err;
+    }
+    expect(result).to.be.a('Error');
+  });
+
   it('Should change appointment status to confirmed', async () => {
     const result = await AppointmentService.changeStatus(appointment.id, 'pending', 'confirmed');
     expect(result).to.be.a('Array');
@@ -32,6 +45,19 @@ describe('Appointment functionality', () => {
   it('Should return empty array if previous status is not valid', async () => {
     const result = await AppointmentService.changeStatus(appointment.id, 'pending', 'confirmed');
     expect(result).to.be.a('Array');
+  });
+
+  it('Should return error if status is not valid or not in enum', async () => {
+    const appointmentData = { appointment };
+    appointmentData.patientId = null;
+    let result;
+    try {
+      result = await AppointmentService.changeStatus(appointment.id, 'confirmed', 'done');
+    }
+    catch (err) {
+      result = err;
+    }
+    expect(result).to.be.a('Error');
   });
 
   it('Should return appointment object if time is correct', async () => {
@@ -53,6 +79,17 @@ describe('Appointment functionality', () => {
       .to.be.lengthOf(0);
   });
 
+  it('Should return error if patientId is not given', async () => {
+    let result;
+    try {
+      result = await AppointmentService.findByTime();
+    }
+    catch (err) {
+      result = err;
+    }
+    expect(result).to.be.a('Error');
+  });
+
   it('Should return list of appointments of patient', async () => {
     const result = await AppointmentService.findByPatient(appointment.patientId);
     expect(result).to.be.a('Array');
@@ -61,6 +98,25 @@ describe('Appointment functionality', () => {
 
   it('Should return empty array if patient has no appointments', async () => {
     const result = await AppointmentService.findByPatient(v4());
+    expect(result).to.be.a('Array')
+      .to.be.lengthOf(0);
+  });
+
+  it('Should return error if patientId is not given', async () => {
+    const appointmentData = { appointment };
+    appointmentData.patientId = null;
+    let result;
+    try {
+      result = await AppointmentService.findByPatient(appointmentData);
+    }
+    catch (err) {
+      result = err;
+    }
+    expect(result).to.be.a('Error');
+  });
+
+  it('Should return empty array if patient has no history is not given', async () => {
+    const result = await AppointmentService.findWithPatientHistory(appointment.patientId);
     expect(result).to.be.a('Array')
       .to.be.lengthOf(0);
   });
@@ -74,9 +130,9 @@ describe('Appointment functionality', () => {
   it('Should return error if doctor has no appointments', async () => {
     let result;
     try {
-    result = await AppointmentService.findByDoctor(v4(), 'approved');
+      result = await AppointmentService.findByDoctor(v4(), 'approved');
     }
-    catch(err) {
+    catch (err) {
       result = err;
     }
     expect(result).to.be.a('Error');
@@ -85,5 +141,16 @@ describe('Appointment functionality', () => {
   it('Should delete appointment and return 1', async () => {
     const result = await AppointmentService.delete(appointment.id);
     expect(result).to.be.equal(1);
+  });
+
+  it('Should delete appointment and return 1', async () => {
+    let result;
+    try {
+    result = await AppointmentService.delete();
+    }
+    catch (err) {
+      result = err;
+    }
+    expect(result).to.be.a('Error');
   });
 });

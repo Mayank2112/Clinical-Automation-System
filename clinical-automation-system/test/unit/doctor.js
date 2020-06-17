@@ -82,12 +82,24 @@ describe('Doctor functionalities', () => {
       .to.be.lengthOf(0);
   });
 
+  it('Should return error if status is not given', async () => {
+    let result;
+    try {
+      result = await DoctorService.findByStatus();
+    }
+    catch (err) {
+      result = err;
+    }
+    expect(result).to.be.a('Error');
+  });
+
   it('Should return doctor with given doctor id ', async () => {
     const result = await DoctorService.findById(doctor.id);
     expect(result).to.be.a('Object')
       .to.include({ id: doctor.id })
       .to.have.property('email');
   });
+
 
   it('Should change doctor status to approved', async () => {
     const result = await DoctorService.approve(doctor.email);

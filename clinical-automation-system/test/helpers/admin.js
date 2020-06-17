@@ -1,6 +1,6 @@
-import db from '../../src/models';
 import { v4 } from 'uuid';
 import { hashSync } from 'bcryptjs';
+import db from '../../src/models';
 
 const { Admin, sequelize } = db;
 
