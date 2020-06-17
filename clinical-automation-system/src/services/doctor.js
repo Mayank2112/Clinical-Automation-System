@@ -67,13 +67,14 @@ export default class DoctorService {
    * @param {Object} doctor
    */
   static addDetails(doctor) {
-    const { degree, startTime, endTime, experienceFrom } = doctor;
+    const { degree, startTime, endTime, experienceFrom, appointmentFee } = doctor;
     const status = 'pending';
     return Doctor.update({
       degree,
       startTime,
       endTime,
       experienceFrom,
+      appointmentFee,
       status
     },
       {
