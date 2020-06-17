@@ -6,6 +6,8 @@
   "scripts": {
     "premigration": "babel src -d dist",
     "migration": "npx sequelize-cli db:migrate",
+    "testMigration": "NODE_ENV=test npx sequelize-cli db:migrate",
+    "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text mocha --exit --require @babel/register --require regenerator-runtime ./test/**/*.js",
     "build": "babel src --out-dir build",
     "server": "nodemon ./bin/prod",
     "start": "nodemon ./bin/dev"
