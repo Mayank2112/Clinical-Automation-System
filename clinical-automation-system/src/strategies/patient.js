@@ -5,8 +5,11 @@ import PatientService from '../services/patient';
 export default new Strategy(
   async (username, password, done) => {
     try {
-      await PatientService.verify(username, password);
-      return done(null, { username });
+      const result = await PatientService.verify(username, password);
+      if (result) {
+        return done(null, { username });
+      }
+      return done(null, false);
     }
     catch (err) {
       return done(null, false);
