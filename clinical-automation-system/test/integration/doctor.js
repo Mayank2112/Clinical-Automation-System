@@ -50,7 +50,7 @@ describe('Doctor Authentication', () => {
   };
 
   after('Delete newly created doctor in testing', () => {
-   DoctorService.delete(doctor.email)
+    DoctorService.delete(doctor.email)
       .then(result => {
         expect(result).to.be.equal(1);
       });
@@ -96,32 +96,83 @@ describe('Doctor Authentication', () => {
           done();
         });
     });
-  });
 
-  /**
-   * Check Login functionality
-   */
-  describe('Verify Doctor', () => {
-    it('Redirect to dashboard with status 200 if login successfully', done => {
-      chai.request(app)
+    /**
+     * Check Login functionality
+     */
+    describe('Verify Doctor', () => {
+      it('Redirect to dashboard with status 200 if login successfully', done => {
+        chai.request(app)
+          .post('/login')
+          .send({ username: doctor.email, password: doctor.password, profession: 'doctor' })
+          .end((err, res) => {
+            expect(res).to.have.status(200)
+              .to.redirectTo(/\/doctor\/dashboard$/);
+            done();
+          });
+      });
+
+      it('Redirect to login with status 403 if not login successfully', done => {
+        chai.request(app)
+          .post('/login')
+          .send({ username: 'mayank1234', password: '123456789', profession: 'doctor' })
+          .end((err, res) => {
+            expect(res).to.have.status(403)
+              .to.redirectTo(/\/login$/);
+            expect(res.text).to.include('Invalid Login credentials');
+            done();
+          });
+      });
+    });
+
+    it('Should get empty list of appointment request with message No Appoinments', done => {
+      const agent = chai.request.agent(app);
+      agent
         .post('/login')
         .send({ username: doctor.email, password: doctor.password, profession: 'doctor' })
         .end((err, res) => {
-          expect(res).to.have.status(200)
-            .to.redirectTo(/\/doctor\/dashboard$/);
-          done();
+          agent
+            .get('/doctor/appointment-request')
+            .end((err, res) => {
+              expect(res).to.have.status(200);
+              expect(res.text).to.include('No Appointments');
+              agent.close();
+              done();
+            });
         });
     });
 
-    it('Redirect to login with status 403 if not login successfully', done => {
-      chai.request(app)
+    it('Should get empty list of appointment if doctor has no appointment', done => {
+      const agent = chai.request.agent(app);
+      agent
         .post('/login')
-        .send({ username: 'mayank1234', password: '123456789', profession: 'doctor' })
+        .send({ username: doctor.email, password: doctor.password, profession: 'doctor' })
         .end((err, res) => {
-          expect(res).to.have.status(403)
-            .to.redirectTo(/\/login$/);
-          expect(res.text).to.include('Invalid Login credentials');
-          done();
+          agent
+            .get('/doctor/appointment')
+            .end((err, res) => {
+              expect(res).to.have.status(200);
+              expect(res.text).to.include('No Appointments');
+              agent.close();
+              done();
+            });
+        });
+    });
+
+    it('Should get personal details of doctor', done => {
+      const agent = chai.request.agent(app);
+      agent
+        .post('/login')
+        .send({ username: doctor.email, password: doctor.password, profession: 'doctor' })
+        .end((err, res) => {
+          agent
+            .get('/doctor/details')
+            .end((err, res) => {
+              expect(res).to.have.status(200);
+              expect(res.text).to.include(doctor.email);
+              agent.close();
+              done();
+            });
         });
     });
   });

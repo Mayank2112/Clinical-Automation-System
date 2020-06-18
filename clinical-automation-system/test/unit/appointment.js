@@ -146,7 +146,7 @@ describe('Appointment functionality', () => {
   it('Should delete appointment and return 1', async () => {
     let result;
     try {
-    result = await AppointmentService.delete();
+      result = await AppointmentService.delete();
     }
     catch (err) {
       result = err;

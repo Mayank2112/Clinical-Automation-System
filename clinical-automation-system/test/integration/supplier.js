@@ -27,7 +27,7 @@ describe('Supplier Authentication', () => {
   /**
    * Check Registration functionality
    */
-  describe('Adding a new supplier', () => {
+  describe('Supplier functionality', () => {
     it('Should return message registered successfully with status 201 if supplier register with new credentials', done => {
       chai.request(app)
         .post('/register')
@@ -85,12 +85,58 @@ describe('Supplier Authentication', () => {
           done();
         });
     });
-  });
 
-  /**
-   * Check Logout functionality
-   */
-  describe('Logout supplier', () => {
+    it('Should send supplier personal details', done => {
+      const agent = chai.request.agent(app);
+      agent
+        .post('/login')
+        .send({ username: supplier.email, password: supplier.password, profession: 'supplier' })
+        .end((err, res) => {
+          agent
+            .get('/supplier/details')
+            .end((err, res) => {
+              expect(res).to.have.status(200);
+              expect(res.text).to.include(supplier.email);
+              agent.close();
+              done();
+            });
+        });
+    });
+
+    it('Should send supplier dashboard page', done => {
+      const agent = chai.request.agent(app);
+      agent
+        .post('/login')
+        .send({ username: supplier.email, password: supplier.password, profession: 'supplier' })
+        .end((err, res) => {
+          agent
+            .get('/supplier/dashboard')
+            .end((err, res) => {
+              expect(res).to.have.status(200);
+              expect(res.text).to.include(`Welcome ${supplier.username}`);
+              agent.close();
+              done();
+            });
+        });
+    });
+
+    it('Should send list of orders', done => {
+      const agent = chai.request.agent(app);
+      agent
+        .post('/login')
+        .send({ username: supplier.email, password: supplier.password, profession: 'supplier' })
+        .end((err, res) => {
+          agent
+            .get('/supplier/orders')
+            .end((err, res) => {
+              expect(res).to.have.status(200);
+              expect(res.text).to.include('View Orders');
+              agent.close();
+              done();
+            });
+        });
+    });
+
     it('Should redirect to homepage with status 204 if logout successfully', done => {
       chai.request(app)
         .get('/logout')
