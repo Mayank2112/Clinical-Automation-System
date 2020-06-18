@@ -32,7 +32,7 @@ describe('Check Server Connectivity', () => {
   });
 });
 
-describe('Docto Authentication', () => {
+describe('Doctor Authentication', () => {
   const doctor = {
     username: 'Mayank Parikh',
     dateOfBirth: moment('12-21-1998', 'MM-DD-YYYY'),

@@ -11,8 +11,8 @@ describe('Supplier Authentication', () => {
     username: 'Mayank Supplier',
     companyName: 'Parikh Pharmaceuticals',
     companyAddress: '36-A Dawa Bajar',
-    mobileNumber: '9826942152',
-    email: 'mayank@supplier.com',
+    mobileNumber: '9826942151',
+    email: 'supplier@gmail.com',
     password: '123456789',
     profession: 'supplier'
   };
