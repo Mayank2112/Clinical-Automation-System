@@ -5,8 +5,11 @@ import SupplierService from '../services/supplier';
 export default new Strategy(
   async (username, password, done) => {
     try {
-      await SupplierService.verify(username, password);
-      return done(null, { username });
+      const result = await SupplierService.verify(username, password);
+      if (result) {
+        return done(null, { username });
+      }
+      return done(null, false);
     }
     catch (err) {
       return done(null, false);
