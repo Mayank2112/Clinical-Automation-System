@@ -17,8 +17,24 @@
   <br>
   <h2>Login</h2>
   <form action="/login" method="post">
-    Email : <input type="email" name="username" required="required" placeholder="Enter email Id"><br>
-    Password : <input type="password" name="password" required="required"><br>
+    <table border="10px">
+      <tr>
+        <td>
+          Email
+        </td>
+        <td>
+          <input type="email" name="username" required="required" placeholder="Enter email Id">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Password
+        </td>
+        <td>
+          <input type="password" name="password" required="required">
+        </td>
+      </tr>
+    </table>
     <div style='color: red;'>
       <% if (message) { %>
       <%= message %>

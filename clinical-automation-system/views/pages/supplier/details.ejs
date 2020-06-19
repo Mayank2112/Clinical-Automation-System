@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>CAS | Personal Details</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -29,20 +29,66 @@
     <br>
     <h2>My Personal Details</h2>
     <br>
-
-    Name : <%= details.name %> <br>
-    Email : <%= details.email %> <br>
-    <% if (details.companyName && details.companyAddress) { %>
-    Company Name: <%= details.companyName %> <br>
-    Company Address: <%= details.companyAddress %> <br>
-    <% } else { %>
-    <form action="/supplier/details" method="POST">
-      Company Name : <input type="text" name="companyName" required="required"><br>
-      Company Address : <input type="text" name="companyAddress" required="required"><br>
-      <br>
-      <button type="submit">Submit</button>
-    </form>
-    <% } %>
+    <table>
+      <tr>
+        <td>
+          Name
+        </td>
+        <td>
+          <%= details.name %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Email
+        </td>
+        <td>
+          <%= details.email %>
+        </td>
+      </tr>
+      <% if (details.companyName && details.companyAddress) { %>
+      <tr>
+        <td>
+          Company Name
+        </td>
+        <td>
+          <%= details.companyName %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Company Address
+        </td>
+        <td>
+          <%= details.companyAddress %>
+        </td>
+      </tr>
+      <% } else { %>
+      <form action="/supplier/details" method="POST">
+        <tr>
+          <td>
+            Company Name
+          </td>
+          <td>
+            <input type="text" name="companyName" required="required">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Company Address
+          </td>
+          <td>
+            <input type="text" name="companyAddress" required="required">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button type="submit">Submit</button>
+          </td>
+        </tr>
+      </form>
+      <% } %>
+    </table>
   </div>
 </body>
 
