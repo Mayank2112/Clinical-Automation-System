@@ -82,7 +82,7 @@ export default class UserMiddleware {
       if (authentication[req.body.profession]) {
         return authentication[req.body.profession](req, res);
       }
-      return this.setLoginFailure(req, res);
+      return UserMiddleware.setLoginFailure(req, res);
     }
     catch (err) {
       res.status(500);

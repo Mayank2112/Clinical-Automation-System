@@ -24,11 +24,11 @@ export default class SupplierService {
         );
       });
   }
+
   /**
    * Find supplier with given emailId in database
    * @param {String} email
    */
-
   static find(email) {
     return Supplier.findAll({
       where: { email }
@@ -39,6 +39,22 @@ export default class SupplierService {
       });
   }
 
+  /**
+    * Find supplier with given id in database
+    * @param {String} id
+    */
+  static findById(id) {
+    return Supplier.findAll({
+      where: { id }
+    })
+      .then(supplier => {
+        supplier[0].dataValues.password = 'Hidden';
+        return supplier[0].dataValues
+      })
+      .catch(() => {
+        throw new Error('Supplier not exist');
+      });
+  }
   /**
    * Checks supplier with given emailId and password is valid or not
    * @param {String} email

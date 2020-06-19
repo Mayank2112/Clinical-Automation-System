@@ -4,6 +4,7 @@ import DoctorService from '../services/doctor';
 import PatientService from '../services/patient';
 import AppointmentService from '../services/appointment';
 import renderPageWithMessage from '../helpers/responseRenderer';
+import SupplierService from '../services/supplier';
 
 export default class Patient {
   /**
@@ -178,6 +179,52 @@ export default class Patient {
         templatePaths.patient.makeOrder,
         err.message
       );
+    }
+  }
+
+  /**
+   * Send details of doctor
+   * @param {httpRequest} req
+   * @param {httpResponse} res
+   */
+  static async sendDoctorInformation(req, res) {
+    try {
+      const doctor = await DoctorService.findById(req.params.doctorId);
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.patient.doctorInformation,
+        null,
+        doctor
+      );
+    }
+    catch (err) {
+      res.status(500);
+      return res.send(err.message);
+    }
+  }
+
+  /**
+   * Send details of supplier
+   * @param {httpRequest} req
+   * @param {httpResponse} res
+   */
+  static async sendSupplierInformation(req, res) {
+    try {
+      const supplier = await SupplierService.findById(req.params.supplierId);
+      return renderPageWithMessage(
+        req,
+        res,
+        200,
+        templatePaths.patient.supplierInformation,
+        null,
+        supplier
+      );
+    }
+    catch (err) {
+      res.status(500);
+      return res.send(err.message);
     }
   }
 

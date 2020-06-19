@@ -34,6 +34,12 @@ router.post('/order-medicine', checkMedicineAvailabilty, Patient.createOrder);
 // Route to get order details
 router.get('/orders', Patient.sendOrderDetails);
 
+// Route to get information of doctors
+router.get('/doctor-information/:doctorId', Patient.sendDoctorInformation);
+
+// Route to get information of suppliers
+router.get('/supplier-information/:supplierId', Patient.sendSupplierInformation);
+
 // Invalid routes or methods
 router.all('/', invalidRoutes);
 

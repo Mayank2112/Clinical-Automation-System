@@ -15,7 +15,7 @@ export default class Appointment {
     try {
       if (req.body.doctorId && req.body.subject && !isNaN(req.body.time)) {
         const doctor = await DoctorService.findById(req.body.doctorId);
-        if (req.body.time >= doctor.startTime && req.body.time <= doctor.endTime) {
+        if (Number(req.body.time) >= Number(doctor.startTime) && Number(req.body.time) <= Number(doctor.endTime)) {
           return next();
         }
         return renderPageWithMessage(
@@ -52,12 +52,15 @@ export default class Appointment {
    * @param {Function} next
    */
   static async checkDoctorAvailability(req, res, next) {
-    const time = Number(req.body.time) % 100;
     try {
       const doctor = await DoctorService.findById(req.body.doctorId);
 
       if (doctor) {
-        const appointment = await AppointmentService.findByTime(req.body.doctorId, moment().format('l'), time);
+        const appointment = await AppointmentService.findByTime(
+          req.body.doctorId,
+          moment().format('l'),
+          req.body.time
+        );
 
         if (appointment.length) {
           return renderPageWithMessage(
