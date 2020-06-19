@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import UserMiddleware from '../middlewares/user';
-import User from '../controllers/user';
+import middlewares from '../middlewares';
+import controllers from '../controllers';
 import invalidRoutes from './invalidRoutes';
 
+const { UserMiddleware } = middlewares;
+const { User } = controllers;
 const router = Router();
 
 // Routing for base URL

@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import UserMiddleware from '../middlewares/user';
-import Appointment from '../middlewares/appointment';
-import checkMedicineAvailabilty from '../middlewares/patient';
+import middlewares from '../middlewares';
+import controllers from '../controllers';
 import invalidRoutes from './invalidRoutes';
-import Patient from '../controllers/patient';
 
+const { UserMiddleware, Appointment, checkMedicineAvailabilty } = middlewares;
+const { Patient } = controllers;
 const router = Router();
 
 // Dashborad route to access dashboard after login

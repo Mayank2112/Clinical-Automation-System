@@ -1,9 +1,10 @@
 import { templatePaths } from 'config';
 import authentication from './authentication';
-import User from '../controllers/user';
-import Register from '../controllers/registration';
+import controllers from '../controllers';
 import regEx from '../helpers/regEx';
 import renderPageWithMessage from '../helpers/responseRenderer';
+
+const { User, Register } = controllers;
 
 export default class UserMiddleware {
   /**

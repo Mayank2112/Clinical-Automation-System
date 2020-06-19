@@ -1,8 +1,9 @@
 import moment from 'moment';
 import { templatePaths } from 'config';
-import DoctorService from '../services/doctor';
-import AppointmentService from '../services/appointment';
+import services from '../services';
 import renderPageWithMessage from '../helpers/responseRenderer';
+
+const { DoctorService, AppointmentService } = services;
 
 export default class Appointment {
   /**
@@ -15,7 +16,8 @@ export default class Appointment {
     try {
       if (req.body.doctorId && req.body.subject && !isNaN(req.body.time)) {
         const doctor = await DoctorService.findById(req.body.doctorId);
-        if (Number(req.body.time) >= Number(doctor.startTime) && Number(req.body.time) <= Number(doctor.endTime)) {
+        if (Number(req.body.time) >= Number(doctor.startTime)
+          && Number(req.body.time) <= Number(doctor.endTime)) {
           return next();
         }
         return renderPageWithMessage(

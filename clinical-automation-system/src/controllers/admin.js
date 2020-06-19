@@ -1,8 +1,8 @@
 import { templatePaths } from 'config';
-import AdminService from '../services/admin';
-import DoctorService from '../services/doctor';
-import SupplierService from '../services/supplier';
+import services from '../services';
 import renderPageWithMessage from '../helpers/responseRenderer';
+
+const { AdminService, DoctorService, SupplierService } = services;
 
 export default class Admin {
   /**

@@ -1,7 +1,8 @@
 import { templatePaths } from 'config';
-import PatientService from '../services/patient';
-import SupplierService from '../services/supplier';
+import services from '../services';
 import renderPageWithMessage from '../helpers/responseRenderer';
+
+const { PatientService, SupplierService } = services;
 
 export default class Supplier {
   /**

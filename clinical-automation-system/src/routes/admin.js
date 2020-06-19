@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import UserMiddleware from '../middlewares/user';
+import middlewares from '../middlewares';
+import controllers from '../controllers';
 import invalidRoutes from './invalidRoutes';
-import Admin from '../controllers/admin';
 
+const { UserMiddleware } = middlewares;
+const { Admin } = controllers;
 const router = Router();
 
 // Dashborad route to access dashboard after login

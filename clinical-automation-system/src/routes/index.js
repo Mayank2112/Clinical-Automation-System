@@ -4,8 +4,9 @@ import admin from './admin';
 import doctor from './doctor';
 import patient from './patient';
 import supplier from './supplier';
-import LoggedIn from '../middlewares/loggedIn';
+import middlewares from '../middlewares';
 
+const { LoggedIn } = middlewares;
 const router = Router();
 
 // Routes for admin

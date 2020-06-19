@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import User from '../controllers/user';
+import controllers from '../controllers';
 
+const { User } = controllers;
 const router = Router();
 
 // Invalid method operation

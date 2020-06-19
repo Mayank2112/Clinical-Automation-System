@@ -1,10 +1,9 @@
 import moment from 'moment';
 import { templatePaths } from 'config';
-import DoctorService from '../services/doctor';
-import PatientService from '../services/patient';
-import AppointmentService from '../services/appointment';
+import services from '../services';
 import renderPageWithMessage from '../helpers/responseRenderer';
-import SupplierService from '../services/supplier';
+
+const { DoctorService, PatientService, AppointmentService, SupplierService } = services;
 
 export default class Patient {
   /**
