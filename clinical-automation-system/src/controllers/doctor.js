@@ -33,6 +33,7 @@ export default class Doctor {
       return renderPageWithMessage(req, res, 200, templatePaths.doctor.details, null, details);
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }
@@ -88,12 +89,13 @@ export default class Doctor {
       return renderPageWithMessage(
         req,
         res,
-        200,
+        404,
         templatePaths.doctor.appointmentRequest,
         'No Appointments yet'
       );
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }
@@ -120,6 +122,7 @@ export default class Doctor {
       return res.redirect('/doctor/appointment-request');
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }
@@ -149,12 +152,13 @@ export default class Doctor {
       return renderPageWithMessage(
         req,
         res,
-        200,
+        404,
         templatePaths.doctor.appointment,
         'No Appointments yet'
       );
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }
@@ -212,6 +216,7 @@ export default class Doctor {
       );
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }

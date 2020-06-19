@@ -42,12 +42,13 @@ export default class Patient {
       return renderPageWithMessage(
         req,
         res,
-        200,
+        404,
         templatePaths.patient.appointmentRequest,
         'No doctor registered successfully yet'
       );
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }
@@ -89,6 +90,7 @@ export default class Patient {
       return renderPageWithMessage(req, res, 200, templatePaths.patient.details, null, patient);
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }
@@ -114,12 +116,13 @@ export default class Patient {
       return renderPageWithMessage(
         req,
         res,
-        200,
+        404,
         templatePaths.patient.appointment,
         'No Appointments yet'
       );
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }

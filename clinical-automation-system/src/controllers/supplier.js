@@ -28,6 +28,7 @@ export default class Supplier {
       return renderPageWithMessage(req, res, 200, templatePaths.supplier.details, null, supplier);
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }
@@ -95,6 +96,7 @@ export default class Supplier {
       return res.redirect('/supplier/orders');
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }
@@ -117,6 +119,7 @@ export default class Supplier {
       );
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }

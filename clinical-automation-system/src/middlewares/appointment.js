@@ -79,6 +79,7 @@ export default class Appointment {
       );
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }

@@ -51,6 +51,7 @@ export default class Admin {
       }
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
     return res.redirect('/admin/doctor-request');
@@ -102,6 +103,7 @@ export default class Admin {
       return res.redirect('/admin/supplier-request');
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }

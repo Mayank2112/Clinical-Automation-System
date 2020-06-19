@@ -85,6 +85,7 @@ export default class UserMiddleware {
       return this.setLoginFailure(req, res);
     }
     catch (err) {
+      res.status(500);
       return res.send(err.message);
     }
   }

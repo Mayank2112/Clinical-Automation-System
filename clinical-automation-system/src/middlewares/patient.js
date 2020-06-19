@@ -30,6 +30,7 @@ const checkMedicineAvailabilty = async (req, res, next) => {
     );
   }
   catch (err) {
+    res.status(500);
     res.send(err.message);
   }
 };
