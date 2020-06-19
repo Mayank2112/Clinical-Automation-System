@@ -7,7 +7,8 @@ import {
   sendDoctorList,
   makeAppointmentRequest,
   sendAppointmentList,
-  sendPersonalDetail
+  sendPersonalDetail,
+  sendDoctorInformation
 } from '../controllers/patient';
 
 const router = Router();
@@ -19,13 +20,16 @@ router.get('/dashboard', resetLoginFailure, redirectDashboard);
 router.get('/details', sendPersonalDetail);
 
 // Route for getting confirmed doctors list and make appointments
-router.get('/appointmentRequest', sendDoctorList);
+router.get('/appointment-request', sendDoctorList);
 
 // Route for making appointment requests to doctors
-router.post('/appointmentRequest', checkAppointmentData, checkDoctorAvailability, makeAppointmentRequest);
+router.post('/appointment-request', checkAppointmentData, checkDoctorAvailability, makeAppointmentRequest);
 
 // Route to get all appointments
 router.get('/appointment', sendAppointmentList);
+
+// Route to get information of doctors
+router.get('/doctor-information/:doctorId', sendDoctorInformation);
 
 // Invalid routes or methods
 router.all('/', invalidRoutes);

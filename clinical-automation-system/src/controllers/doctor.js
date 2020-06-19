@@ -107,7 +107,7 @@ export const configureAppointmentRequest = async (req, res) => {
   if (appointmentOperation[req.body.status]) {
     await appointmentOperation[req.body.status](req.body.appointmentId, 'pending', 'confirmed');
   }
-  return res.redirect('/doctor/appointmentRequest');
+  return res.redirect('/doctor/appointment-request');
 };
 
 /**

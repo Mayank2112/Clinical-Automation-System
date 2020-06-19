@@ -36,7 +36,7 @@ export const configureDoctor = async (req, res) => {
   if (doctorOperation[req.body.status]) {
     await doctorOperation[req.body.status](req.body.doctorEmail);
   }
-  res.redirect('/admin/doctorRequest');
+  res.redirect('/admin/doctor-request');
 };
 
 /**
@@ -63,5 +63,5 @@ export const configureSupplier = async (req, res) => {
   if (supplierOperation[req.body.status]) {
     await supplierOperation[req.body.status](req.body.supplierEmail);
   }
-  res.redirect('/admin/supplierRequest');
+  res.redirect('/admin/supplier-request');
 };

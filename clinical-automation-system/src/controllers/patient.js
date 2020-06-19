@@ -2,7 +2,7 @@ import moment from 'moment';
 import { filename } from 'config';
 import { createPatient, findPatient } from '../services/patient';
 import renderPageWithMessage from '../helpers/responseRenderer';
-import { findDoctorByStatus, findDoctor } from '../services/doctor';
+import { findDoctorByStatus, findDoctor, findDoctorById } from '../services/doctor';
 import { createAppointment, findAppointmentByPatient } from '../services/appointment';
 
 /**
@@ -99,4 +99,19 @@ export const sendAppointmentList = async (req, res) => {
     return renderPageWithMessage(res, 200, filename.patient.appointment, null, appointments);
   }
   return renderPageWithMessage(res, 200, filename.patient.appointment, 'No Appointments yet');
+};
+
+export const sendDoctorInformation = async (req, res) => {  
+  const doctor = await findDoctorById(req.params.doctorId);
+  if (doctor) {
+    return renderPageWithMessage(
+      res,
+      200,
+      filename.patient.doctorInformation,
+      null,
+      doctor
+    );
+  }
+  res.status(500);
+  return res.send(err.message);
 };
