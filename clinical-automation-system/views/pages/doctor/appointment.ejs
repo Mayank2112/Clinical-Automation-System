@@ -14,11 +14,8 @@
     <%- include('../../partials/doctor/header') %>
   </div>
 </header>
-<script>
-  const setAppointmentId = id => {
-    document.getElementById('appointmentId').value = id;
-  };
-</script>
+
+<script src="../setCredentials.js"></script>
 
 <body>
   <%- include('../../partials/doctor/approvedSidenav') -%>
@@ -26,7 +23,7 @@
   <div class='main'>
     <h1>Clinical Automation System</h1>
     <%= message %>
-    <% if(details.length) { %>
+    <% if(details && details.length) { %>
     <br>
     <h2>My Appointments</h2>
     <br>
@@ -34,9 +31,10 @@
     <form action="/doctor/appointment/patient-report" method="post">
       <table>
         <tr>
-          <td>Appointment Number</td>
-          <td><input type="text" name="appointmentId" id="appointmentId" readonly="readonly" required
-              placeholder="Select patient"></td>
+          <td>Appointment</td>
+          <td><input type="hidden" name="appointmentId" id="appointmentId" readonly="readonly" required
+              placeholder="Select patient">
+            <label id="appointment">Not Selected</label></td>
         </tr>
         <tr>
           <td>Disease</td>
@@ -53,7 +51,7 @@
     <h2>Today's Appointments</h2>
     <br>
     <br>
-    <table border="1px">
+    <table>
       <th>Patient Information</th>
       <th>Date</th>
       <th>Time</th>
@@ -62,19 +60,20 @@
       <th>Select</th>
       <% details.forEach(appointment => { %>
       <tr>
-        <td><a
-            href="/doctor/appointment/patient-information/<%= appointment.patientId%>"><%= appointment.patientId %></a>
+        <td>
+          <a href="/doctor/appointment/patient-information/<%= appointment.patientId%>">View</a>
         </td>
         <td><%= appointment.date %></td>
         <td><%= appointment.time %></td>
         <td><%= appointment.subject %></td>
         <td><%= appointment.description %></td>
         <td>
-          <input type="button" value="Select" onclick="setAppointmentId(`<%= appointment.id%>`)">
+          <input type="button" value="Select" onclick="setAppointment(`<%= appointment.id%>`)">
         </td>
       </tr>
       <% }); %>
       <% } %>
+    </table>
   </div>
 </body>
 

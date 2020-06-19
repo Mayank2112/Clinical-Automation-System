@@ -14,11 +14,9 @@
     <%- include('../../partials/patient/header') %>
   </div>
 </header>
-<script>
-  const setMail = mail => {
-    document.getElementById('email').value = mail;
-  };
-</script>
+
+<script src="../setCredentials.js"></script>
+
 <body>
   <%- include('../../partials/patient/sidenav') -%>
 
@@ -29,16 +27,49 @@
     <br>
     <%= message %>
     <% if(!message && details.length) { %>
-      <form action="/patient/appointmentRequest" method="post">
-        Enter Doctor Email : <input type="email" name="doctorEmail" required="required" id="email"
-        placeholder="Select from below table" readonly><br>
-        Subject : <input type="text" name="subject" required="required"><br>
-        Description : <input type="text" name="description"><br>
-        Time : <input type="text" name="time"><br>
-        <button type="submit">Send Request</button><br>
-      </form>
+    <form action="/patient/appointment-request" method="post">
+      <table>
+        <tr>
+          <td>
+            Doctor
+          </td>
+          <td>
+            <input type="email" id="doctorEmail" name='doctorEmail' required="required" placeholder="Select from below table" readonly>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Subject
+          </td>
+          <td>
+            <input type="text" name="subject" required="required">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Description
+          </td>
+          <td>
+            <input type="text" name="description">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Time
+          </td>
+          <td>
+            <input type="number" name="time">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button type="submit">Send Request</button>
+          </td>
+        </tr>
+      </table>
+    </form>
     <h2>Doctors List</h2>
-    <table border="1px">
+    <table>
       <th>Name</th>
       <th>Gender</th>
       <th>Start Time</th>
@@ -56,7 +87,7 @@
         <td><%= doctor.experienceFrom %></td>
         <td><%= doctor.appointmentFee %></td>
         <td><%= doctor.mobileNumber %></td>
-        <td><button onclick="setMail(`<%= doctor.email %>`)">Click</button></td>
+        <td><button onclick="setDoctor(`<%= doctor.email %>`)">Click</button></td>
       </tr>
       <% }) %>
       <% } %>

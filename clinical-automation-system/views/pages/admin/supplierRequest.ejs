@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>CAS | Supplier Requests</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
 </head>
@@ -33,7 +33,7 @@
       <th>Reject</th>
       <th>Submit</th>
       <% details.forEach(supplier => { %>
-      <form action="/admin/supplierRequest" method="post">
+      <form action="/admin/supplier-request" method="post">
         <tr>
           <td><%= supplier.name %></td>
           <td><%= supplier.companyName %></td>

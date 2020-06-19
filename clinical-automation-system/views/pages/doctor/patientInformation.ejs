@@ -4,9 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | CAS</title>
+  <title>CAS | Patient Details</title>
   <link href="../../../header.css" rel="stylesheet" type="text/css" />
   <link href="../../../sidenav.css" rel="stylesheet" type="text/css" />
+  <link href="../../../tables.css" rel="stylesheet" type="text/css" />
 </head>
 
 <header>
@@ -28,20 +29,20 @@
     <table>
       <tr>
         <td> Name </td>
-        <td>: <%= details.patient.name %></td>
+        <td> <%= details.patient.name %></td>
       </tr>
       <tr>
         <td> Date of Birth </td>
-        <td>: <%= details.patient.dateOfBirth %> </td>
+        <td> <%= details.patient.dateOfBirth %> </td>
       </tr>
       <tr>
         <td> Gender </td>
-        <td>: <%= details.patient.gender %> </td>
+        <td> <%= details.patient.gender %> </td>
       </tr>
     </table>
     <br>
-    <% if (details.patientInformation) { %>
-    <table border="1px">
+    <% if (details.patientInformation.length) { %>
+    <table >
       <th>Doctor</th>
       <th>Date</th>
       <th>Subject</th>
@@ -51,7 +52,7 @@
       <th>Status</th>
       <% details.patientInformation.forEach(appointment => { %>
       <tr>
-        <td><a href="/doctor/information/<%= appointment.doctorId%>"><%= appointment.doctorId %></a></td>
+        <td><a href="/doctor/information/<%= appointment.doctorId%>">View details</a></td>
         <td> <%= appointment.date %> </td>
         <td> <%= appointment.subject %> </td>
         <td> <%= appointment.description %> </td>
