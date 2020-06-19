@@ -16,11 +16,7 @@
   </div>
 </header>
 
-<script>
-  const setDoctorId = id => {
-    document.getElementById('doctorId').value = id;
-  };
-</script>
+<script src="../setCredentials.js"></script>
 
 <body>
   <%- include('../../partials/patient/sidenav') -%>
@@ -36,11 +32,11 @@
       <table>
         <tr>
           <td>
-            Enter Doctor Id
+            Doctor
           </td>
           <td>
-            <input type="text" name="doctorId" required="required" id="doctorId" placeholder="Select from below table"
-              readonly>
+            <input type="hidden" name="doctorId" id="doctorId">
+            <input type="text" id="doctorName" required="required" placeholder="Select from below table" readonly>
           </td>
         </tr>
         <tr>
@@ -64,7 +60,7 @@
             Time
           </td>
           <td>
-            <input type="text" name="time">
+            <input type="number" name="time">
           </td>
         </tr>
         <tr>
@@ -95,7 +91,7 @@
         <td><%= doctor.experienceFrom %></td>
         <td><%= doctor.appointmentFee %></td>
         <td><%= doctor.mobileNumber %></td>
-        <td><button onclick="setDoctorId(`<%= doctor.id %>`)">Click</button></td>
+        <td><button onclick="setDoctor(`<%= doctor.id %>`, `<%= doctor.name %>`)">Click</button></td>
       </tr>
       <% }) %>
       <% } %>

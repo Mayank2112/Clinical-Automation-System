@@ -24,33 +24,32 @@
     <br>
     <%= message %>
     <% if(details && details.length) { %>
-      <h2>Today's Appointment Requests</h2>
-      <table>
-        <th>Appointment</th>
-        <th>Patient</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Subject</th>
-        <th>Description</th>
-        <th>Approve</th>
-        <th>Reject</th>
-        <th>Response</th>
-        <% details.forEach(appointment => { %>
-        <form action="/doctor/appointment-request" method="post">
-          <tr>
-            <td><input type="text" name="appointmentId" readonly="readonly" value= <%= appointment.id %> ></td>
-            <td><a href="/doctor/appointment/patient-information/<%= appointment.patientId%>">View</a></td>
-            <td><%= appointment.date %></td>
-            <td><%= appointment.time %></td>
-            <td><%= appointment.subject %></td>
-            <td><%= appointment.description %></td>
-            <td><input type="radio" name="status" value="approved"></td>
-            <td><input type="radio" name="status" value="rejected"></td>
-            <td><button type="submit">Send</button></td>
-          </tr>
-        </form>
-        <% }) %>
-        <% } %>
+    <h2>Today's Appointment Requests</h2>
+    <table>
+      <th>Patient</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Subject</th>
+      <th>Description</th>
+      <th>Approve</th>
+      <th>Reject</th>
+      <th>Response</th>
+      <% details.forEach(appointment => { %>
+      <form action="/doctor/appointment-request" method="post">
+        <tr>
+          <input type="hidden" name="appointmentId" readonly="readonly" value=<%= appointment.id %>>
+          <td><a href="/doctor/appointment/patient-information/<%= appointment.patientId%>">View</a></td>
+          <td><%= appointment.date %></td>
+          <td><%= appointment.time %></td>
+          <td><%= appointment.subject %></td>
+          <td><%= appointment.description %></td>
+          <td><input type="radio" name="status" value="approved"></td>
+          <td><input type="radio" name="status" value="rejected"></td>
+          <td><button type="submit">Send</button></td>
+        </tr>
+      </form>
+      <% }) %>
+      <% } %>
   </div>
 </body>
 

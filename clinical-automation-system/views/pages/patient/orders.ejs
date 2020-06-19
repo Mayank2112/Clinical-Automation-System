@@ -15,6 +15,7 @@
     <%- include('../../partials/patient/header') %>
   </div>
 </header>
+
 <body>
   <%- include('../../partials/patient/sidenav') -%>
 
@@ -23,26 +24,30 @@
     <br>
     <%= message %>
     <% if(!message && details.length) { %>
-      <h2>My Orders</h2>
-      <br>
-      <table>
-        <th>Medicine</th>
-        <th>Quantity</th>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Supplier</th>
-        <th>Status</th>
-        <% details.forEach(order => { %>
-          <tr>
-            <td><%= order.medicineName %></td>
-            <td><%= order.quantity %></td>
-            <td><%= order.date %></td>
-            <td><%= order.amount %></td>
-            <td><%= order.supplierId %></td>
-            <td><%= order.status %></td>
-          </tr>
-        <% }) %>
-        <% } %>
+    <h2>My Orders</h2>
+    <br>
+    <table>
+      <th>Medicine</th>
+      <th>Quantity</th>
+      <th>Date</th>
+      <th>Amount</th>
+      <th>Supplier</th>
+      <th>Status</th>
+      <% details.forEach(order => { %>
+      <tr>
+        <td><%= order.medicineName %></td>
+        <td><%= order.quantity %></td>
+        <td><%= order.date %></td>
+        <td><%= order.amount %></td>
+        <td>
+          <% if (order.supplierId) { %>
+          <a href="/patient/supplier-information/<%= order.supplierId%>">View details</a>
+          <% } %>
+        </td>
+        <td><%= order.status %></td>
+      </tr>
+      <% }) %>
+      <% } %>
   </div>
 </body>
 

@@ -34,7 +34,7 @@
         <th>Status</th>
         <% details.forEach(appointment => { %>
           <tr>
-            <td><%= appointment.doctorId %></td>
+            <td><a href="/patient/doctor-information/<%= appointment.doctorId%>">View details</a></td>
             <td><%= appointment.date %></td>
             <td><%= appointment.time %></td>
             <td><%= appointment.subject %></td>

@@ -52,7 +52,7 @@
       <th>Status</th>
       <% details.patientInformation.forEach(appointment => { %>
       <tr>
-        <td><a href="/doctor/information/<%= appointment.doctorId%>"><%= appointment.doctorId %></a></td>
+        <td><a href="/doctor/information/<%= appointment.doctorId%>">View details</a></td>
         <td> <%= appointment.date %> </td>
         <td> <%= appointment.subject %> </td>
         <td> <%= appointment.description %> </td>

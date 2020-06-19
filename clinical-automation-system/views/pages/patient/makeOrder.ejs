@@ -16,11 +16,7 @@
   </div>
 </header>
 
-<script>
-  const setSupplier = id => {
-    document.getElementById('supplierId').value = id;
-  };
-</script>
+<script src="../setCredentials.js"></script>
 
 <body>
   <%- include('../../partials/patient/sidenav') -%>
@@ -29,23 +25,54 @@
     <h1>Clinical Automation System</h1>
     <br>
     <h2>Create Order</h2>
-    <br>
     <%= message %>
+    <br>
     <% if (!details.suppliers) { %>
     <form action="/patient/order-medicine" method="post">
-      Medicine : <input type="text" name="medicineName" required="required"><br>
-      Quantity: <input type="number" name="quantity" required="required"><br>
-      <button type="submit">Make order</button>
+      <table>
+        <tr>
+          <td>Medicine</td>
+          <td><input type="text" name="medicineName" required="required">
+          </td>
+        </tr>
+        <tr>
+          <td>Quantity</td>
+          <td><input type="number" name="quantity" required="required"></td>
+        </tr>
+        <tr>
+          <td>
+            <button type="submit">Make order</button>
+          </td>
+        </tr>
+      </table>
     </form>
-      <% } else { %>
-        <form action="/patient/order-medicine" method="post">
-        Medicine : <input type="text" name="medicineName" required="required" value="<%= details.medicine.medicineName %>"><br>
-        Quantity: <input type="number" name="quantity" required="required" value="<%= details.medicine.quantity %>"><br>
-        Supplier : <input type=" text" name="supplierId" id="supplierId" required="required" readonly
-        placeholder="Select from below table"><br>
-      <br>
-      <button type="submit">Make order</button>
-    </form>
+    <% } else { %>
+    <table>
+      <form action="/patient/order-medicine" method="post">
+        <tr>
+          <td>Medicine</td>
+          <td><input type="text" name="medicineName" required="required" value="<%= details.medicine.medicineName %>">
+          </td>
+        </tr>
+        <tr>
+          <td>Quantity</td>
+          <td><input type="number" name="quantity" required="required" value="<%= details.medicine.quantity %>"></td>
+        </tr>
+        <tr>
+          <td>Supplier</td>
+          <td>
+            <input type="hidden" name="supplierId" id="supplierId" required="required">
+            <input type="text" id="supplierName" required="required" readonly placeholder="Select from below table">
+          </td>
+        </tr>
+        <br>
+        <tr>
+          <td>
+            <button type="submit">Make order</button>
+          </td>
+        </tr>
+      </form>
+    </table>
     <h2>Suppliers List</h2>
     <table>
       <th>Name</th>
@@ -57,10 +84,12 @@
         <td><%= supplier.name %></td>
         <td><%= supplier.companyName %></td>
         <td><%= supplier.mobileNumber %></td>
-        <td><input type="button" onclick="setSupplier(`<%= supplier.id %>`)" value="Select"></td>
+        <td><input type="button" onclick="setSupplier(`<%= supplier.id %>`, `<%= supplier.name %>`)" value="Select">
+        </td>
       </tr>
       <% }); %>
       <% } %>
+    </table>
   </div>
 </body>
 

@@ -37,7 +37,7 @@
         <% details.forEach(order => { %>
           <form action="/supplier/order-delivered/<%= order.id %>">
           <tr>
-            <td><a href="/supplier/patient-information/<%= order.patientId%>">View</a></td>
+            <td><a href="/supplier/patient-information/<%= order.patientId%>">View Information</a></td>
             <td><%= order.medicineName %></td>
             <td><%= order.quantity %></td>
             <td><%= order.date %></td>
