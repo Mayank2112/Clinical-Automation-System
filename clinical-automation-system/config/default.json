@@ -9,7 +9,8 @@
       "dashboard": "pages/patient/dashboard.ejs",
       "appointmentRequest": "pages/patient/appointmentRequest.ejs",
       "details": "pages/patient/details.ejs",
-      "appointment": "pages/patient/appointment"
+      "appointment": "pages/patient/appointment",
+      "doctorInformation": "pages/patient/doctorInformation.ejs"
     },
     "doctor": {
       "dashboard": "pages/doctor/dashboard.ejs",
