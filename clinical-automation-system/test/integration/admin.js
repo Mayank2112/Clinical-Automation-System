@@ -1,5 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import faker from 'faker';
 import app from '../../src/app';
 import { createAdmin, deleteAdmin } from '../helpers/admin';
 
@@ -8,20 +9,22 @@ chai.use(chaiHttp);
 
 describe('Admin Authentication', () => {
   const admin = {
-    name: 'Mayank Parikh',
+    name: faker.name.findName(),
     gender: 'male',
-    address: 'Indore',
-    mobileNumber: '9826942152',
-    email: 'mayank@admin.com',
-    password: '123456789'
+    address: faker.address.streetAddress(),
+    mobileNumber: faker.random.number({ min: 6000000000, max: 9999999999 }),
+    email: faker.internet.email(),
+    password: faker.internet.password(8)
   };
 
   before('Create Admin to database', async () => {
     const result = await createAdmin(admin);
+    expect(result).to.be.a('Object');
   });
 
   after('Delete Admin from database', async () => {
     const result = await deleteAdmin(admin.email);
+    expect(result).to.be.equal(1);
   });
 
   describe('Admin functionality', () => {
@@ -38,7 +41,7 @@ describe('Admin Authentication', () => {
     it('Redirect to login with status 403 if not login successfully', done => {
       chai.request(app)
         .post('/login')
-        .send({ username: 'mayank1234', password: '123456789', profession: 'admin' })
+        .send({ username: faker.internet.email(), password: faker.internet.password(), profession: 'admin' })
         .end((err, res) => {
           expect(res).to.have.status(403)
             .to.redirectTo(/\/login$/);

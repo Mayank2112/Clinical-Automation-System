@@ -1,19 +1,18 @@
-import moment from 'moment';
 import { expect } from 'chai';
-import { v4 } from 'uuid';
+import faker from 'faker';
 import getUserDetails from '../../src/services/user';
 import { deletePatient, deleteMedicine, deleteOrder } from '../helpers/patient';
 import PatientService from '../../src/services/patient';
 
 describe('Patient functionalities', () => {
   const patient = {
-    username: 'Mayank Parikh',
-    dateOfBirth: moment('12-21-1998', 'MM-DD-YYYY'),
+    username: faker.name.findName(),
+    dateOfBirth: faker.date.past(30),
     gender: 'male',
-    address: 'Indore',
-    mobileNumber: '9826942152',
-    email: 'mayank@patient.com',
-    password: '123456789'
+    address: faker.address.streetAddress(),
+    mobileNumber: faker.random.number({ min: 6000000000, max: 9999999999 }),
+    email: faker.internet.email(),
+    password: faker.internet.password(8)
   };
 
   describe('Patient Login and Registration', () => {
@@ -59,7 +58,7 @@ describe('Patient functionalities', () => {
     it('Should return error if patient email is not correct', async () => {
       let result;
       try {
-        result = await PatientService.find('mayank@techracers.io');
+        result = await PatientService.find(faker.internet.email());
       }
       catch (err) {
         result = err;
@@ -77,7 +76,7 @@ describe('Patient functionalities', () => {
     it('Should return error if patient id is not correct ', async () => {
       let result;
       try {
-        result = await PatientService.findById(v4());
+        result = await PatientService.findById(faker.random.uuid());
       }
       catch (err) {
         result = err;
@@ -91,14 +90,14 @@ describe('Patient functionalities', () => {
     });
 
     it('Should return false if patient password is not correct', async () => {
-      const result = await PatientService.verify(patient.email, '12345689');
+      const result = await PatientService.verify(patient.email, faker.internet.password(8));
       expect(result).to.be.equal(false);
     });
 
     it('Should return error if patient email is not correct', async () => {
       let result;
       try {
-        result = await PatientService.verify('mayank@techracers.io', patient.password);
+        result = await PatientService.verify(faker.internet.email(), patient.password);
       }
       catch (err) {
         result = err;
@@ -110,8 +109,8 @@ describe('Patient functionalities', () => {
   describe('Order-medicine', () => {
     const order = {
       medicineName: 'Pain Killer',
-      quantity: 10,
-      date: moment('06-09-2020', 'MM-DD-YYYY'),
+      quantity: faker.random.number(20),
+      date: faker.date.recent(),
       status: 'confirmed'
     };
 

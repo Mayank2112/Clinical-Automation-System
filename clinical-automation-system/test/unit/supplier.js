@@ -1,6 +1,5 @@
-import moment from 'moment';
 import { expect } from 'chai';
-import { v4 } from 'uuid';
+import faker from 'faker';
 import { deleteOrder } from '../helpers/patient';
 import PatientService from '../../src/services/patient';
 import getUserDetails from '../../src/services/user';
@@ -8,19 +7,19 @@ import SupplierService from '../../src/services/supplier';
 
 describe('Supplier functionalities', () => {
   const supplier = {
-    username: 'Mayank Parikh',
-    companyName: 'Parikh Pharmaceuticals',
-    companyAddress: '36- Dawa Bajar',
-    mobileNumber: '9826942152',
-    email: 'mayank@supplier.com',
-    password: '123456789'
+    username: faker.name.findName(),
+    companyName: faker.company.companyName(),
+    companyAddress: faker.address.streetAddress(),
+    mobileNumber: faker.random.number({ min: 6000000000, max: 9999999999 }),
+    email: faker.internet.email(),
+    password: faker.internet.password(8)
   };
 
   const order = {
-    patientId: v4(),
+    patientId: faker.random.uuid(),
     medicineName: 'Pain Killer',
-    quantity: 10,
-    date: moment('06-09-2020', 'MM-DD-YYYY'),
+    quantity: faker.random.number(100),
+    date: faker.date.recent(),
     status: 'confirmed'
   };
 
@@ -57,7 +56,7 @@ describe('Supplier functionalities', () => {
   it('Should return error if supplier email is not correct', async () => {
     let result;
     try {
-      result = await SupplierService.find('mayank@techracers.io');
+      result = await SupplierService.find(faker.internet.email());
     }
     catch (err) {
       result = err;
@@ -91,14 +90,14 @@ describe('Supplier functionalities', () => {
   });
 
   it('Should return false if supplier password is not correct', async () => {
-    const result = await SupplierService.verify(supplier.email, '12345689');
+    const result = await SupplierService.verify(supplier.email, faker.internet.password(8));
     expect(result).to.be.equal(false);
   });
 
   it('Should return error if supplier email is not correct', async () => {
     let result;
     try {
-      result = await SupplierService.verify('mayank@techracers.io', supplier.password);
+      result = await SupplierService.verify(faker.internet.email(), supplier.password);
     }
     catch (err) {
       result = err;
@@ -138,7 +137,7 @@ describe('Supplier functionalities', () => {
   });
 
   it('Should return empty list if supplier has no orders', async () => {
-    const result = await SupplierService.findOrders(v4());
+    const result = await SupplierService.findOrders(faker.random.uuid());
     expect(result).to.be.a('Array')
       .to.be.lengthOf(0);
   });

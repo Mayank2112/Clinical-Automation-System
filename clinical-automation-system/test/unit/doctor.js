@@ -1,22 +1,22 @@
-import moment from 'moment';
+import faker from 'faker';
 import { expect } from 'chai';
 import getUserDetails from '../../src/services/user';
 import DoctorService from '../../src/services/doctor';
 
 describe('Doctor functionalities', () => {
   const doctor = {
-    username: 'Mayank Parikh',
-    dateOfBirth: moment('12-21-1998', 'MM-DD-YYYY'),
+    username: faker.name.findName(),
+    dateOfBirth: faker.date.past(30),
     gender: 'male',
-    address: 'Indore',
-    startTime: 10,
-    endTime: 17,
-    experienceFrom: moment('11-12-2016', 'MM-DD-YYYY'),
+    address: faker.address.streetAddress(),
+    startTime: faker.random.number({ min: 8, max: 11 }),
+    endTime: faker.random.number({ min: 12, max: 22 }),
+    experienceFrom: faker.date.past(5),
     degree: 'MBBS',
-    appointmentFee: 150,
-    mobileNumber: '9826942152',
-    email: 'mayank@doctor.com',
-    password: '123456789'
+    appointmentFee: faker.random.number(),
+    mobileNumber: faker.random.number({ min: 6000000000, max: 9999999999 }),
+    email: faker.internet.email(),
+    password: faker.internet.password(8)
   };
 
   it('Should create doctor entry in database', async () => {
@@ -60,7 +60,7 @@ describe('Doctor functionalities', () => {
   it('Should return error if doctor email is not correct', async () => {
     let result;
     try {
-      result = await DoctorService.find('mayank@techracers.io');
+      result = await DoctorService.find(faker.internet.email());
     }
     catch (err) {
       result = err;
@@ -113,14 +113,14 @@ describe('Doctor functionalities', () => {
   });
 
   it('Should return false if doctor password is not correct', async () => {
-    const result = await DoctorService.verify(doctor.email, '12345689');
+    const result = await DoctorService.verify(doctor.email, faker.internet.password());
     expect(result).to.be.equal(false);
   });
 
   it('Should return error if doctor email is not correct', async () => {
     let result;
     try {
-      result = await DoctorService.verify('mayank@techracers.io', doctor.password);
+      result = await DoctorService.verify(faker.internet.email(), doctor.password);
     }
     catch (err) {
       result = err;

@@ -1,17 +1,16 @@
-import moment from 'moment';
+import faker from 'faker';
 import { expect } from 'chai';
-import { v4 } from 'uuid';
 import AppointmentService from '../../src/services/appointment';
 
 describe('Appointment functionality', () => {
   const appointment = {
-    patientId: v4(),
-    doctorId: v4(),
-    subject: 'Fever',
-    description: 'with cough and cold',
-    date: moment('06-09-2020', 'MM-DD-YYYY'),
+    patientId: faker.random.uuid(),
+    doctorId: faker.random.uuid(),
+    subject: faker.random.word(),
+    description: faker.random.words(),
+    date: faker.date.recent(),
     status: 'pending',
-    time: '10'
+    time: faker.random.number({ min: 11, max: 22 })
   };
 
   it('Should create appointment and return sequelize appointment object', async () => {
@@ -97,7 +96,7 @@ describe('Appointment functionality', () => {
   });
 
   it('Should return empty array if patient has no appointments', async () => {
-    const result = await AppointmentService.findByPatient(v4());
+    const result = await AppointmentService.findByPatient(faker.random.uuid());
     expect(result).to.be.a('Array')
       .to.be.lengthOf(0);
   });
@@ -130,7 +129,7 @@ describe('Appointment functionality', () => {
   it('Should return error if doctor has no appointments', async () => {
     let result;
     try {
-      result = await AppointmentService.findByDoctor(v4(), 'approved');
+      result = await AppointmentService.findByDoctor(faker.random.uuid(), 'approved');
     }
     catch (err) {
       result = err;

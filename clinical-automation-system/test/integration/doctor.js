@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import moment from 'moment';
+import faker from 'faker';
 import app from '../../src/app';
 import DoctorService from '../../src/services/doctor';
 
@@ -34,18 +34,18 @@ describe('Check Server Connectivity', () => {
 
 describe('Doctor Authentication', () => {
   const doctor = {
-    username: 'Mayank Parikh',
-    dateOfBirth: moment('12-21-1998', 'MM-DD-YYYY'),
+    username: faker.name.findName(),
+    dateOfBirth: faker.date.past(30),
     gender: 'male',
-    address: 'Indore',
-    startTime: 10,
-    endTime: 17,
-    experienceFrom: moment('11-12-2016', 'MM-DD-YYYY'),
+    address: faker.address.streetAddress(),
+    startTime: faker.random.number({ min: 8, max: 11 }),
+    endTime: faker.random.number({ min: 12, max: 22 }),
+    experienceFrom: faker.date.past(5),
     degree: 'MBBS',
-    appointmentFee: 150,
-    mobileNumber: '9826942152',
-    email: 'mayank@doctor.com',
-    password: '123456789',
+    appointmentFee: faker.random.number(),
+    mobileNumber: faker.random.number({ min: 6000000000, max: 9999999999 }),
+    email: faker.internet.email(),
+    password: faker.internet.password(8),
     profession: 'doctor'
   };
 
@@ -86,9 +86,9 @@ describe('Doctor Authentication', () => {
       chai.request(app)
         .post('/register')
         .send({
-          username: 'mayank',
-          email: 'mayankparikh1',
-          password: '123456789'
+          username: faker.internet.email(),
+          password: faker.internet.password(),
+          profession: 'doctor',
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -115,7 +115,7 @@ describe('Doctor Authentication', () => {
       it('Redirect to login with status 403 if not login successfully', done => {
         chai.request(app)
           .post('/login')
-          .send({ username: 'mayank1234', password: '123456789', profession: 'doctor' })
+          .send({ username: faker.internet.email(), password: faker.internet.password(), profession: 'doctor' })
           .end((err, res) => {
             expect(res).to.have.status(403)
               .to.redirectTo(/\/login$/);

@@ -1,4 +1,4 @@
-import moment from 'moment';
+import faker from 'faker';
 import { expect } from 'chai';
 import AdminService from '../../src/services/admin';
 import { createAdmin, deleteAdmin } from '../helpers/admin';
@@ -6,20 +6,22 @@ import getUserDetails from '../../src/services/user';
 
 describe('Admin Credentials', () => {
   const admin = {
-    name: 'Mayank Parikh',
+    name: faker.name.findName(),
     gender: 'male',
-    address: 'Indore',
-    mobileNumber: '9826942152',
-    email: 'mayank@admin.com',
-    password: '123456789'
+    address: faker.address.streetAddress(),
+    mobileNumber: faker.random.number({ min: 6000000000, max: 9999999999 }),
+    email: faker.internet.email(),
+    password: faker.internet.password()
   };
 
   before('Create Admin to database', async () => {
     const result = await createAdmin(admin);
+    expect(result).to.be.a('Object');
   });
 
   after('Delete Admin from database', async () => {
     const result = await deleteAdmin(admin.email);
+    expect(result).to.be.equal(1);
   });
 
   it('Should return admin details if admin email is correct', async () => {
@@ -33,7 +35,7 @@ describe('Admin Credentials', () => {
   it('Should return error if admin email is not correct', async () => {
     let result;
     try {
-      result = await AdminService.find('mayank@techracers.io');
+      result = await AdminService.find(faker.internet.email());
     }
     catch (err) {
       result = err;
@@ -48,12 +50,12 @@ describe('Admin Credentials', () => {
   });
 
   it('Should return true if admin login credentials are correct', async () => {
-    const result = await AdminService.verify(admin.email, '123456789');
+    const result = await AdminService.verify(admin.email, admin.password);
     expect(result).to.be.equal(true);
   });
 
   it('Should return false if admin login credentials are not correct', async () => {
-    const result = await AdminService.verify(admin.email, '12345689');
+    const result = await AdminService.verify(admin.email, faker.internet.password());
     expect(result).to.be.equal(false);
   });
 });
@@ -61,10 +63,10 @@ describe('Admin Credentials', () => {
 describe('Add medicines to store', () => {
   const medicine = {
     name: 'Pain Killer',
-    manufacturingDate: moment('11-12-2018', 'MM-DD-YYYY'),
-    expiryDate: moment('11-12-2020', 'MM-DD-YYYY'),
-    pricePerTablet: '8',
-    quantity: 1000
+    manufacturingDate: faker.date.past(5),
+    expiryDate: faker.date.future(5),
+    pricePerTablet: faker.random.number({ min: 1, max: 50 }),
+    quantity: faker.random.number({ min: 100, max: 1000 })
   };
 
   it('Should return Medicine Object if medicine added successfully', async () => {

@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import moment from 'moment';
+import faker from 'faker';
 import app from '../../src/app';
 import { deletePatient } from '../helpers/patient';
 
@@ -9,13 +9,13 @@ chai.use(chaiHttp);
 
 describe('Patient Authentication', () => {
   const patient = {
-    username: 'Mayank Parikh',
-    dateOfBirth: moment('12-21-1998', 'MM-DD-YYYY'),
+    username: faker.name.findName(),
+    dateOfBirth: faker.date.past(30),
     gender: 'male',
-    address: 'Indore',
-    mobileNumber: '9826942152',
-    email: 'patient@gmail.com',
-    password: '123456789',
+    address: faker.address.streetAddress(),
+    mobileNumber: faker.random.number({ min: 6000000000, max: 9999999999 }),
+    email: faker.internet.email(),
+    password: faker.internet.password(8),
     profession: 'patient'
   };
 
@@ -51,9 +51,9 @@ describe('Patient Authentication', () => {
       chai.request(app)
         .post('/register')
         .send({
-          username: 'mayank',
-          email: 'mayankparikh1',
-          password: '123456789'
+          username: faker.internet.email(),
+          password: faker.internet.password(),
+          profession: 'patient',
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -65,7 +65,7 @@ describe('Patient Authentication', () => {
     it('Redirect to login with status 403 if not login successfully', done => {
       chai.request(app)
         .post('/login')
-        .send({ username: 'mayank1234', password: '123456789', profession: 'patient' })
+        .send({ username: faker.internet.email(), password: faker.internet.password(), profession: 'patient' })
         .end((err, res) => {
           expect(res).to.have.status(403)
             .to.redirectTo(/\/login$/);

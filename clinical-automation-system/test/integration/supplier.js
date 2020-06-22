@@ -1,5 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import faker from 'faker';
 import app from '../../src/app';
 import SupplierService from '../../src/services/supplier';
 
@@ -8,12 +9,12 @@ chai.use(chaiHttp);
 
 describe('Supplier Authentication', () => {
   const supplier = {
-    username: 'Mayank Supplier',
-    companyName: 'Parikh Pharmaceuticals',
-    companyAddress: '36-A Dawa Bajar',
-    mobileNumber: '9826942151',
-    email: 'supplier@gmail.com',
-    password: '123456789',
+    username: faker.name.findName(),
+    companyName: faker.company.companyName(),
+    companyAddress: faker.address.streetAddress(),
+    mobileNumber: faker.random.number({ min: 6000000000, max: 9999999999 }),
+    email: faker.internet.email(),
+    password: faker.internet.password(8),
     profession: 'supplier'
   };
 
@@ -53,9 +54,9 @@ describe('Supplier Authentication', () => {
       chai.request(app)
         .post('/register')
         .send({
-          username: 'mayank',
-          email: 'mayankparikh1',
-          password: '123456789'
+          username: faker.internet.email(),
+          password: faker.internet.password(),
+          profession: 'supplier',
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -77,7 +78,7 @@ describe('Supplier Authentication', () => {
     it('Redirect to login with status 403 if not login successfully', done => {
       chai.request(app)
         .post('/login')
-        .send({ username: 'mayank1234', password: '123456789', profession: 'supplier' })
+        .send({ username: faker.internet.email(), password: faker.internet.password(), profession: 'supplier' })
         .end((err, res) => {
           expect(res).to.have.status(403)
             .to.redirectTo(/\/login$/);
@@ -113,7 +114,7 @@ describe('Supplier Authentication', () => {
             .get('/supplier/dashboard')
             .end((err, res) => {
               expect(res).to.have.status(200);
-              expect(res.text).to.include(`Welcome ${supplier.username}`);
+              expect(res.text).to.include(`Welcome`);
               agent.close();
               done();
             });
