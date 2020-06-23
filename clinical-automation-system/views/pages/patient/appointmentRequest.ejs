@@ -8,6 +8,12 @@
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
   <link href="../tables.css" rel="stylesheet" type="text/css" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript"
+    src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+  <script src="../validations/appointmentRequest.js"></script>
+  <script src="../setCredentials.js"></script>
 </head>
 
 <header>
@@ -15,8 +21,6 @@
     <%- include('../../partials/patient/header') %>
   </div>
 </header>
-
-<script src="../setCredentials.js"></script>
 
 <body>
   <%- include('../../partials/patient/sidenav') -%>
@@ -28,7 +32,7 @@
     <br>
     <%= message %>
     <% if(!message && details.length) { %>
-    <form action="/patient/appointment-request" method="post">
+    <form action="/patient/appointment-request" method="post" id="appointmentRequest">
       <table>
         <tr>
           <td>
@@ -36,7 +40,7 @@
           </td>
           <td>
             <input type="hidden" name="doctorId" id="doctorId">
-            <input type="text" id="doctorName" required="required" placeholder="Select from below table" readonly>
+            <input type="text" id="doctorName" name="doctorName" required="required" placeholder="Select from below table" readonly>
           </td>
         </tr>
         <tr>
@@ -44,7 +48,7 @@
             Subject
           </td>
           <td>
-            <input type="text" name="subject" required="required">
+            <input type="text" name="subject" id="subject" required="required">
           </td>
         </tr>
         <tr>
@@ -60,7 +64,7 @@
             Time
           </td>
           <td>
-            <input type="number" name="time">
+            <input type="number" name="time" id="time">
           </td>
         </tr>
         <tr>

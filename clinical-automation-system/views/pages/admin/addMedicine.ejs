@@ -8,6 +8,13 @@
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../sidenav.css" rel="stylesheet" type="text/css" />
   <link href="../tables.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript"
+    src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="../validations/addMedicine.js"></script>
 </head>
 
 <header>
@@ -23,14 +30,14 @@
     <h1>Clinical Automation System</h1>
     <br>
     <h2>Add Medicines to Store</h2>
-    <form action="/admin/medicine" method="post">
+    <form action="/admin/medicine" method="post" id="addMedicine">
       <table>
         <tr>
           <td>
             Name
           </td>
           <td>
-            <input type="text" name="medicineName" required="required"><br>
+            <input type="text" name="medicineName" id="medicineName" required="required"><br>
           </td>
         </tr>
         <tr>
@@ -38,7 +45,7 @@
             Manufacturing Date
           </td>
           <td>
-            <input type="datetime" name="manufacturingDate" required="required"><br>
+            <input type="datetime" name="manufacturingDate" id="manufacturingDate" required="required"><br>
           </td>
         </tr>
         <tr>
@@ -46,7 +53,7 @@
             Expiry Date
           </td>
           <td>
-            <input type="datetime" name="expiryDate" required="required"><br>
+            <input type="datetime" name="expiryDate" id="expiryDate" required="required"><br>
           </td>
         </tr>
         <tr>
@@ -54,7 +61,7 @@
             Price per Tablet
           </td>
           <td>
-            <input type="datetime" name="pricePerTablet" required="required"><br>
+            <input type="number" name="pricePerTablet" id="price" required="required"><br>
           </td>
         </tr>
         <tr>
@@ -62,7 +69,7 @@
             Quantity
           </td>
           <td>
-            <input type="number" name="quantity" required="required"><br>
+            <input type="number" name="quantity" id="quantity" required="required"><br>
           </td>
         </tr>
         <br>
