@@ -7,6 +7,13 @@
   <title>Registration | CAS</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../tables.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript"
+    src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="../validations/registration.js"></script>
 </head>
 
 <header>
@@ -16,14 +23,14 @@
 <body>
   <h1>Clinical Automation System</h1>
   <br>
-  <form action="/register" method="post">
-    <table border="10px">
+  <form action="/register" method="post" id="registration">
+    <table>
       <tr>
         <td>
           Name
         </td>
         <td>
-          <input type="text" name="username" required="required" placeholder="Atleast 6 characters">
+          <input type="text" name="username" id="username" required="required" placeholder="Atleast 6 characters">
         </td>
       </tr>
       <tr>
@@ -31,7 +38,7 @@
           Date of Birth
         </td>
         <td>
-          <input type="datetime" name="dateOfBirth" required="required">
+          <input type="datetime" name="dateOfBirth" id="dateOfBirth" required="required" placeholder="mm/dd/yyyy">
         </td>
       </tr>
       <tr>
@@ -39,8 +46,8 @@
           Gender
         </td>
         <td>
-          <input type="radio" name="gender" value="male"> Male <input type="radio" name="gender" value="female"> Female
-          <input type="radio" name="gender" value="other"> Other
+          <input type="radio" name="gender" id="gender" value="male"> Male <input type="radio" name="gender" id="gender"
+            value="female"> Female <input type="radio" name="gender" id="gender" value="other"> Other
         </td>
       </tr>
       <tr>
@@ -48,8 +55,9 @@
           SignIn As
         </td>
         <td>
-          <input type="radio" name="profession" value="patient"> Patient <input type="radio" name="profession"
-            value="doctor"> Doctor <input type="radio" name="profession" value="supplier"> Supplier
+          <input type="radio" name="profession" id="profession" value="patient"> Patient <input type="radio"
+            name="profession" id="profession" value="doctor"> Doctor <input type="radio" name="profession"
+            id="profession" value="supplier"> Supplier
         </td>
       </tr>
       <tr>
@@ -57,7 +65,7 @@
           Mobile Number
         </td>
         <td>
-          <input type="number" name="mobileNumber" required="required">
+          <input type="number" name="mobileNumber" id="mobileNumber" required="required">
         </td>
       </tr>
       <tr>
@@ -65,7 +73,7 @@
           address
         </td>
         <td>
-          <input type="text" name="address" required="required">
+          <input type="text" name="address" id="address" required="required">
         </td>
       </tr>
       <tr>
@@ -73,7 +81,7 @@
           Email
         </td>
         <td>
-          <input type="email" name="email" required="required" placeholder="Enter valid email address">
+          <input type="email" name="email" id="email" required="required" placeholder="Enter valid email address">
         </td>
       </tr>
       <tr>
@@ -81,7 +89,8 @@
           Password
         </td>
         <td>
-          <input type="password" name="password" required="required" placeholder="Atleast contain 8 characters">
+          <input type="password" name="password" id="password" required="required"
+            placeholder="Atleast contain 8 characters">
         </td>
       </tr>
     </table>

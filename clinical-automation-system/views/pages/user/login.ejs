@@ -7,6 +7,11 @@
   <title>Login | CAS</title>
   <link href="../header.css" rel="stylesheet" type="text/css" />
   <link href="../tables.css" rel="stylesheet" type="text/css" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript"
+    src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+  <script src="../validations/login.js"></script>
 </head>
 
 <header>
@@ -17,14 +22,14 @@
   <h1>Clinical Automation System</h1>
   <br>
   <h2>Login</h2>
-  <form action="/login" method="post">
-    <table border="10px">
+  <form action="/login" method="post" id="login">
+    <table>
       <tr>
         <td>
           Email
         </td>
         <td>
-          <input type="email" name="username" required="required" placeholder="Enter email Id">
+          <input type="email" name="username" id="username" required="required" placeholder="Enter email Id">
         </td>
       </tr>
       <tr>
@@ -32,7 +37,7 @@
           Password
         </td>
         <td>
-          <input type="password" name="password" required="required">
+          <input type="password" name="password" id="password" required="required">
         </td>
       </tr>
     </table>
