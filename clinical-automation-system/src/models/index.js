@@ -9,8 +9,8 @@ const { database } = require('../../config/' + env);
 const db = {};
 
 let sequelize;
-if (database.use_env_variable) {
-  sequelize = new Sequelize(process.env[database.use_env_variable], database);
+if (process.env.use_env_variable) {
+  sequelize = new Sequelize(process.env[process.env.use_env_variable], database);  
 } else {
   sequelize = new Sequelize(database.name, database.username, database.password, database);
 }

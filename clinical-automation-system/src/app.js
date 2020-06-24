@@ -3,6 +3,7 @@ import session from 'express-session';
 import { join } from 'path';
 import router from './routes';
 import { passportSetup } from './lib/passport';
+import db from './models';
 
 const env = process.env.NODE_ENV || 'development';
 const { server } = require('../config/' + env);
@@ -43,6 +44,9 @@ app.use('/', router);
 app.locals.loginFailure = false;
 app.locals.userType = null;
 
-app.listen(port, () => console.log(`Server is running on port ${port}`));
+db.sequelize.sync()
+  .then(() => {
+    app.listen(port, () => console.log(`Server is running on port ${port}`));
+  });
 
 export default app;

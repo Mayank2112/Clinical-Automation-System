@@ -1,8 +1,8 @@
 {
   "database": {
     "username": "deqode",
-    "password": "deq@123",
-    "database": "test-clinical-automation-system",
+    "password": "deq123",
+    "name": "test-clinical-automation-system",
     "host": "localhost",
     "dialect": "postgres",
     "logging": false

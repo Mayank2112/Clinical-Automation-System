@@ -1,7 +1,7 @@
 {
   "database": {
     "username": "deqode",
-    "password": "deq@123",
+    "password": "deq123",
     "name": "clinical-automation-system",
     "host": "localhost",
     "dialect": "postgres",
