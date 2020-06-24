@@ -1,0 +1,26 @@
+version: '2'
+services:
+  web:
+    image: mayankparikh21/clinical-automation-system:1.0
+    build: .
+    command: npm run start
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://deqode:deq123@db:5432/clinical-automation-system
+      use_env_variable: DATABASE_URL
+  db:
+    image: postgres
+    ports:
+      - 5430:5432
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_USER: deqode
+      POSTGRES_PASSWORD: deq123
+      POSTGRES_DB: clinical-automation-system
+      NODE_ENV: development
